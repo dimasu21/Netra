@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCR Scanner | NETRA</title>
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap"
+        rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --blue-primary: #2563eb;
+            --blue-dark: #1e40af;
+            --blue-light: #60a5fa;
+            --blue-pale: #dbeafe;
+            --black: #0a0a0a;
+            --white: #ffffff;
+            --gray: #6b7280;
+            --gray-light: #f1f5f9;
+            --border-width: 3px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            min-height: 100vh;
+        }
+
+        /* ==================== iLovePDF-STYLE NAVBAR ==================== */
+        .navbar {
+            background: var(--white);
+            border-bottom: 2px solid var(--gray-light);
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            text-decoration: none;
+        }
+
+        .navbar-brand .logo-text {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--black);
+        }
+
+        .navbar-brand .logo-heart {
+            color: var(--blue-primary);
+            font-size: 1.1rem;
+        }
+
+        .navbar-tools {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            height: 100%;
+        }
+
+        .navbar-tools a {
+            display: flex;
+            align-items: center;
+            height: 60px;
+            padding: 0 16px;
+            color: var(--gray);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .navbar-tools a:hover {
+            color: var(--blue-primary);
+            border-bottom-color: var(--blue-primary);
+            background: var(--blue-pale);
+        }
+
+        .navbar-tools a.active {
+            color: var(--blue-primary);
+            border-bottom-color: var(--blue-primary);
+        }
+
+        .navbar-tools .dropdown {
+            position: relative;
+        }
+
+        .navbar-tools .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: var(--white);
+            border: 2px solid var(--gray-light);
+            min-width: 180px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-tools .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .navbar-tools .dropdown-content a {
+            height: auto;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .navbar-tools .dropdown-content a:last-child {
+            border-bottom: none;
+        }
+
+        .navbar-auth {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-login {
+            padding: 8px 16px;
+            color: var(--gray);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .btn-login:hover {
+            color: var(--blue-primary);
+        }
+
+        .btn-signup {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: var(--blue-primary);
+            color: var(--white);
+            border: none;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-signup:hover {
+            background: var(--blue-dark);
+        }
+
+        .btn-signup i {
+            font-size: 1rem;
+        }
+
+        /* Mobile Menu */
+        .navbar-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--black);
+        }
+
+        @media (max-width: 900px) {
+
+
+
+            .navbar-tools.active a {
+                margin-bottom: 12px;
+                width: 100%;
+                display: block;
+            }
+
+            .navbar-tools.active .dropdown-content {
+                position: static;
+                box-shadow: none;
+                border: none;
+                border-left: 2px solid var(--gray-light);
+                padding-left: 12px;
+                margin-bottom: 12px;
+                display: none;
+                /* Keep hidden until hover or click? Mobile usually click */
+            }
+
+            /* Show dropdown on hover/active for mobile? Or simplified */
+            .navbar-tools.active .dropdown:hover .dropdown-content {
+                display: block;
+            }
+
+
+            .navbar-tools {
+                display: flex;
+                flex-direction: column;
+                position: fixed;
+                top: 0;
+                right: 0;
+                height: 100vh;
+                width: 250px;
+                background: var(--white);
+                border-left: 3px solid var(--black);
+                padding: 80px 24px 24px;
+                z-index: 2000;
+                transform: translateX(100%);
+                transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+                box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+            }
+
+            .navbar-tools.active {
+                transform: translateX(0);
+            }
+
+            .navbar-toggle {
+                display: block;
+                z-index: 2010;
+                position: relative;
+            }
+
+            /* Links in sidebar */
+            .navbar-tools a {
+                padding: 12px 0;
+                border-bottom: 1px solid #e2e8f0;
+                width: 100%;
+                display: block;
+            }
+
+
+            .navbar-toggle {
+                display: block;
+            }
+
+
+        }
+
+        /* ==================== MAIN CONTAINER ==================== */
+
+        /* Hero Section */
+        .hero {
+            background: var(--blue-pale);
+            border-bottom: var(--border-width) solid var(--black);
+            padding: 60px 24px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .hero h1 {
+            font-family: 'Space Mono', monospace;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            color: var(--black);
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        /* ==================== BRUTALIST CARD ==================== */
+        .card {
+            background: var(--white);
+            border: var(--border-width) solid var(--black);
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            right: -6px;
+            bottom: -6px;
+            background: var(--blue-primary);
+            z-index: -1;
+        }
+
+        .card-header {
+            background: var(--black);
+            color: var(--white);
+            padding: 16px 20px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-body {
+            padding: 24px;
+        }
+
+        /* ==================== FORM ELEMENTS ==================== */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            color: var(--black);
+        }
+
+        .form-label .badge {
+            display: inline-block;
+            background: var(--blue-primary);
+            color: var(--white);
+            padding: 2px 8px;
+            font-size: 0.65rem;
+            margin-left: 8px;
+        }
+
+        /* Upload Zone - Brutalist */
+        .upload-zone {
+            border: var(--border-width) dashed var(--black);
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: var(--blue-pale);
+        }
+
+        .upload-zone:hover,
+        .upload-zone.dragover {
+            background: var(--blue-light);
+            border-style: solid;
+        }
+
+        .upload-zone .icon {
+            font-size: 3rem;
+            color: var(--blue-dark);
+            margin-bottom: 12px;
+        }
+
+        .upload-zone h5 {
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .upload-zone p {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        /* File Preview */
+        .file-preview {
+            display: none;
+            border: var(--border-width) solid var(--black);
+            padding: 16px;
+            background: var(--blue-pale);
+        }
+
+        .file-preview.show {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .file-preview img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border: 2px solid var(--black);
+        }
+
+        .file-preview .file-info {
+            flex: 1;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .file-preview .file-info h6 {
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+
+        .file-preview .file-info p {
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+
+        /* Input */
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: var(--border-width) solid var(--black);
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+            background: var(--white);
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            background: var(--blue-pale);
+            box-shadow: 4px 4px 0 var(--blue-primary);
+        }
+
+        .form-input::placeholder {
+            color: var(--gray);
+        }
+
+        /* Brutalist Button */
+        .btn-brutal {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 18px 24px;
+            background: var(--blue-primary);
+            color: var(--white);
+            border: var(--border-width) solid var(--black);
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.1s;
+            position: relative;
+        }
+
+        .btn-brutal:hover {
+            background: var(--blue-dark);
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        .btn-brutal:active {
+            transform: translate(0, 0);
+            box-shadow: none;
+        }
+
+        .btn-small {
+            padding: 8px 12px;
+            font-size: 0.75rem;
+            width: auto;
+            background: var(--white);
+            color: var(--black);
+        }
+
+        .btn-small:hover {
+            background: #fee2e2;
+        }
+
+        /* ==================== RESULTS SECTION ==================== */
+        .results-section {
+            display: none;
+        }
+
+        .results-section.show {
+            display: block;
+        }
+
+        /* Status Badge - Brutalist */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: var(--border-width) solid var(--black);
+        }
+
+        .status-badge.relevan {
+            background: #22c55e;
+            color: var(--white);
+        }
+
+        .status-badge.tidak-relevan {
+            background: #ef4444;
+            color: var(--white);
+        }
+
+        /* Result Grid */
+        .result-grid {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .thumbnail-box {
+            border: var(--border-width) solid var(--black);
+            padding: 12px;
+            background: var(--blue-pale);
+            text-align: center;
+        }
+
+        .thumbnail-box img {
+            max-width: 100%;
+            max-height: 200px;
+            border: 2px solid var(--black);
+        }
+
+        .thumbnail-box p {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            margin-top: 8px;
+            color: var(--gray);
+        }
+
+        /* Text Result */
+        .text-result {
+            border: var(--border-width) solid var(--black);
+            background: var(--black);
+            color: var(--white);
+            padding: 20px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.8;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .text-result mark.highlight {
+            background: #fbbf24;
+            color: var(--black);
+            padding: 2px 4px;
+            font-weight: 700;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .stat-box {
+            border: var(--border-width) solid var(--black);
+            padding: 16px;
+            text-align: center;
+            background: var(--blue-pale);
+        }
+
+        .stat-box .value {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--blue-dark);
+        }
+
+        .stat-box .label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gray);
+            margin-top: 4px;
+        }
+
+        /* AI Summary Container */
+        .ai-summary-section {
+            margin-top: 24px;
+            border: var(--border-width) solid var(--black);
+            background: var(--white);
+        }
+
+        .ai-summary-header {
+            background: var(--blue-primary);
+            color: var(--white);
+            padding: 12px 20px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ai-summary-content {
+            padding: 20px;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .ai-summary-content h2 {
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+            color: var(--blue-dark);
+            margin: 20px 0 10px 0;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--blue-pale);
+            padding-bottom: 8px;
+        }
+
+        .ai-summary-content h2:first-child {
+            margin-top: 0;
+        }
+
+        .ai-summary-content p {
+            color: var(--gray);
+            margin-bottom: 12px;
+        }
+
+        .ai-summary-content ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .ai-summary-content li {
+            color: var(--gray);
+            margin-bottom: 8px;
+        }
+
+        .ai-loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--gray);
+        }
+
+        .ai-loading .spinner {
+            width: 30px;
+            height: 30px;
+            border: 3px solid var(--gray-light);
+            border-top-color: var(--blue-primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        .ai-error {
+            color: #ef4444;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* ==================== FOOTER - MULTI COLUMN ==================== */
+        .footer {
+            background: #0f172a;
+            color: #94a3b8;
+            margin-top: 60px;
+        }
+
+        .footer-main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 48px 24px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            gap: 32px;
+        }
+
+        @media (max-width: 900px) {
+
+
+
+            .navbar-tools.active a {
+                margin-bottom: 12px;
+                width: 100%;
+                display: block;
+            }
+
+            .navbar-tools.active .dropdown-content {
+                position: static;
+                box-shadow: none;
+                border: none;
+                border-left: 2px solid var(--gray-light);
+                padding-left: 12px;
+                margin-bottom: 12px;
+                display: none;
+                /* Keep hidden until hover or click? Mobile usually click */
+            }
+
+            /* Show dropdown on hover/active for mobile? Or simplified */
+            .navbar-tools.active .dropdown:hover .dropdown-content {
+                display: block;
+            }
+
+            .footer-main {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .footer-main {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .footer-brand {
+            font-family: 'Space Mono', monospace;
+        }
+
+        .footer-brand h3 {
+            color: var(--white);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-brand p {
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .footer-column h4 {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--white);
+            margin-bottom: 16px;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.2s;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--blue-light);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #1e293b;
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        .footer-copyright {
+            font-size: 0.8rem;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 16px;
+        }
+
+        .footer-social a {
+            color: #94a3b8;
+            font-size: 1.25rem;
+            transition: color 0.2s;
+        }
+
+        .footer-social a:hover {
+            color: var(--blue-light);
+        }
+
+        /* ==================== LOADING ==================== */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .loading-box {
+            border: var(--border-width) solid var(--black);
+            background: var(--blue-primary);
+            padding: 40px 60px;
+            text-align: center;
+            position: relative;
+        }
+
+        .loading-box::before {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            right: -6px;
+            bottom: -6px;
+            background: var(--black);
+            z-index: -1;
+        }
+
+        .loading-box .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--white);
+            border-top-color: var(--blue-dark);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-box p {
+            font-family: 'Space Mono', monospace;
+            color: var(--white);
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        /* Utilities */
+        .hidden {
+            display: none !important;
+        }
+
+        /* FORCE DESKTOP RESTORATION (Min-Width 901px) */
+        @media (min-width: 901px) {
+            .navbar-toggle {
+                display: none !important;
+            }
+
+            .navbar-tools {
+                display: flex !important;
+                flex-direction: row !important;
+                position: static !important;
+                transform: none !important;
+                height: auto !important;
+                width: auto !important;
+                padding: 0 !important;
+                background: transparent !important;
+                border: none !important;
+                box-shadow: none !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                top: auto !important;
+                right: auto !important;
+                bottom: auto !important;
+            }
+
+            .navbar-tools a {
+                padding: 24px 16px !important;
+                border-bottom: 2px solid transparent !important;
+                width: auto !important;
+                margin-bottom: 0 !important;
+                display: inline-block !important;
+                color: var(--gray);
+                /* Ensure color */
+            }
+
+            .navbar-tools a.active {
+                color: var(--blue-primary) !important;
+                border-bottom-color: var(--blue-primary) !important;
+            }
+
+            .navbar-tools a:hover {
+                background: var(--blue-pale) !important;
+                border-bottom-color: var(--blue-primary) !important;
+                color: var(--blue-primary) !important;
+            }
+
+            .navbar-tools .dropdown-content {
+                position: absolute !important;
+                top: 100% !important;
+                left: 0 !important;
+                min-width: 180px !important;
+                background: var(--white) !important;
+                border: 2px solid var(--gray-light) !important;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+                padding: 0 !important;
+                display: none !important;
+                z-index: 100 !important;
+                transform: none !important;
+                /* preventing sidebar transform inheritance */
+            }
+
+            .navbar-tools .dropdown:hover .dropdown-content {
+                display: block !important;
+            }
+
+            .navbar-tools .dropdown-content a {
+                padding: 12px 16px !important;
+                border-bottom: 1px solid var(--gray-light) !important;
+                display: block !important;
+                height: auto !important;
+            }
+
+            .navbar-tools .dropdown-content a:last-child {
+                border-bottom: none !important;
+            }
+
+            /* Hide Overlay if active */
+            .navbar-tools.active::before {
+                display: none !important;
+            }
+
+            /* Navbar Right Alignment */
+            .navbar-right {
+                margin-left: auto !important;
+                display: flex !important;
+                align-items: center !important;
+                gap: 12px !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <!-- Brand -->
+            <a href="/" class="navbar-brand">
+                <span class="logo-text">NETRA</span>
+            </a>
+
+            <!-- Tool Links -->
+            <div class="navbar-tools">
+                <a href="/">Beranda</a>
+                <a href="/ocr" class="active">OCR Scan</a>
+                <a href="/document">Parse Document</a>
+                <a href="/batch">Batch</a>
+                <div class="dropdown">
+                    <a href="#">All Tools <i class="bi bi-chevron-down"></i></a>
+                    <div class="dropdown-content">
+                        <a href="/ocr">OCR Scanner</a>
+                        <a href="/document">Document Parser</a>
+                        <a href="/batch">Batch Analysis</a>
+                        <a href="/pricing">Pricing</a>
+                        <a href="/about">About</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Toggle -->
+            <div class="navbar-right" style="margin-left: auto; display: flex; align-items: center; gap: 12px;">
+                <div class="navbar-auth">
+                    <a href="/login" class="btn-login">Login</a>
+                    <a href="/signup" class="btn-signup">
+                        <i class="bi bi-google"></i>
+                        Sign up
+                    </a>
+                </div><button class="navbar-toggle">
+                    <i class="bi bi-list"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main -->
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1>OCR & Rabin-Karp Analysis</h1>
+        <p>Unggah gambar dokumen Anda untuk mengekstraksi teks dan menganalisis tingkat relevansi menggunakan algoritma
+            Rabin-Karp.</p>
+    </section>
+
+    <main class="main">
+        <!-- Input Card -->
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-camera-fill"></i>
+                OCR Scanner Form
+            </div>
+            <div class="card-body">
+                <form id="analyzeForm">
+                    <!-- File Upload -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            Unggah Dokumen Referensi
+                            <span class="badge">Wajib</span>
+                        </label>
+                        <div class="upload-zone" id="dropZone">
+                            <input type="file" class="hidden" id="fileInput" accept="image/jpeg,image/png">
+                            <i class="bi bi-cloud-arrow-up icon"></i>
+                            <h5>Drag & Drop Image</h5>
+                            <p>Format: JPG, PNG</p>
+                        </div>
+                        <div class="file-preview" id="filePreview">
+                            <img id="previewImg" src="" alt="Preview">
+                            <div class="file-info">
+                                <h6 id="fileName">filename.jpg</h6>
+                                <p id="fileSize">0 KB</p>
+                            </div>
+                            <button type="button" class="btn-brutal btn-small" onclick="clearFile()">
+                                <i class="bi bi-x-lg"></i> Hapus
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Keyword Input -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            Variabel / Kata Kunci Riset
+                            <span class="badge">Wajib</span>
+                        </label>
+                        <input type="text" class="form-input" id="keywordInput"
+                            placeholder="Contoh: Machine Learning, Deep Learning...">
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit" class="btn-brutal" id="analyzeBtn">
+                        <i class="bi bi-cpu"></i>
+                        Analisis Relevansi
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Results Card -->
+        <div class="card results-section" id="resultsSection">
+            <div class="card-header">
+                <i class="bi bi-clipboard-data"></i>
+                Hasil Analisis
+            </div>
+            <div class="card-body">
+                <!-- Status -->
+                <div style="margin-bottom: 20px;">
+                    <span class="status-badge" id="statusBadge">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span id="statusText">RELEVAN</span>
+                    </span>
+                </div>
+
+                <!-- Grid -->
+                <div class="result-grid">
+                    <div class="thumbnail-box" id="thumbnailBox">
+                        <img id="resultImage" src="" alt="Preview">
+                        <p>Preview Dokumen</p>
+                    </div>
+                    <div>
+                        <label class="form-label" style="margin-bottom: 12px;">
+                            Teks Hasil Ekstraksi
+                        </label>
+                        <div class="text-result" id="extractedText"></div>
+                    </div>
+                </div>
+
+                <!-- Stats -->
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="value" id="matchCount">0</div>
+                        <div class="label">Jumlah Match</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="value" id="keywordUsed">-</div>
+                        <div class="label">Kata Kunci</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="value">Rabin-Karp</div>
+                        <div class="label">Algoritma</div>
+                    </div>
+                </div>
+
+                <!-- AI Summary Section -->
+                <div class="ai-summary-section" id="aiSummarySection">
+                    <div class="ai-summary-header">
+                        <i class="bi bi-stars"></i>
+                        Ringkasan AI
+                    </div>
+                    <div class="ai-summary-content" id="aiSummaryContent">
+                        <div class="ai-loading" id="aiLoading">
+                            <div class="spinner"></div>
+                            <p>AI sedang menganalisis dokumen...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- AdSense Display Ad (Horizontal) -->
+    <div
+        style="max-width: 1100px; margin: 40px auto; padding: 20px; text-align: center; background: #f8f9fa; border: 1px dashed #ced4da;">
+        <p style="color: #6c757d; font-family: 'Space Mono', monospace; font-size: 0.8rem; margin-bottom: 10px;">
+            ADVERTISEMENT</p>
+        <!-- Paste Google AdSense Code Here -->
+        <div
+            style="width: 100%; height: 90px; background: #e9ecef; display: flex; align-items: center; justify-content: center; color: #adb5bd;">
+            Google AdSense Banner (728x90)
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-main">
+            <div class="footer-brand">
+                <h3>NETRA</h3>
+                <p>Aplikasi screening literatur berbasis OCR dan algoritma Rabin-Karp untuk membantu mahasiswa dalam
+                    proses tinjauan pustaka.</p>
+            </div>
+
+            <div class="footer-column">
+                <h4>Fitur</h4>
+                <ul>
+                    <li><a href="/batch">Batch Processing</a></li>
+                    <li><a href="#">OCR Gambar</a></li>
+                    <li><a href="#">Parse DOCX</a></li>
+                    <li><a href="#">Parse PDF</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Teknologi</h4>
+                <ul>
+                    <li><a href="#">Flask</a></li>
+                    <li><a href="#">Tesseract OCR</a></li>
+                    <li><a href="#">PyPDF2</a></li>
+                    <li><a href="#">python-docx</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Referensi</h4>
+                <ul>
+                    <li><a href="#">Dokumentasi</a></li>
+                    <li><a href="#">GitHub</a></li>
+                    <li><a href="#">Paper</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Perusahaan</h4>
+                <ul>
+                    <li><a href="/about">Tentang Kami</a></li>
+                    <li><a href="/contact">Kontak</a></li>
+                    <li><a href="/pricing">Pricing</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-copyright">© 2024 NETRA • Thesis Project</div>
+            <div class="footer-social">
+                <a href="#"><i class="bi bi-github"></i></a>
+                <a href="#"><i class="bi bi-linkedin"></i></a>
+                <a href="#"><i class="bi bi-instagram"></i></a>
+                <a href="#"><i class="bi bi-envelope-fill"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loading -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-box">
+            <div class="spinner"></div>
+            <p>Memproses...</p>
+        </div>
+    </div>
+
+    <script>
+        // Elements
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const filePreview = document.getElementById('filePreview');
+        const previewImg = document.getElementById('previewImg');
+        const fileName = document.getElementById('fileName');
+        const fileSize = document.getElementById('fileSize');
+        const analyzeForm = document.getElementById('analyzeForm');
+        const keywordInput = document.getElementById('keywordInput');
+        const resultsSection = document.getElementById('resultsSection');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+
+        let selectedFile = null;
+
+        // Drag and Drop
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(e => {
+            dropZone.addEventListener(e, ev => { ev.preventDefault(); ev.stopPropagation(); });
+        });
+
+        ['dragenter', 'dragover'].forEach(e => {
+            dropZone.addEventListener(e, () => dropZone.classList.add('dragover'));
+        });
+
+        ['dragleave', 'drop'].forEach(e => {
+            dropZone.addEventListener(e, () => dropZone.classList.remove('dragover'));
+        });
+
+        dropZone.addEventListener('drop', e => {
+            const files = e.dataTransfer.files;
+            if (files.length > 0) handleFile(files[0]);
+        });
+
+        dropZone.addEventListener('click', () => fileInput.click());
+
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) handleFile(fileInput.files[0]);
+        });
+
+        function handleFile(file) {
+            const ext = file.name.split('.').pop().toLowerCase();
+            const supportedExts = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'doc', 'docx', 'pdf'];
+
+            if (!supportedExts.includes(ext) && !file.type.startsWith('image/')) {
+                alert('Format tidak didukung! Gunakan: JPG, PNG, DOCX, PDF');
+                return;
+            }
+
+            selectedFile = file;
+
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    previewImg.src = e.target.result;
+                    previewImg.style.display = 'block';
+                    fileName.textContent = file.name;
+                    fileSize.textContent = formatFileSize(file.size);
+                    dropZone.classList.add('hidden');
+                    filePreview.classList.add('show');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                const iconClass = ext === 'pdf' ? 'bi-file-pdf' : 'bi-file-word';
+                previewImg.style.display = 'none';
+                fileName.innerHTML = `<i class="bi ${iconClass}" style="font-size: 2rem; color: var(--blue-primary);"></i> ${file.name}`;
+                fileSize.textContent = formatFileSize(file.size);
+                dropZone.classList.add('hidden');
+                filePreview.classList.add('show');
+            }
+        }
+
+        function clearFile() {
+            selectedFile = null;
+            fileInput.value = '';
+            dropZone.classList.remove('hidden');
+            filePreview.classList.remove('show');
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Form Submit
+        analyzeForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!selectedFile) {
+                alert('Harap unggah dokumen terlebih dahulu!');
+                return;
+            }
+
+            const keyword = keywordInput.value.trim();
+            if (!keyword) {
+                alert('Harap masukkan kata kunci riset!');
+                return;
+            }
+
+            loadingOverlay.classList.add('show');
+            resultsSection.classList.remove('show');
+
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            formData.append('keyword', keyword);
+
+            try {
+                const response = await fetch('/api/analyze', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    displayResults(data);
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                alert('Terjadi kesalahan: ' + error.message);
+            } finally {
+                loadingOverlay.classList.remove('show');
+            }
+        });
+
+        function displayResults(data) {
+            resultsSection.classList.add('show');
+
+            const statusBadge = document.getElementById('statusBadge');
+
+            if (data.is_relevant) {
+                statusBadge.className = 'status-badge relevan';
+                statusBadge.innerHTML = '<i class="bi bi-check-circle-fill"></i> RELEVAN';
+            } else {
+                statusBadge.className = 'status-badge tidak-relevan';
+                statusBadge.innerHTML = '<i class="bi bi-x-circle-fill"></i> TIDAK RELEVAN';
+            }
+
+            const thumbnailBox = document.getElementById('thumbnailBox');
+            const resultImage = document.getElementById('resultImage');
+
+            if (data.image_preview) {
+                resultImage.src = data.image_preview;
+                resultImage.style.display = 'block';
+            } else {
+                const iconClass = data.file_type === 'pdf' ? 'bi-file-pdf' : 'bi-file-word';
+                thumbnailBox.innerHTML = `
+                    <div style="padding: 20px;">
+                        <i class="bi ${iconClass}" style="font-size: 3rem; color: var(--blue-dark);"></i>
+                        <p>${data.filename || 'Dokumen'}</p>
+                    </div>
+                `;
+            }
+
+            document.getElementById('extractedText').innerHTML = data.highlighted_text || data.extracted_text;
+            document.getElementById('matchCount').textContent = data.match_count;
+            document.getElementById('keywordUsed').textContent = data.keyword;
+
+            // Display AI Summary
+            const aiSummaryContent = document.getElementById('aiSummaryContent');
+
+            if (data.ai_summary) {
+                // Simple markdown to HTML conversion
+                let html = data.ai_summary
+                    .replace(/## (.*)/g, '<h2>$1</h2>')
+                    .replace(/- (.*)/g, '<li>$1</li>')
+                    .replace(/\n\n/g, '</p><p>')
+                    .replace(/\n/g, '<br>');
+
+                // Wrap list items in ul
+                html = html.replace(/(<li>.*<\/li>)+/g, '<ul>$&</ul>');
+
+                aiSummaryContent.innerHTML = '<p>' + html + '</p>';
+            } else if (data.ai_error) {
+                aiSummaryContent.innerHTML = `<div class="ai-error"><i class="bi bi-exclamation-triangle"></i> ${data.ai_error}</div>`;
+            } else {
+                aiSummaryContent.innerHTML = '<div class="ai-error">AI summary tidak tersedia</div>';
+            }
+
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Google Authentication (placeholder - needs Google OAuth setup)
+        function loginWithGoogle() {
+            alert('🔐 Login dengan Google\n\nFitur ini memerlukan konfigurasi Google OAuth.\n\n1. Buat project di Google Cloud Console\n2. Enable Google+ API\n3. Buat OAuth 2.0 credentials\n4. Tambahkan client ID ke kode ini');
+        }
+
+        function signupWithGoogle() {
+            alert('📝 Sign Up dengan Google\n\nFitur ini memerlukan konfigurasi Google OAuth.\n\nSetelah dikonfigurasi, user akan bisa:\n• Login dengan akun Google\n• Menyimpan riwayat analisis\n• Mengakses fitur premium');
+        }
+
+        // Mobile Menu Toggle
+        const toggleBtn = document.querySelector('.navbar-toggle');
+        const toolsMenu = document.querySelector('.navbar-tools');
+        if (toggleBtn && toolsMenu) {
+            toggleBtn.addEventListener('click', () => {
+                toolsMenu.classList.toggle('active');
+                const icon = toggleBtn.querySelector('i');
+                if (icon) {
+                    icon.classList.toggle('bi-list');
+                    icon.classList.toggle('bi-x');
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

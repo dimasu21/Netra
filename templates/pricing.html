@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing | NETRA - Asisten Tinjauan Pustaka</title>
+    <meta name="description"
+        content="Pilih paket yang sesuai untuk kebutuhan screening literatur Anda. Gratis, Pro, atau Enterprise.">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap"
+        rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --blue-primary: #2563eb;
+            --blue-dark: #1e40af;
+            --blue-light: #60a5fa;
+            --blue-pale: #dbeafe;
+            --black: #0a0a0a;
+            --white: #ffffff;
+            --gray: #6b7280;
+            --gray-light: #f1f5f9;
+            --success: #22c55e;
+            --border-width: 3px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            min-height: 100vh;
+        }
+
+        /* ==================== iLovePDF-STYLE NAVBAR ==================== */
+        .navbar {
+            background: var(--white);
+            border-bottom: 2px solid var(--gray-light);
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            text-decoration: none;
+        }
+
+        .navbar-brand .logo-text {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--black);
+        }
+
+        .navbar-brand .logo-heart {
+            color: var(--blue-primary);
+            font-size: 1.1rem;
+        }
+
+        .navbar-tools {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            height: 100%;
+        }
+
+        .navbar-tools a {
+            display: flex;
+            align-items: center;
+            height: 60px;
+            padding: 0 16px;
+            color: var(--gray);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .navbar-tools a:hover {
+            color: var(--blue-primary);
+            border-bottom-color: var(--blue-primary);
+            background: var(--blue-pale);
+        }
+
+        .navbar-tools a.active {
+            color: var(--blue-primary);
+            border-bottom-color: var(--blue-primary);
+        }
+
+        .navbar-tools .dropdown {
+            position: relative;
+        }
+
+        .navbar-tools .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: var(--white);
+            border: 2px solid var(--gray-light);
+            min-width: 180px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-tools .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .navbar-tools .dropdown-content a {
+            height: auto;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .navbar-tools .dropdown-content a:last-child {
+            border-bottom: none;
+        }
+
+        .navbar-auth {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-login {
+            padding: 8px 16px;
+            color: var(--gray);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .btn-login:hover {
+            color: var(--blue-primary);
+        }
+
+        .btn-signup {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: var(--blue-primary);
+            color: var(--white);
+            border: none;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-signup:hover {
+            background: var(--blue-dark);
+        }
+
+        .btn-signup i {
+            font-size: 1rem;
+        }
+
+        .navbar-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--black);
+        }
+
+        @media (max-width: 900px) {
+            
+            
+                
+            .navbar-tools.active a {
+                margin-bottom: 12px;
+                width: 100%;
+                display: block;
+            }
+            .navbar-tools.active .dropdown-content {
+                position: static;
+                box-shadow: none;
+                border: none;
+                border-left: 2px solid var(--gray-light);
+                padding-left: 12px;
+                margin-bottom: 12px;
+                display: none; /* Keep hidden until hover or click? Mobile usually click */
+            }
+            /* Show dropdown on hover/active for mobile? Or simplified */
+            .navbar-tools.active .dropdown:hover .dropdown-content {
+                display: block;
+            }
+
+            
+            .navbar-tools {
+                display: flex;
+                flex-direction: column;
+                position: fixed;
+                top: 0;
+                right: 0;
+                height: 100vh;
+                width: 250px;
+                background: var(--white);
+                border-left: 3px solid var(--black);
+                padding: 80px 24px 24px;
+                z-index: 2000;
+                transform: translateX(100%);
+                transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+                box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+            }
+            
+            .navbar-tools.active {
+                transform: translateX(0);
+            }
+
+            .navbar-toggle {
+                display: block;
+                z-index: 2010;
+                position: relative;
+            }
+            
+            /* Links in sidebar */
+            .navbar-tools a {
+                padding: 12px 0;
+                border-bottom: 1px solid #e2e8f0;
+                width: 100%;
+                display: block;
+            }
+    
+
+            .navbar-toggle {
+                display: block;
+            }
+
+            
+        }
+
+        /* ==================== HERO ==================== */
+        .hero {
+            text-align: center;
+            padding: 60px 24px 40px;
+            background: var(--gray-light);
+            border-bottom: var(--border-width) solid var(--black);
+        }
+
+        .hero h1 {
+            font-family: 'Space Mono', monospace;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 600px) {
+            .hero h1 {
+                font-size: 1.75rem;
+            }
+        }
+
+        /* ==================== PRICING CARDS ==================== */
+        .pricing-section {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        @media (max-width: 900px) {
+            
+            
+                
+            .navbar-tools.active a {
+                margin-bottom: 12px;
+                width: 100%;
+                display: block;
+            }
+            .navbar-tools.active .dropdown-content {
+                position: static;
+                box-shadow: none;
+                border: none;
+                border-left: 2px solid var(--gray-light);
+                padding-left: 12px;
+                margin-bottom: 12px;
+                display: none; /* Keep hidden until hover or click? Mobile usually click */
+            }
+            /* Show dropdown on hover/active for mobile? Or simplified */
+            .navbar-tools.active .dropdown:hover .dropdown-content {
+                display: block;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+        }
+
+        .pricing-card {
+            background: var(--white);
+            border: var(--border-width) solid var(--black);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            right: -6px;
+            bottom: -6px;
+            background: var(--blue-primary);
+            z-index: -1;
+        }
+
+        .pricing-card.featured {
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured::before {
+            background: var(--black);
+        }
+
+        .pricing-card.featured .card-header {
+            background: var(--blue-primary);
+        }
+
+        .card-header {
+            background: var(--black);
+            color: var(--white);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .card-header h3 {
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .card-header .badge {
+            display: inline-block;
+            background: var(--success);
+            color: var(--white);
+            font-size: 0.65rem;
+            padding: 4px 8px;
+            margin-top: 8px;
+            font-family: 'Space Mono', monospace;
+            text-transform: uppercase;
+        }
+
+        .card-price {
+            padding: 24px 20px;
+            text-align: center;
+            border-bottom: var(--border-width) solid var(--black);
+            background: var(--white);
+        }
+
+        .card-price .amount {
+            font-family: 'Space Mono', monospace;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--blue-dark);
+        }
+
+        .card-price .amount span {
+            font-size: 1rem;
+            color: var(--gray);
+        }
+
+        .card-price .period {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .card-features {
+            padding: 24px 20px;
+            flex: 1;
+            background: var(--white);
+        }
+
+        .card-features ul {
+            list-style: none;
+        }
+
+        .card-features ul li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--gray-light);
+            font-size: 0.9rem;
+            color: var(--black);
+        }
+
+        .card-features ul li:last-child {
+            border-bottom: none;
+        }
+
+        .card-features ul li i {
+            color: var(--success);
+            font-size: 1rem;
+        }
+
+        .card-features ul li.disabled {
+            color: var(--gray);
+            text-decoration: line-through;
+        }
+
+        .card-features ul li.disabled i {
+            color: var(--gray);
+        }
+
+        .card-action {
+            padding: 0 20px 20px;
+        }
+
+        .btn-brutal {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: var(--blue-primary);
+            color: var(--white);
+            border: var(--border-width) solid var(--black);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+
+        .btn-brutal:hover {
+            background: var(--blue-dark);
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        .btn-brutal.secondary {
+            background: var(--white);
+            color: var(--black);
+        }
+
+        .btn-brutal.secondary:hover {
+            background: var(--gray-light);
+        }
+
+        /* ==================== FAQ SECTION ==================== */
+        .faq-section {
+            background: var(--gray-light);
+            border-top: var(--border-width) solid var(--black);
+            padding: 60px 24px;
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-section h2 {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .faq-item {
+            background: var(--white);
+            border: var(--border-width) solid var(--black);
+            margin-bottom: 16px;
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            cursor: pointer;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .faq-question:hover {
+            background: var(--blue-pale);
+        }
+
+        .faq-answer {
+            display: none;
+            padding: 0 20px 16px;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--gray);
+        }
+
+        .faq-item.open .faq-answer {
+            display: block;
+        }
+
+        .faq-item.open .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        /* ==================== FOOTER ==================== */
+        .footer {
+            background: #0f172a;
+            color: #94a3b8;
+        }
+
+        .footer-main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 48px 24px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            gap: 32px;
+        }
+
+        @media (max-width: 900px) {
+            
+            
+                
+            .navbar-tools.active a {
+                margin-bottom: 12px;
+                width: 100%;
+                display: block;
+            }
+            .navbar-tools.active .dropdown-content {
+                position: static;
+                box-shadow: none;
+                border: none;
+                border-left: 2px solid var(--gray-light);
+                padding-left: 12px;
+                margin-bottom: 12px;
+                display: none; /* Keep hidden until hover or click? Mobile usually click */
+            }
+            /* Show dropdown on hover/active for mobile? Or simplified */
+            .navbar-tools.active .dropdown:hover .dropdown-content {
+                display: block;
+            }
+
+            .footer-main {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .footer-main {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .footer-brand {
+            font-family: 'Space Mono', monospace;
+        }
+
+        .footer-brand h3 {
+            color: var(--white);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-brand p {
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .footer-column h4 {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--white);
+            margin-bottom: 16px;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.2s;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--blue-light);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #1e293b;
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        .footer-copyright {
+            font-size: 0.8rem;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 16px;
+        }
+
+        .footer-social a {
+            color: #94a3b8;
+            font-size: 1.25rem;
+            transition: color 0.2s;
+        }
+
+        .footer-social a:hover {
+            color: var(--blue-light);
+        }
+    
+        /* FORCE DESKTOP RESTORATION (Min-Width 901px) */
+        @media (min-width: 901px) {
+             .navbar-toggle {
+                 display: none !important;
+             }
+             .navbar-tools {
+                 display: flex !important;
+                 flex-direction: row !important;
+                 position: static !important;
+                 transform: none !important;
+                 height: auto !important;
+                 width: auto !important;
+                 padding: 0 !important;
+                 background: transparent !important;
+                 border: none !important;
+                 box-shadow: none !important;
+                 visibility: visible !important;
+                 opacity: 1 !important;
+                 top: auto !important;
+                 right: auto !important;
+                 bottom: auto !important;
+             }
+             .navbar-tools a {
+                 padding: 24px 16px !important;
+                 border-bottom: 2px solid transparent !important;
+                 width: auto !important;
+                 margin-bottom: 0 !important;
+                 display: inline-block !important;
+                 color: var(--gray); /* Ensure color */
+             }
+             .navbar-tools a.active {
+                 color: var(--blue-primary) !important;
+                 border-bottom-color: var(--blue-primary) !important;
+             }
+             .navbar-tools a:hover {
+                 background: var(--blue-pale) !important;
+                 border-bottom-color: var(--blue-primary) !important;
+                 color: var(--blue-primary) !important;
+             }
+             
+             .navbar-tools .dropdown-content {
+                 position: absolute !important;
+                 top: 100% !important;
+                 left: 0 !important;
+                 min-width: 180px !important;
+                 background: var(--white) !important;
+                 border: 2px solid var(--gray-light) !important;
+                 box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+                 padding: 0 !important;
+                 display: none !important;
+                 z-index: 100 !important;
+                 transform: none !important; /* preventing sidebar transform inheritance */
+             }
+             .navbar-tools .dropdown:hover .dropdown-content {
+                 display: block !important;
+             }
+             .navbar-tools .dropdown-content a {
+                 padding: 12px 16px !important;
+                 border-bottom: 1px solid var(--gray-light) !important;
+                 display: block !important;
+                 height: auto !important;
+             }
+             .navbar-tools .dropdown-content a:last-child {
+                 border-bottom: none !important;
+             }
+             
+             /* Hide Overlay if active */
+             .navbar-tools.active::before {
+                 display: none !important;
+             }
+             
+             /* Navbar Right Alignment */
+             .navbar-right {
+                 margin-left: auto !important;
+                 display: flex !important;
+                 align-items: center !important;
+                 gap: 12px !important;
+             }
+        }
+
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-brand">
+                <span class="logo-text">NETRA</span>
+            </a>
+
+            <div class="navbar-tools">
+                <a href="/">OCR Scan</a>
+                <a href="/document">Parse Document</a>
+                <a href="/batch">Batch</a>
+                <div class="dropdown">
+                    <a href="#">All Tools <i class="bi bi-chevron-down"></i></a>
+                    <div class="dropdown-content">
+                        <a href="/">OCR Scanner</a>
+                        <a href="/document">Document Parser</a>
+                        <a href="/batch">Batch Analysis</a>
+                        <a href="/pricing" class="active">Pricing</a>
+                        <a href="/about">About</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navbar-right" style="margin-left: auto; display: flex; align-items: center; gap: 12px;"><div class="navbar-auth">
+                <a href="/login" class="btn-login">Login</a>
+                <a href="/signup" class="btn-signup">
+                    <i class="bi bi-google"></i>
+                    Sign up
+                </a>
+            </div>
+
+            <button class="navbar-toggle">
+                <i class="bi bi-list"></i>
+            </button></div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1>Pilih Paket Anda</h1>
+        <p>Mulai gratis atau upgrade untuk fitur premium. Batalkan kapan saja.</p>
+    </section>
+
+    <!-- Pricing Cards -->
+    <section class="pricing-section">
+        <div class="pricing-grid">
+            <!-- Free Plan -->
+            <div class="pricing-card">
+                <div class="card-header">
+                    <h3>Free</h3>
+                </div>
+                <div class="card-price">
+                    <div class="amount">Rp0<span>/bln</span></div>
+                    <div class="period">Gratis selamanya</div>
+                </div>
+                <div class="card-features">
+                    <ul>
+                        <li><i class="bi bi-check-circle-fill"></i> 5 analisis/hari</li>
+                        <li><i class="bi bi-check-circle-fill"></i> OCR gambar (JPG, PNG)</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Rabin-Karp search</li>
+                        <li class="disabled"><i class="bi bi-x-circle"></i> Parse PDF</li>
+                        <li class="disabled"><i class="bi bi-x-circle"></i> Parse DOCX</li>
+                        <li class="disabled"><i class="bi bi-x-circle"></i> Batch processing</li>
+                        <li class="disabled"><i class="bi bi-x-circle"></i> API access</li>
+                    </ul>
+                </div>
+                <div class="card-action">
+                    <a href="/" class="btn-brutal secondary">Mulai Gratis</a>
+                </div>
+            </div>
+
+            <!-- Pro Plan -->
+            <div class="pricing-card featured">
+                <div class="card-header">
+                    <h3>Pro</h3>
+                    <span class="badge">Most Popular</span>
+                </div>
+                <div class="card-price">
+                    <div class="amount">Rp49K<span>/bln</span></div>
+                    <div class="period">Bayar bulanan</div>
+                </div>
+                <div class="card-features">
+                    <ul>
+                        <li><i class="bi bi-check-circle-fill"></i> Unlimited analisis</li>
+                        <li><i class="bi bi-check-circle-fill"></i> OCR gambar (JPG, PNG)</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Rabin-Karp search</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Parse PDF</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Parse DOCX</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Batch processing (10 file)</li>
+                        <li class="disabled"><i class="bi bi-x-circle"></i> API access</li>
+                    </ul>
+                </div>
+                <div class="card-action">
+                    <a href="#" class="btn-brutal">Upgrade ke Pro</a>
+                </div>
+            </div>
+
+            <!-- Enterprise Plan -->
+            <div class="pricing-card">
+                <div class="card-header">
+                    <h3>Enterprise</h3>
+                </div>
+                <div class="card-price">
+                    <div class="amount">Rp199K<span>/bln</span></div>
+                    <div class="period">Bayar bulanan</div>
+                </div>
+                <div class="card-features">
+                    <ul>
+                        <li><i class="bi bi-check-circle-fill"></i> Unlimited analisis</li>
+                        <li><i class="bi bi-check-circle-fill"></i> OCR gambar (JPG, PNG)</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Rabin-Karp search</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Parse PDF</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Parse DOCX</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Batch processing (100 file)</li>
+                        <li><i class="bi bi-check-circle-fill"></i> API access</li>
+                    </ul>
+                </div>
+                <div class="card-action">
+                    <a href="#" class="btn-brutal secondary">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="faq-container">
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Apakah benar-benar gratis?
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Ya! Paket Free benar-benar gratis selamanya dengan limit 5 analisis per hari. Cocok untuk kebutuhan
+                    ringan atau untuk mencoba layanan kami.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Bagaimana cara pembayaran?
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Kami menerima pembayaran melalui transfer bank, e-wallet (GoPay, OVO, Dana), dan kartu kredit/debit.
+                    Pembayaran diproses secara otomatis setiap bulan.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Bisakah saya membatalkan kapan saja?
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Tentu! Anda bisa membatalkan langganan kapan saja. Akses premium akan tetap aktif sampai akhir
+                    periode billing saat ini.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Apa itu API access?
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    API access memungkinkan Anda mengintegrasikan layanan kami ke dalam aplikasi atau sistem Anda
+                    sendiri. Cocok untuk developer atau perusahaan yang ingin automasi proses screening literatur.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-main">
+            <div class="footer-brand">
+                <h3>NETRA</h3>
+                <p>Aplikasi screening literatur berbasis OCR dan algoritma Rabin-Karp untuk membantu mahasiswa dalam
+                    proses tinjauan pustaka.</p>
+            </div>
+
+            <div class="footer-column">
+                <h4>Fitur</h4>
+                <ul>
+                    <li><a href="#">OCR Gambar</a></li>
+                    <li><a href="#">Parse DOCX</a></li>
+                    <li><a href="#">Parse PDF</a></li>
+                    <li><a href="#">Rabin-Karp</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Teknologi</h4>
+                <ul>
+                    <li><a href="#">Flask</a></li>
+                    <li><a href="#">Tesseract OCR</a></li>
+                    <li><a href="#">PyPDF2</a></li>
+                    <li><a href="#">python-docx</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Referensi</h4>
+                <ul>
+                    <li><a href="#">Dokumentasi</a></li>
+                    <li><a href="#">GitHub</a></li>
+                    <li><a href="#">Paper</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Perusahaan</h4>
+                <ul>
+                    <li><a href="/about">Tentang Kami</a></li>
+                    <li><a href="/contact">Kontak</a></li>
+                    <li><a href="#">Lisensi</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-copyright">© 2024 NETRA • Thesis Project</div>
+            <div class="footer-social">
+                <a href="#"><i class="bi bi-github"></i></a>
+                <a href="#"><i class="bi bi-linkedin"></i></a>
+                <a href="#"><i class="bi bi-instagram"></i></a>
+                <a href="#"><i class="bi bi-envelope-fill"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleFaq(element) {
+            const faqItem = element.parentElement;
+            faqItem.classList.toggle('open');
+        }
+    
+        // Mobile Menu Toggle
+        const toggleBtn = document.querySelector('.navbar-toggle');
+        const toolsMenu = document.querySelector('.navbar-tools');
+        if (toggleBtn && toolsMenu) {
+            toggleBtn.addEventListener('click', () => {
+                toolsMenu.classList.toggle('active');
+                const icon = toggleBtn.querySelector('i');
+                if (icon) {
+                    icon.classList.toggle('bi-list');
+                    icon.classList.toggle('bi-x');
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

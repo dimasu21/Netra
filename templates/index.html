@@ -1,0 +1,1648 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NETRA | Analisis Dokumen Cerdas dengan OCR & Rabin-Karp</title>
+    <meta name="description"
+        content="Platform screening literatur berbasis OCR dan algoritma Rabin-Karp untuk membantu mahasiswa dalam proses tinjauan pustaka.">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap"
+        rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --blue-primary: #2563eb;
+            --blue-dark: #1e40af;
+            --blue-light: #60a5fa;
+            --blue-pale: #dbeafe;
+            --black: #0a0a0a;
+            --white: #ffffff;
+            --gray: #6b7280;
+            --gray-light: #f1f5f9;
+            --border-width: 3px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            min-height: 100vh;
+        }
+
+        /* ==================== NAVBAR ==================== */
+        .navbar {
+            background: var(--white);
+            border-bottom: 2px solid var(--gray-light);
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            text-decoration: none;
+        }
+
+        .navbar-brand .logo-text {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--black);
+        }
+
+        .navbar-tools {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            height: 100%;
+        }
+
+        .navbar-tools a {
+            display: flex;
+            align-items: center;
+            height: 60px;
+            padding: 0 16px;
+            color: var(--gray);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .navbar-tools a:hover {
+            color: var(--blue-primary);
+            border-bottom-color: var(--blue-primary);
+            background: var(--blue-pale);
+        }
+
+        .navbar-tools a.active {
+            color: var(--blue-primary);
+            border-bottom-color: var(--blue-primary);
+        }
+
+        .navbar-tools .dropdown {
+            position: relative;
+        }
+
+        .navbar-tools .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: var(--white);
+            border: 2px solid var(--gray-light);
+            min-width: 180px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-tools .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .navbar-tools .dropdown-content a {
+            height: auto;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .navbar-tools .dropdown-content a:last-child {
+            border-bottom: none;
+        }
+
+        .navbar-auth {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-login {
+            padding: 8px 16px;
+            color: var(--gray);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .btn-login:hover {
+            color: var(--blue-primary);
+        }
+
+        .btn-signup {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: var(--blue-primary);
+            color: var(--white);
+            border: 2px solid var(--black);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-signup:hover {
+            background: var(--blue-dark);
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        .navbar-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--black);
+        }
+
+        /* ==================== HERO SECTION (CAKE STYLE) ==================== */
+        .hero {
+            background: linear-gradient(135deg, var(--blue-pale) 0%, var(--white) 100%);
+            border-bottom: var(--border-width) solid var(--black);
+            padding: 80px 24px;
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-family: 'Space Mono', monospace;
+            font-size: 3rem;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            color: var(--black);
+        }
+
+        .hero-content h1 .highlight {
+            color: var(--blue-primary);
+            position: relative;
+        }
+
+        .hero-content h1 .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: var(--blue-light);
+            z-index: -1;
+        }
+
+        .hero-content p {
+            font-size: 1.15rem;
+            color: var(--gray);
+            line-height: 1.7;
+            margin-bottom: 32px;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn-brutal {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px 32px;
+            background: var(--blue-primary);
+            color: var(--white);
+            border: var(--border-width) solid var(--black);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.1s;
+            text-decoration: none;
+        }
+
+        .btn-brutal:hover {
+            background: var(--blue-dark);
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        .btn-brutal:active {
+            transform: translate(0, 0);
+            box-shadow: none;
+        }
+
+        .btn-brutal-outline {
+            background: var(--white);
+            color: var(--black);
+        }
+
+        .btn-brutal-outline:hover {
+            background: var(--blue-pale);
+        }
+
+        .hero-image {
+            position: relative;
+        }
+
+        .hero-image-box {
+            background: var(--white);
+            border: var(--border-width) solid var(--black);
+            padding: 12px;
+            position: relative;
+            box-shadow: 10px 10px 0 var(--blue-primary);
+            overflow: hidden;
+        }
+
+        .hero-image-box img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 4px;
+        }
+
+        .hero-mockup {
+            text-align: center;
+            padding: 40px 30px;
+        }
+
+        .hero-mockup i {
+            font-size: 5rem;
+            color: var(--blue-primary);
+            margin-bottom: 20px;
+        }
+
+        .hero-mockup h3 {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.1rem;
+            color: var(--black);
+            margin-bottom: 8px;
+        }
+
+        .hero-mockup p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* ==================== FEATURE CARDS + DESCRIPTION SLIDER ==================== */
+        .features-section {
+            padding: 60px 24px;
+            background: var(--white);
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-header h2 {
+            font-family: 'Space Mono', monospace;
+            font-size: 2rem;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .section-header p {
+            color: var(--gray);
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Static Feature Cards Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .feature-card {
+            background: var(--white);
+            border: var(--border-width) solid var(--black);
+            transition: all 0.3s;
+            box-shadow: 5px 5px 0 var(--blue-primary);
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .feature-card:hover,
+        .feature-card.active {
+            transform: translate(-3px, -3px);
+            box-shadow: 8px 8px 0 var(--blue-primary);
+        }
+
+        .feature-card.active {
+            border-color: var(--blue-primary);
+        }
+
+        .feature-card .card-image {
+            width: 100%;
+            height: 140px;
+            background: var(--blue-pale);
+            border-bottom: 2px solid var(--black);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .feature-card .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 6px 6px 0 0;
+        }
+
+        /* Remove border-radius for card 2 and 4 */
+        .feature-card:nth-child(2) .card-image,
+        .feature-card:nth-child(4) .card-image {
+            border-radius: 0;
+        }
+
+        .feature-card:nth-child(2) .card-image img,
+        .feature-card:nth-child(4) .card-image img {
+            border-radius: 0;
+        }
+
+        .feature-card .card-image .placeholder-icon {
+            font-size: 2.5rem;
+            color: var(--blue-primary);
+        }
+
+        .feature-card .card-title {
+            padding: 16px;
+            text-align: left;
+        }
+
+        .feature-card h3 {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+            color: var(--black);
+        }
+
+        .feature-card .card-subtitle {
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+
+        /* Description Slider Container */
+        .feature-description-slider {
+            background: var(--blue-pale);
+            border: var(--border-width) solid var(--black);
+            border-radius: 0;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+            box-shadow: 8px 8px 0 var(--blue-primary);
+            min-height: 280px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-slide {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feature-slide.active {
+            display: contents;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .feature-slide-content h3 {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            color: var(--black);
+        }
+
+        .feature-slide-content p {
+            font-size: 1rem;
+            color: var(--gray);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .feature-slide-content .learn-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--blue-primary);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .feature-slide-content .learn-more:hover {
+            text-decoration: underline;
+        }
+
+        .feature-slide-image {
+            background: var(--white);
+            border: 2px solid var(--black);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+        }
+
+        .feature-slide-image i {
+            font-size: 5rem;
+            color: var(--blue-dark);
+        }
+
+        .feature-slide-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Remove padding when slide image has img */
+        .feature-slide-image:has(img) {
+            padding: 0;
+            overflow: hidden;
+            border: none;
+            background: transparent;
+        }
+
+        .feature-slide-image.rounded,
+        .feature-slide-image.rounded img {
+            border-radius: 12px;
+        }
+
+
+        /* Arrow Pointer Indicator */
+        .slider-pointer-container {
+            position: relative;
+            height: 30px;
+            margin-top: 24px;
+        }
+
+        .slider-pointer {
+            position: absolute;
+            top: 0;
+            width: 50px;
+            height: 30px;
+            transition: left 0.5s ease;
+        }
+
+        .slider-pointer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 25px solid transparent;
+            border-right: 25px solid transparent;
+            border-bottom: 30px solid var(--blue-primary);
+        }
+
+        /* Position for each card */
+        .slider-pointer[data-active="0"] {
+            left: calc(12.5% - 25px);
+        }
+
+        .slider-pointer[data-active="1"] {
+            left: calc(37.5% - 25px);
+        }
+
+        .slider-pointer[data-active="2"] {
+            left: calc(62.5% - 25px);
+        }
+
+        .slider-pointer[data-active="3"] {
+            left: calc(87.5% - 25px);
+        }
+
+        @media (max-width: 900px) {
+            .slider-pointer[data-active="0"] {
+                left: calc(25% - 25px);
+            }
+
+            .slider-pointer[data-active="1"] {
+                left: calc(75% - 25px);
+            }
+
+            .slider-pointer[data-active="2"] {
+                left: calc(25% - 25px);
+            }
+
+            .slider-pointer[data-active="3"] {
+                left: calc(75% - 25px);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .slider-pointer[data-active="0"] {
+                left: calc(25% - 25px);
+            }
+
+            .slider-pointer[data-active="1"] {
+                left: calc(75% - 25px);
+            }
+
+            .slider-pointer[data-active="2"] {
+                left: calc(25% - 25px);
+            }
+
+            .slider-pointer[data-active="3"] {
+                left: calc(75% - 25px);
+            }
+        }
+
+        /* Slider Dots */
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            background: var(--gray-light);
+            border: 2px solid var(--black);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .slider-dot.active,
+        .slider-dot:hover {
+            background: var(--blue-primary);
+        }
+
+        @media (max-width: 900px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .feature-description-slider {
+                grid-template-columns: 1fr;
+                padding: 24px;
+            }
+
+            .feature-slide-image {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .features-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            .feature-card .card-image {
+                height: 80px;
+            }
+
+            .feature-card .card-title {
+                padding: 12px;
+            }
+
+            .feature-card h3 {
+                font-size: 0.75rem;
+            }
+        }
+
+        /* ==================== HOW IT WORKS ==================== */
+        .how-section {
+            padding: 80px 24px;
+            background: var(--blue-pale);
+            border-top: var(--border-width) solid var(--black);
+            border-bottom: var(--border-width) solid var(--black);
+        }
+
+        .how-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 60px;
+        }
+
+        .how-step {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .how-step:nth-child(even) {
+            direction: rtl;
+        }
+
+        .how-step:nth-child(even)>* {
+            direction: ltr;
+        }
+
+        .how-step-content {
+            padding: 20px 0;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--blue-primary);
+            color: var(--white);
+            border: 2px solid var(--black);
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+        }
+
+        .how-step-content h3 {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .how-step-content p {
+            color: var(--gray);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .how-step-visual {
+            background: var(--white);
+            border: var(--border-width) solid var(--black);
+            padding: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 8px 8px 0 var(--blue-primary);
+        }
+
+        .how-step-visual i {
+            font-size: 4rem;
+            color: var(--blue-dark);
+        }
+
+        .how-step-visual img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Remove padding when visual has image */
+        .how-step-visual:has(img) {
+            padding: 0;
+            overflow: hidden;
+        }
+
+        /* ==================== STATS SECTION ==================== */
+        .stats-section {
+            padding: 60px 24px;
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .stat-item .value {
+            font-family: 'Space Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--blue-light);
+            margin-bottom: 8px;
+        }
+
+        .stat-item .label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #94a3b8;
+        }
+
+        /* ==================== CTA SECTION ==================== */
+        .cta-section {
+            padding: 80px 24px;
+            background: var(--blue-primary);
+            border-top: var(--border-width) solid var(--black);
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-family: 'Space Mono', monospace;
+            font-size: 2rem;
+            color: var(--white);
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+
+        .cta-section p {
+            color: var(--blue-pale);
+            font-size: 1.1rem;
+            margin-bottom: 32px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-section .btn-brutal {
+            background: var(--white);
+            color: var(--black);
+        }
+
+        .cta-section .btn-brutal:hover {
+            background: var(--blue-pale);
+        }
+
+        /* ==================== FAQ SECTION ==================== */
+        .faq-section {
+            padding: 80px 24px;
+            background: var(--white);
+            border-bottom: var(--border-width) solid var(--black);
+        }
+
+        .faq-section .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .faq-section .section-header span {
+            color: var(--blue-primary);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 24px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--black);
+            transition: color 0.2s;
+        }
+
+        .faq-question:hover {
+            color: var(--blue-primary);
+        }
+
+        .faq-question i {
+            font-size: 1.2rem;
+            color: var(--gray);
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 300px;
+            padding-bottom: 24px;
+        }
+
+        .faq-answer p {
+            color: var(--gray);
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        .faq-cta {
+            text-align: center;
+            margin-top: 48px;
+        }
+
+        .faq-cta .btn-primary {
+            display: inline-block;
+            padding: 16px 40px;
+            background: var(--blue-primary);
+            color: var(--white);
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: 3px solid var(--black);
+            box-shadow: 4px 4px 0 var(--black);
+            transition: all 0.2s;
+        }
+
+        .faq-cta .btn-primary:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 var(--black);
+        }
+
+        /* ==================== FOOTER ==================== */
+        .footer {
+            background: #0f172a;
+            color: #94a3b8;
+        }
+
+        .footer-main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 48px 24px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            gap: 32px;
+        }
+
+        .footer-brand {
+            font-family: 'Space Mono', monospace;
+        }
+
+        .footer-brand h3 {
+            color: var(--white);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        .footer-brand p {
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .footer-column h4 {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--white);
+            margin-bottom: 16px;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.2s;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--blue-light);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #1e293b;
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .footer-copyright {
+            font-size: 0.8rem;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 16px;
+        }
+
+        .footer-social a {
+            color: #94a3b8;
+            font-size: 1.25rem;
+            transition: color 0.2s;
+        }
+
+        .footer-social a:hover {
+            color: var(--blue-light);
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 1024px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .hero-content {
+                text-align: center;
+            }
+
+            .hero-cta {
+                justify-content: center;
+            }
+
+            .hero-image-box {
+                max-width: 500px;
+                margin: 0 auto;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .how-step,
+            .how-step:nth-child(even) {
+                grid-template-columns: 1fr;
+                direction: ltr;
+            }
+
+            .how-step-visual {
+                order: -1;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-main {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                padding: 50px 24px;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .footer-main {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .navbar-tools {
+                display: flex;
+                flex-direction: column;
+                position: fixed;
+                top: 0;
+                right: 0;
+                height: 100vh;
+                width: 250px;
+                background: var(--white);
+                border-left: 3px solid var(--black);
+                padding: 80px 24px 24px;
+                z-index: 2000;
+                transform: translateX(100%);
+                transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+                box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+            }
+
+            .navbar-tools.active {
+                transform: translateX(0);
+            }
+
+            .navbar-tools a {
+                padding: 12px 0;
+                border-bottom: 1px solid #e2e8f0;
+                width: 100%;
+                display: block;
+                height: auto;
+            }
+
+            .navbar-toggle {
+                display: block;
+                z-index: 2010;
+            }
+        }
+
+        @media (min-width: 901px) {
+            .navbar-toggle {
+                display: none !important;
+            }
+
+            .navbar-tools {
+                display: flex !important;
+                flex-direction: row !important;
+                position: static !important;
+                transform: none !important;
+                height: auto !important;
+                width: auto !important;
+                padding: 0 !important;
+                background: transparent !important;
+                border: none !important;
+                box-shadow: none !important;
+            }
+
+            .navbar-tools a {
+                padding: 24px 16px !important;
+                border-bottom: 2px solid transparent !important;
+                width: auto !important;
+                display: inline-block !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-brand">
+                <span class="logo-text">NETRA</span>
+            </a>
+
+            <div class="navbar-tools">
+                <a href="/" class="active">Beranda</a>
+                <a href="/ocr">OCR Scan</a>
+                <a href="/document">Parse Document</a>
+                <a href="/batch">Batch</a>
+                <div class="dropdown">
+                    <a href="#">All Tools <i class="bi bi-chevron-down"></i></a>
+                    <div class="dropdown-content">
+                        <a href="/ocr">OCR Scanner</a>
+                        <a href="/document">Document Parser</a>
+                        <a href="/batch">Batch Analysis</a>
+                        <a href="/pricing">Pricing</a>
+                        <a href="/about">About</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navbar-right" style="margin-left: auto; display: flex; align-items: center; gap: 12px;">
+                <div class="navbar-auth">
+                    <a href="/login" class="btn-login">Login</a>
+                    <a href="/signup" class="btn-signup">
+                        <i class="bi bi-person-plus"></i>
+                        Sign up
+                    </a>
+                </div>
+                <button class="navbar-toggle">
+                    <i class="bi bi-list"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section (Cake.me Style) -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>
+                    Analisis Dokumen Cerdas dengan
+                    <span class="highlight">Rabin-Karp</span> &
+                    <span class="highlight">OCR</span>
+                </h1>
+                <p>
+                    Platform screening literatur berbasis OCR dan algoritma Rabin-Karp untuk membantu mahasiswa
+                    dalam proses tinjauan pustaka. Ekstrak teks dari gambar dan analisis relevansi dokumen dengan cepat.
+                </p>
+                <div class="hero-cta">
+                    <a href="/ocr" class="btn-brutal">
+                        <i class="bi bi-camera"></i>
+                        Mulai OCR Scan
+                    </a>
+                    <a href="/document" class="btn-brutal btn-brutal-outline">
+                        <i class="bi bi-file-earmark-text"></i>
+                        Parse Document
+                    </a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="hero-image-box">
+                    <img src="/static/img/hero-mockup.png" alt="NETRA - Analisis Dokumen dengan Rabin-Karp">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feature Cards + Description Slider -->
+    <section class="features-section">
+        <div class="section-container">
+            <div class="section-header">
+                <h2>Fitur Unggulan</h2>
+                <p>Tools lengkap untuk analisis dokumen akademis Anda</p>
+            </div>
+
+            <!-- Static Feature Cards Grid -->
+            <div class="features-grid">
+                <div class="feature-card active" data-slide="0">
+                    <div class="card-image">
+                        <img src="/static/img/feature-ocr.png" alt="OCR Scan">
+                    </div>
+                    <div class="card-title">
+                        <h3>OCR Scan</h3>
+                        <div class="card-subtitle">Foto → Teks Digital</div>
+                    </div>
+                </div>
+                <div class="feature-card" data-slide="1">
+                    <div class="card-image">
+                        <img src="/static/img/feature-parse.png" alt="Parse Document">
+                    </div>
+                    <div class="card-title">
+                        <h3>Parse Document</h3>
+                        <div class="card-subtitle">PDF & Word Support</div>
+                    </div>
+                </div>
+                <div class="feature-card" data-slide="2">
+                    <div class="card-image">
+                        <img src="/static/img/feature-batch.png" alt="Batch Processing">
+                    </div>
+                    <div class="card-title">
+                        <h3>Batch </h3>
+                        <div class="card-subtitle">Multi-file Analysis</div>
+                    </div>
+                </div>
+                <div class="feature-card" data-slide="3">
+                    <div class="card-image">
+                        <img src="/static/img/feature-rabin.png" alt="Rabin-Karp Algorithm">
+                    </div>
+                    <div class="card-title">
+                        <h3>Algoritma Rabin-Karp</h3>
+                        <div class="card-subtitle">Rolling Hash Match</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Arrow Pointer Indicator -->
+            <div class="slider-pointer-container">
+                <div class="slider-pointer" data-active="0"></div>
+            </div>
+
+            <!-- Auto-scrolling Description Slider -->
+            <div class="feature-description-slider">
+                <!-- Slide 1 - OCR -->
+                <div class="feature-slide active" data-index="0">
+                    <div class="feature-slide-content">
+                        <h3>OCR Scan</h3>
+                        <p>Ubah foto dokumen fisik buram menjadi teks digital presisi yang siap dianalisis sistem.
+                            Teknologi Tesseract OCR dengan dukungan bahasa Indonesia dan Inggris.</p>
+                        <a href="/ocr" class="learn-more">Coba Sekarang →</a>
+                    </div>
+                    <div class="feature-slide-image">
+                        <img src="/static/img/slide-ocr.png" alt="OCR Scanner Demo">
+                    </div>
+                </div>
+
+                <!-- Slide 2 - Parse -->
+                <div class="feature-slide" data-index="1">
+                    <div class="feature-slide-content">
+                        <h3>Parse Document</h3>
+                        <p>Dukungan penuh untuk analisis langsung file PDF dan Word tanpa perlu konversi format yang
+                            ribet. Ekstraksi teks cepat dan akurat.</p>
+                        <a href="/document" class="learn-more">Coba Sekarang →</a>
+                    </div>
+                    <div class="feature-slide-image">
+                        <img src="/static/img/slide-parse.png" alt="Parse Document Demo">
+                    </div>
+                </div>
+
+                <!-- Slide 3 - Batch -->
+                <div class="feature-slide" data-index="2">
+                    <div class="feature-slide-content">
+                        <h3>Batch</h3>
+                        <p>Efisiensi riset maksimal dengan memproses puluhan halaman referensi sekaligus dalam satu
+                            klik. Bandingkan relevansi multiple dokumen.</p>
+                        <a href="/batch" class="learn-more">Coba Sekarang →</a>
+                    </div>
+                    <div class="feature-slide-image rounded">
+                        <img src="/static/img/slide-batch.jpg" alt="Batch Processing Demo">
+                    </div>
+                </div>
+
+                <!-- Slide 4 - Rabin-Karp -->
+                <div class="feature-slide" data-index="3">
+                    <div class="feature-slide-content">
+                        <h3>Algoritma Rabin-Karp</h3>
+                        <p>Mesin pencari berbasis rolling-hash yang mampu menemukan relevansi topik dengan akurasi
+                            tinggi. Algoritma Rabin-Karp untuk pattern matching efisien.</p>
+                        <a href="/about" class="learn-more">Pelajari Lebih Lanjut →</a>
+                    </div>
+                    <div class="feature-slide-image rounded">
+                        <img src="/static/img/slide-rabin.png" alt="Algoritma Rabin-Karp">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slider Dots -->
+            <div class="slider-dots">
+                <div class="slider-dot active" data-slide="0"></div>
+                <div class="slider-dot" data-slide="1"></div>
+                <div class="slider-dot" data-slide="2"></div>
+                <div class="slider-dot" data-slide="3"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-section">
+        <div class="section-container">
+            <div class="section-header">
+                <h2>Cara Kerja</h2>
+                <p>3 langkah mudah untuk menganalisis dokumen Anda</p>
+            </div>
+            <div class="how-steps">
+                <div class="how-step">
+                    <div class="how-step-content">
+                        <div class="step-number">1</div>
+                        <h3>Upload Dokumen</h3>
+                        <p>Unggah gambar (JPG, PNG) atau dokumen (PDF, DOCX) yang ingin dianalisis. Sistem kami
+                            mendukung berbagai format file akademis.</p>
+                    </div>
+                    <div class="how-step-visual">
+                        <img src="/static/img/step-upload.png" alt="Upload Dokumen">
+                    </div>
+                </div>
+                <div class="how-step">
+                    <div class="how-step-content">
+                        <div class="step-number">2</div>
+                        <h3>Ekstraksi Teks</h3>
+                        <p>Sistem melakukan OCR pada gambar atau parse pada dokumen untuk mengekstrak seluruh teks
+                            yang ada di dalamnya.</p>
+                    </div>
+                    <div class="how-step-visual">
+                        <img src="/static/img/step-extract.png" alt="Ekstraksi Teks">
+                    </div>
+                </div>
+                <div class="how-step">
+                    <div class="how-step-content">
+                        <div class="step-number">3</div>
+                        <h3>Analisis Relevansi</h3>
+                        <p>Algoritma Rabin-Karp menganalisis teks dan mencocokkan dengan kata kunci riset Anda untuk
+                            menentukan tingkat relevansi.</p>
+                    </div>
+                    <div class="how-step-visual">
+                        <img src="/static/img/step-analysis.png" alt="Analisis Relevansi">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="value">10K+</div>
+                <div class="label">Dokumen Diproses</div>
+            </div>
+            <div class="stat-item">
+                <div class="value">99%</div>
+                <div class="label">Akurasi OCR</div>
+            </div>
+            <div class="stat-item">
+                <div class="value">&lt;5s</div>
+                <div class="label">Waktu Proses</div>
+            </div>
+            <div class="stat-item">
+                <div class="value">4.9★</div>
+                <div class="label">Rating User</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="section-container">
+            <div class="section-header">
+                <span>FAQ</span>
+                <h2>Pertanyaan yang Sering Diajukan</h2>
+            </div>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Bagaimana NETRA dapat membantu proses riset saya?
+                        <i class="bi bi-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>NETRA membantu mempercepat proses screening literatur dengan menganalisis relevansi dokumen
+                            terhadap kata kunci riset Anda menggunakan algoritma Rabin-Karp. Anda dapat memproses
+                            puluhan dokumen sekaligus dan mendapatkan hasil dalam hitungan detik.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Format file apa saja yang didukung oleh NETRA?
+                        <i class="bi bi-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>NETRA mendukung berbagai format file termasuk gambar (JPG, PNG) melalui fitur OCR, dokumen
+                            PDF, dan file Word (DOCX). Anda dapat mengupload dan menganalisis semua format tersebut
+                            secara langsung.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Bagaimana algoritma Rabin-Karp bekerja dalam NETRA?
+                        <i class="bi bi-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Algoritma Rabin-Karp menggunakan teknik rolling hash untuk mencari pola teks secara efisien.
+                            NETRA menggunakan algoritma ini untuk mencocokkan kata kunci riset dengan isi dokumen,
+                            menghasilkan persentase relevansi yang akurat.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Apakah data dokumen saya aman di NETRA?
+                        <i class="bi bi-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Ya, keamanan data adalah prioritas kami. Dokumen yang Anda upload hanya diproses sementara
+                            untuk analisis dan tidak disimpan di server kami. Setelah analisis selesai, file akan
+                            otomatis dihapus.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Berapa banyak dokumen yang bisa diproses sekaligus?
+                        <i class="bi bi-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Dengan fitur Batch Analysis, Anda dapat mengupload dan memproses hingga 20 dokumen sekaligus.
+                            Sistem akan menganalisis setiap dokumen dan menampilkan hasil relevansi dalam bentuk tabel
+                            yang mudah dibaca.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Apakah NETRA gratis untuk digunakan?
+                        <i class="bi bi-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>NETRA menyediakan paket gratis dengan batasan tertentu. Untuk penggunaan lebih intensif,
+                            tersedia paket berbayar dengan fitur tambahan seperti analisis batch unlimited dan prioritas
+                            processing.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="faq-cta">
+                <a href="/signup" class="btn-primary">Daftar Sekarang</a>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-main">
+            <div class="footer-brand">
+                <h3>NETRA</h3>
+                <p>Aplikasi screening literatur berbasis OCR dan algoritma Rabin-Karp untuk membantu mahasiswa dalam
+                    proses tinjauan pustaka.</p>
+            </div>
+
+            <div class="footer-column">
+                <h4>Fitur</h4>
+                <ul>
+                    <li><a href="/batch">Batch Processing</a></li>
+                    <li><a href="/ocr">OCR Gambar</a></li>
+                    <li><a href="/document">Parse DOCX</a></li>
+                    <li><a href="/document">Parse PDF</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Teknologi</h4>
+                <ul>
+                    <li><a href="#">Flask</a></li>
+                    <li><a href="#">Tesseract OCR</a></li>
+                    <li><a href="#">PyPDF2</a></li>
+                    <li><a href="#">python-docx</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Referensi</h4>
+                <ul>
+                    <li><a href="#">Dokumentasi</a></li>
+                    <li><a href="#">GitHub</a></li>
+                    <li><a href="#">Paper</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Perusahaan</h4>
+                <ul>
+                    <li><a href="/about">Tentang Kami</a></li>
+                    <li><a href="/contact">Kontak</a></li>
+                    <li><a href="/pricing">Pricing</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-copyright">© 2024 NETRA • Thesis Project</div>
+            <div class="footer-social">
+                <a href="#"><i class="bi bi-github"></i></a>
+                <a href="#"><i class="bi bi-linkedin"></i></a>
+                <a href="#"><i class="bi bi-instagram"></i></a>
+                <a href="#"><i class="bi bi-envelope-fill"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const toggleBtn = document.querySelector('.navbar-toggle');
+        const toolsMenu = document.querySelector('.navbar-tools');
+        if (toggleBtn && toolsMenu) {
+            toggleBtn.addEventListener('click', () => {
+                toolsMenu.classList.toggle('active');
+                const icon = toggleBtn.querySelector('i');
+                if (icon) {
+                    icon.classList.toggle('bi-list');
+                    icon.classList.toggle('bi-x');
+                }
+            });
+        }
+
+        // Feature Description Slider - Auto-scroll
+        (function () {
+            const slides = document.querySelectorAll('.feature-slide');
+            const cards = document.querySelectorAll('.features-grid .feature-card');
+            const dots = document.querySelectorAll('.slider-dot');
+            const pointer = document.querySelector('.slider-pointer');
+            let currentSlide = 0;
+            let autoSlideInterval;
+            const SLIDE_DURATION = 4000; // 4 seconds
+
+            function showSlide(index) {
+                // Remove active from all slides, cards, dots
+                slides.forEach(s => s.classList.remove('active'));
+                cards.forEach(c => c.classList.remove('active'));
+                dots.forEach(d => d.classList.remove('active'));
+
+                // Add active to current
+                if (slides[index]) slides[index].classList.add('active');
+                if (cards[index]) cards[index].classList.add('active');
+                if (dots[index]) dots[index].classList.add('active');
+
+                // Move arrow pointer
+                if (pointer) pointer.setAttribute('data-active', index);
+
+                currentSlide = index;
+            }
+
+            function nextSlide() {
+                const next = (currentSlide + 1) % slides.length;
+                showSlide(next);
+            }
+
+            function startAutoSlide() {
+                autoSlideInterval = setInterval(nextSlide, SLIDE_DURATION);
+            }
+
+            function resetAutoSlide() {
+                clearInterval(autoSlideInterval);
+                startAutoSlide();
+            }
+
+            // Card click handler
+            cards.forEach((card, index) => {
+                card.addEventListener('click', () => {
+                    showSlide(index);
+                    resetAutoSlide();
+                });
+            });
+
+            // Dot click handler
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    showSlide(index);
+                    resetAutoSlide();
+                });
+            });
+
+            // Start auto-slide
+            if (slides.length > 0) {
+                startAutoSlide();
+            }
+        })();
+
+        // FAQ Accordion Toggle
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const item = button.parentElement;
+                const isActive = item.classList.contains('active');
+
+                // Close all other items
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+
+                // Toggle current item
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

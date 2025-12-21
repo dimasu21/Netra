@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  netra:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - GROQ_API_KEY=${GROQ_API_KEY}
+    volumes:
+      - ./static:/app/static
+    restart: unless-stopped
