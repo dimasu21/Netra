@@ -14,6 +14,8 @@
         rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Cloudflare Turnstile -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
     <style>
         :root {
@@ -1003,6 +1005,12 @@
                     placeholder="Masukkan keyword yang akan dicari di semua file...">
             </div>
 
+            <!-- Turnstile Widget -->
+            <div class="form-group"
+                style="display: flex; justify-content: center; margin-top: 20px; margin-bottom: 20px;">
+                <div class="cf-turnstile" data-sitekey="0x4AAAAAACH9K81txQlhqv5C" data-theme="light"></div>
+            </div>
+
             <button class="btn-analyze" id="analyzeBtn" disabled>
                 <i class="bi bi-search"></i> Analisis Semua File
             </button>
@@ -1196,6 +1204,12 @@
                 const formData = new FormData();
                 formData.append('file', selectedFiles[i]);
                 formData.append('keyword', keyword);
+
+                // Append Turnstile Token (valid for session initiation)
+                const turnstileToken = document.querySelector('[name="cf-turnstile-response"]')?.value;
+                if (turnstileToken) {
+                    formData.append('cf-turnstile-response', turnstileToken);
+                }
 
                 try {
                     const response = await fetch('/api/analyze', {

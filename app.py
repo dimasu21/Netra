@@ -18,7 +18,7 @@ import os
 import re
 import base64
 from io import BytesIO
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, session
 from flask_login import LoginManager, current_user
 from PIL import Image
 import pytesseract
@@ -477,6 +477,42 @@ def analyze():
         if not uploaded_file:
             return jsonify({'success': False, 'error': 'Tidak ada file yang diunggah'}), 400
         
+from flask import Flask, render_template, request, jsonify, session
+
+# ... imports ...
+
+# In analyze function:
+
+        # Cloudflare Turnstile Verification
+        # Skip if user is logged in or already verified in session
+        if not current_user.is_authenticated and not session.get('is_human_verified'):
+            turnstile_token = request.form.get('cf-turnstile-response')
+            if not turnstile_token:
+                return jsonify({'success': False, 'error': 'Verifikasi keamanan gagal (Token missing). Silakan refresh halaman.'}), 400
+
+            # Verify token with Cloudflare
+            try:
+                import requests
+                secret_key = os.environ.get('TURNSTILE_SECRET_KEY', '0x4AAAAAACH9KxS6HutyBiLRk8STEbKs-j8')
+                verify_response = requests.post(
+                    'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+                    data={
+                        'secret': secret_key,
+                        'response': turnstile_token,
+                        'remoteip': request.remote_addr
+                    }
+                ).json()
+
+                if not verify_response.get('success'):
+                    return jsonify({'success': False, 'error': 'Verifikasi keamanan gagal. Silakan coba lagi.'}), 400
+                
+                # Mark session as verified
+                session['is_human_verified'] = True
+                
+            except Exception as e:
+                # Fallback if verification api fails
+                pass
+
         keyword = request.form.get('keyword', '').strip()
         
         if uploaded_file.filename == '':
