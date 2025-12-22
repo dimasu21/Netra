@@ -648,28 +648,18 @@
         }
 
         @media (max-width: 600px) {
+
+            /* Hide feature cards on mobile - too cluttered */
             .features-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 12px;
+                display: none;
             }
 
-            .feature-card .card-image {
-                height: 100px;
-                padding: 10px;
+            .feature-description-slider {
+                display: none;
             }
 
-            .feature-card .card-image img {
-                object-fit: contain;
-                height: auto;
-                max-height: 100%;
-            }
-
-            .feature-card .card-title {
-                padding: 12px;
-            }
-
-            .feature-card h3 {
-                font-size: 0.75rem;
+            .slider-dots {
+                display: none;
             }
 
             /* Hide slider pointer on mobile */
