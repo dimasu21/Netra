@@ -14,6 +14,8 @@
         rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Translation System -->
+    <script src="/static/js/translations.js"></script>
 
     <style>
         :root {
@@ -573,21 +575,55 @@
                 <a href="/document">Parse Document</a>
                 <a href="/batch">Batch</a>
                 <div class="dropdown">
-                    <a href="#">All Tools <i class="bi bi-chevron-down"></i></a>
+                    <a href="#"><span data-i18n="nav.more">Lainnya</span> <i class="bi bi-chevron-down"></i></a>
                     <div class="dropdown-content">
-                        <a href="/">OCR Scanner</a>
-                        <a href="/document">Document Parser</a>
-                        <a href="/batch">Batch Analysis</a>
+                        
+                        
+                        
                         <a href="/pricing">Pricing</a>
                         <a href="/about" class="active">About</a>
                         <a href="/contact">Contact</a>
+                        <a href="/privacy">Kebijakan Privasi</a>
+                        <a href="/terms">Syarat & Ketentuan</a>
                     </div>
                 </div>
             </div>
             <div class="navbar-right" style="margin-left: auto; display: flex; align-items: center; gap: 12px;">
+                <!-- Language Dropdown -->
+                <div class="lang-dropdown" style="position: relative;">
+                    <button class="lang-btn"
+                        style="display: flex; align-items: center; gap: 6px; padding: 8px 12px; background: transparent; border: 1px solid #f1f5f9; border-radius: 6px; cursor: pointer; font-size: 0.85rem; color: #6b7280;">
+                        <i class="bi bi-globe"></i>
+                        <span class="lang-current">ID</span>
+                        <i class="bi bi-chevron-down"></i>
+                    </button>
+                    <div class="lang-dropdown-content"
+                        style="display: none; position: absolute; top: 100%; right: 0; background: white; border: 1px solid #f1f5f9; border-radius: 8px; min-width: 180px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 1000;">
+                        <a href="#" data-lang="id" class="lang-option active"
+                            style="display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; color: #6b7280; text-decoration: none;"><span>Bahasa
+                                Indonesia</span><i class="bi bi-check2"></i></a>
+                        <a href="#" data-lang="en" class="lang-option"
+                            style="display: block; padding: 10px 16px; color: #6b7280; text-decoration: none;"><span>English</span></a>
+                        <a href="#" data-lang="zh-TW" class="lang-option"
+                            style="display: block; padding: 10px 16px; color: #6b7280; text-decoration: none;"><span>中文（繁體）</span></a>
+                        <a href="#" data-lang="zh-CN" class="lang-option"
+                            style="display: block; padding: 10px 16px; color: #6b7280; text-decoration: none;"><span>中文（简体）</span></a>
+                        <a href="#" data-lang="vi" class="lang-option"
+                            style="display: block; padding: 10px 16px; color: #6b7280; text-decoration: none;"><span>Tiếng
+                                Việt</span></a>
+                        <a href="#" data-lang="ja" class="lang-option"
+                            style="display: block; padding: 10px 16px; color: #6b7280; text-decoration: none;"><span>日本語</span></a>
+                    </div>
+                </div>
                 <div class="navbar-auth">
-                    <a href="/login" class="btn-login">Login</a>
-                    <a href="/signup" class="btn-signup"><i class="bi bi-google"></i> Sign up</a>
+                    {% if current_user.is_authenticated %}
+                    <span style="color: var(--gray); font-size: 0.85rem;">{{ current_user.name.split()[0] }}</span>
+                    <a href="/logout" class="btn-login" data-i18n="nav.logout">Logout</a>
+                    {% else %}
+                    <a href="/login" class="btn-login" data-i18n="nav.login">Login</a>
+                    <a href="/signup" class="btn-signup"><i class="bi bi-person-plus"></i> <span
+                            data-i18n="nav.signup">Sign up</span></a>
+                    {% endif %}
                 </div>
                 <button class="navbar-toggle"><i class="bi bi-list"></i></button>
             </div>
@@ -640,52 +676,34 @@
         <div class="footer-main">
             <div class="footer-brand">
                 <h3>NETRA</h3>
-                <p>Aplikasi screening literatur berbasis OCR dan algoritma Rabin-Karp untuk membantu mahasiswa dalam
-                    proses tinjauan pustaka.</p>
+                <p>Platform analisis dokumen cerdas berbasis OCR dan algoritma Rabin-Karp.</p>
             </div>
             <div class="footer-column">
-                <h4>Fitur</h4>
+                <h4 data-i18n="footer.tools">TOOLS</h4>
                 <ul>
-                    <li><a href="#">OCR Gambar</a></li>
-                    <li><a href="#">Parse DOCX</a></li>
-                    <li><a href="#">Parse PDF</a></li>
-                    <li><a href="#">Rabin-Karp</a></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
                 </ul>
             </div>
             <div class="footer-column">
-                <h4>Teknologi</h4>
+                <h4 data-i18n="footer.company">COMPANY</h4>
                 <ul>
-                    <li><a href="#">Flask</a></li>
-                    <li><a href="#">Tesseract OCR</a></li>
-                    <li><a href="#">PyPDF2</a></li>
-                    <li><a href="#">python-docx</a></li>
+                    <li><a href="/about" data-i18n="footer.about">About</a></li>
+                    <li><a href="/pricing" data-i18n="footer.pricing">Pricing</a></li>
+                    <li><a href="/contact" data-i18n="footer.contact">Contact</a></li>
                 </ul>
             </div>
             <div class="footer-column">
-                <h4>Referensi</h4>
+                <h4 data-i18n="footer.legal">LEGAL</h4>
                 <ul>
-                    <li><a href="#">Dokumentasi</a></li>
-                    <li><a href="#">GitHub</a></li>
-                    <li><a href="#">Paper</a></li>
-                </ul>
-            </div>
-            <div class="footer-column">
-                <h4>Perusahaan</h4>
-                <ul>
-                    <li><a href="/about">Tentang Kami</a></li>
-                    <li><a href="/contact">Kontak</a></li>
-                    <li><a href="#">Lisensi</a></li>
+                    <li><a href="/privacy" data-i18n="footer.privacy">Kebijakan Privasi</a></li>
+                    <li><a href="/terms" data-i18n="footer.terms">Syarat & Ketentuan</a></li>
                 </ul>
             </div>
         </div>
         <div class="footer-bottom">
-            <div class="footer-copyright">© 2024 NETRA • Thesis Project</div>
-            <div class="footer-social">
-                <a href="#"><i class="bi bi-github"></i></a>
-                <a href="#"><i class="bi bi-linkedin"></i></a>
-                <a href="#"><i class="bi bi-instagram"></i></a>
-                <a href="#"><i class="bi bi-envelope-fill"></i></a>
-            </div>
+            <div class="footer-copyright" data-i18n="footer.copyright">© 2025 NETRA. All rights reserved.</div>
         </div>
     </footer>
     <script>
@@ -707,7 +725,46 @@
                 }
             });
         }
+
+        // Language Switcher
+        (function () {
+            const langDropdown = document.querySelector('.lang-dropdown');
+            const langContent = document.querySelector('.lang-dropdown-content');
+            const langOptions = document.querySelectorAll('.lang-option');
+            const langCurrent = document.querySelector('.lang-current');
+
+            const langNames = { 'id': 'ID', 'en': 'EN', 'zh-TW': '繁', 'zh-CN': '简', 'vi': 'VI', 'ja': 'JP' };
+
+            // Show/hide dropdown on hover
+            if (langDropdown) {
+                langDropdown.addEventListener('mouseenter', () => langContent.style.display = 'block');
+                langDropdown.addEventListener('mouseleave', () => langContent.style.display = 'none');
+            }
+
+            langOptions.forEach(option => {
+                option.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const lang = option.getAttribute('data-lang');
+                    langOptions.forEach(opt => opt.classList.remove('active'));
+                    option.classList.add('active');
+                    if (langCurrent) langCurrent.textContent = langNames[lang] || lang.toUpperCase();
+                    localStorage.setItem('netra-lang', lang);
+                    if (window.netraI18n) window.netraI18n.applyTranslations();
+                });
+            });
+
+            // Load saved preference
+            const savedLang = localStorage.getItem('netra-lang');
+            if (savedLang && langCurrent) {
+                langCurrent.textContent = langNames[savedLang] || savedLang.toUpperCase();
+                langOptions.forEach(opt => opt.classList.remove('active'));
+                const savedOption = document.querySelector(`.lang-option[data-lang="${savedLang}"]`);
+                if (savedOption) savedOption.classList.add('active');
+            }
+        })();
     </script>
 </body>
 
 </html>
+
+

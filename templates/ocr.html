@@ -12,6 +12,8 @@
         rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Translation System -->
+    <script src="/static/js/translations.js"></script>
     <!-- Cloudflare Turnstile -->
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
@@ -1015,14 +1017,16 @@
                 <a href="/document">Parse Document</a>
                 <a href="/batch">Batch</a>
                 <div class="dropdown">
-                    <a href="#">All Tools <i class="bi bi-chevron-down"></i></a>
+                    <a href="#"><span data-i18n="nav.more">Lainnya</span> <i class="bi bi-chevron-down"></i></a>
                     <div class="dropdown-content">
-                        <a href="/ocr">OCR Scanner</a>
-                        <a href="/document">Document Parser</a>
-                        <a href="/batch">Batch Analysis</a>
+                        
+                        
+                        
                         <a href="/pricing">Pricing</a>
                         <a href="/about">About</a>
                         <a href="/contact">Contact</a>
+                        <a href="/privacy">Kebijakan Privasi</a>
+                        <a href="/terms">Syarat & Ketentuan</a>
                     </div>
                 </div>
             </div>
@@ -1466,3 +1470,6 @@
 </body>
 
 </html>
+
+
+

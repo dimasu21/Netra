@@ -14,6 +14,8 @@
         rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Translation System -->
+    <script src="/static/js/translations.js"></script>
 
     <style>
         :root {
@@ -54,7 +56,7 @@
         .navbar-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 24px;
+            padding: 0 24px 0 0;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -80,6 +82,7 @@
             align-items: center;
             gap: 0;
             height: 100%;
+            margin-left: auto;
         }
 
         .navbar-tools a {
@@ -112,15 +115,23 @@
             position: relative;
         }
 
+        /* Mobile-only links - hidden on desktop */
+        .mobile-only-link {
+            display: none !important;
+        }
+
         .navbar-tools .dropdown-content {
             display: none;
             position: absolute;
             top: 100%;
             left: 0;
             background: var(--white);
-            border: 2px solid var(--gray-light);
-            min-width: 180px;
+            border: 1px solid var(--gray-light);
+            border-radius: 8px;
+            min-width: 150px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 4px 0;
         }
 
         .navbar-tools .dropdown:hover .dropdown-content {
@@ -128,11 +139,19 @@
         }
 
         .navbar-tools .dropdown-content a {
-            display: block;
+            display: block !important;
             width: 100%;
-            height: auto;
-            padding: 12px 16px;
-            border-bottom: 1px solid var(--gray-light);
+            height: auto !important;
+            padding: 10px 16px !important;
+            font-size: 0.9rem !important;
+            border-bottom: none !important;
+            text-transform: none !important;
+            letter-spacing: normal !important;
+        }
+
+        .navbar-tools .dropdown-content a:hover {
+            background: var(--gray-light);
+            border-bottom-color: transparent !important;
         }
 
         .navbar-tools .dropdown-content a:last-child {
@@ -186,6 +205,157 @@
             font-size: 1.5rem;
             cursor: pointer;
             color: var(--black);
+        }
+
+        /* ==================== LANGUAGE DROPDOWN ==================== */
+        .lang-dropdown {
+            position: relative;
+        }
+
+        .lang-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            background: transparent;
+            border: 1px solid var(--gray-light);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: var(--gray);
+            transition: all 0.2s;
+        }
+
+        .lang-btn:hover {
+            border-color: var(--blue-primary);
+            color: var(--blue-primary);
+        }
+
+        .lang-dropdown-content {
+            display: none;
+            position: absolute;
+            top: calc(100% - 4px);
+            right: 0;
+            background: var(--white);
+            border: 1px solid var(--gray-light);
+            border-radius: 8px;
+            min-width: 180px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding-top: 8px;
+        }
+
+        .lang-dropdown:hover .lang-dropdown-content,
+        .lang-dropdown-content:hover {
+            display: block;
+        }
+
+        .lang-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 16px;
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .lang-option:hover {
+            background: var(--gray-light);
+        }
+
+        .lang-option.active {
+            color: var(--blue-primary);
+            font-weight: 600;
+        }
+
+        .lang-option i {
+            display: none;
+        }
+
+        .lang-option.active i {
+            display: inline;
+            color: var(--blue-primary);
+        }
+
+        /* ==================== USER DROPDOWN ==================== */
+        .user-dropdown {
+            position: relative;
+        }
+
+        .user-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--blue-pale);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: var(--blue-primary);
+            font-weight: 600;
+        }
+
+        .user-btn:hover {
+            background: var(--blue-light);
+            color: var(--white);
+        }
+
+        .user-dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--white);
+            border: 1px solid var(--gray-light);
+            border-radius: 8px;
+            min-width: 200px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            margin-top: 4px;
+        }
+
+        .user-dropdown:hover .user-dropdown-content {
+            display: block;
+        }
+
+        .user-info {
+            padding: 12px 16px;
+        }
+
+        .user-info strong {
+            display: block;
+            color: var(--black);
+            font-size: 0.95rem;
+        }
+
+        .user-info small {
+            color: var(--gray);
+            font-size: 0.8rem;
+        }
+
+        .user-dropdown-content hr {
+            margin: 0;
+            border: none;
+            border-top: 1px solid var(--gray-light);
+        }
+
+        .user-dropdown-content a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .user-dropdown-content a:hover {
+            background: var(--gray-light);
+            color: var(--blue-primary);
         }
 
         /* ==================== HERO SECTION (CAKE STYLE) ==================== */
@@ -1069,11 +1239,38 @@
 
         @media (max-width: 768px) {
             .hero {
-                padding: 50px 24px;
+                padding: 40px 20px;
+            }
+
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                text-align: left;
             }
 
             .hero-content h1 {
-                font-size: 2rem;
+                font-size: 1.75rem;
+                text-align: left;
+            }
+
+            .hero-content p {
+                font-size: 1rem;
+                text-align: justify;
+                line-height: 1.6;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .hero-cta .btn-brutal {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .hero-image {
+                display: none;
             }
 
             .features-grid {
@@ -1092,6 +1289,14 @@
                 flex-direction: column;
                 text-align: center;
                 gap: 16px;
+            }
+
+            .section-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .section-header p {
+                text-align: justify;
             }
         }
 
@@ -1129,6 +1334,54 @@
                 display: block;
                 z-index: 2010;
             }
+
+            /* Compact navbar for mobile */
+            .navbar-container {
+                padding: 0 12px !important;
+            }
+
+            .navbar-brand .logo-text {
+                font-size: 1rem;
+            }
+
+            .lang-btn {
+                padding: 6px 8px !important;
+                font-size: 0.75rem !important;
+            }
+
+            .lang-btn .bi-chevron-down {
+                display: none;
+            }
+
+            .btn-login {
+                padding: 6px 10px !important;
+                font-size: 0.7rem !important;
+            }
+
+            .btn-signup {
+                padding: 6px 10px !important;
+                font-size: 0.7rem !important;
+            }
+
+            .btn-signup span {
+                display: none;
+            }
+
+            .navbar-right {
+                gap: 6px !important;
+            }
+
+            .navbar-auth {
+                gap: 6px !important;
+            }
+
+            .navbar-tools .dropdown {
+                display: none !important;
+            }
+
+            .mobile-only-link {
+                display: block !important;
+            }
         }
 
         @media (min-width: 901px) {
@@ -1155,6 +1408,10 @@
                 width: auto !important;
                 display: inline-block !important;
             }
+
+            .navbar-tools .mobile-only-link {
+                display: none !important;
+            }
         }
     </style>
 </head>
@@ -1168,30 +1425,84 @@
             </a>
 
             <div class="navbar-tools">
-                <a href="/" class="active">Beranda</a>
-                <a href="/ocr">OCR Scan</a>
-                <a href="/document">Parse Document</a>
-                <a href="/batch">Batch</a>
+                <a href="/" class="active" data-i18n="nav.home">Beranda</a>
+                <a href="/ocr" data-i18n="nav.ocr">OCR Scan</a>
+                <a href="/document" data-i18n="nav.document">Parse Document</a>
+                <a href="/batch" data-i18n="nav.batch">Batch</a>
                 <div class="dropdown">
-                    <a href="#">All Tools <i class="bi bi-chevron-down"></i></a>
+                    <a href="#"><span data-i18n="nav.more">Lainnya</span> <i class="bi bi-chevron-down"></i></a>
                     <div class="dropdown-content">
-                        <a href="/ocr">OCR Scanner</a>
-                        <a href="/document">Document Parser</a>
-                        <a href="/batch">Batch Analysis</a>
-                        <a href="/pricing">Pricing</a>
-                        <a href="/about">About</a>
-                        <a href="/contact">Contact</a>
+                        <a href="/pricing" data-i18n="footer.pricing">Pricing</a>
+                        <a href="/about" data-i18n="footer.about">About</a>
+                        <a href="/contact" data-i18n="footer.contact">Contact</a>
+                        <a href="/privacy" data-i18n="footer.privacy">Kebijakan Privasi</a>
+                        <a href="/terms" data-i18n="footer.terms">Syarat & Ketentuan</a>
                     </div>
                 </div>
+                <!-- Mobile-only links -->
+                <a href="/pricing" class="mobile-only-link" data-i18n="footer.pricing">Pricing</a>
+                <a href="/about" class="mobile-only-link" data-i18n="footer.about">About</a>
+                <a href="/contact" class="mobile-only-link" data-i18n="footer.contact">Contact</a>
+                <a href="/privacy" class="mobile-only-link" data-i18n="footer.privacy">Kebijakan Privasi</a>
+                <a href="/terms" class="mobile-only-link" data-i18n="footer.terms">Syarat & Ketentuan</a>
             </div>
 
             <div class="navbar-right" style="margin-left: auto; display: flex; align-items: center; gap: 12px;">
+                <!-- Language Dropdown -->
+                <div class="lang-dropdown">
+                    <button class="lang-btn">
+                        <i class="bi bi-globe"></i>
+                        <span class="lang-current">ID</span>
+                        <i class="bi bi-chevron-down"></i>
+                    </button>
+                    <div class="lang-dropdown-content">
+                        <a href="#" data-lang="id" class="lang-option active">
+                            <span>Bahasa Indonesia</span>
+                            <i class="bi bi-check2"></i>
+                        </a>
+                        <a href="#" data-lang="en" class="lang-option">
+                            <span>English</span>
+                        </a>
+                        <a href="#" data-lang="zh-TW" class="lang-option">
+                            <span>中文（繁體）</span>
+                        </a>
+                        <a href="#" data-lang="zh-CN" class="lang-option">
+                            <span>中文（简体）</span>
+                        </a>
+                        <a href="#" data-lang="vi" class="lang-option">
+                            <span>Tiếng Việt</span>
+                        </a>
+                        <a href="#" data-lang="ja" class="lang-option">
+                            <span>日本語</span>
+                        </a>
+                    </div>
+                </div>
+
                 <div class="navbar-auth">
-                    <a href="/login" class="btn-login">Login</a>
+                    {% if current_user.is_authenticated %}
+                    <div class="user-dropdown">
+                        <button class="user-btn">
+                            <i class="bi bi-person-circle"></i>
+                            <span>{{ current_user.name.split()[0] }}</span>
+                            <i class="bi bi-chevron-down"></i>
+                        </button>
+                        <div class="user-dropdown-content">
+                            <div class="user-info">
+                                <strong>{{ current_user.name }}</strong>
+                                <small>{{ current_user.email }}</small>
+                            </div>
+                            <hr>
+                            <a href="/logout"><i class="bi bi-box-arrow-right"></i><span
+                                    data-i18n="nav.logout">Logout</span></a>
+                        </div>
+                    </div>
+                    {% else %}
+                    <a href="/login" class="btn-login" data-i18n="nav.login">Login</a>
                     <a href="/signup" class="btn-signup">
                         <i class="bi bi-person-plus"></i>
-                        Sign up
+                        <span data-i18n="nav.signup">Sign up</span>
                     </a>
+                    {% endif %}
                 </div>
                 <button class="navbar-toggle">
                     <i class="bi bi-list"></i>
@@ -1205,22 +1516,22 @@
         <div class="hero-container">
             <div class="hero-content">
                 <h1>
-                    Analisis Dokumen Cerdas dengan
-                    <span class="highlight">Rabin-Karp</span> &
-                    <span class="highlight">OCR</span>
+                    <span data-i18n="hero.title">Analisis Dokumen Cerdas dengan</span>
+                    <span class="highlight" data-i18n="hero.rabinkarp">Rabin-Karp</span> &
+                    <span class="highlight" data-i18n="hero.ocr">OCR</span>
                 </h1>
-                <p>
+                <p data-i18n="hero.description">
                     Platform screening literatur berbasis OCR dan algoritma Rabin-Karp untuk membantu mahasiswa
                     dalam proses tinjauan pustaka. Ekstrak teks dari gambar dan analisis relevansi dokumen dengan cepat.
                 </p>
                 <div class="hero-cta">
                     <a href="/ocr" class="btn-brutal">
                         <i class="bi bi-camera"></i>
-                        Mulai OCR Scan
+                        <span data-i18n="hero.btn.ocr">Mulai OCR Scan</span>
                     </a>
                     <a href="/document" class="btn-brutal btn-brutal-outline">
                         <i class="bi bi-file-earmark-text"></i>
-                        Parse Document
+                        <span data-i18n="hero.btn.document">Parse Document</span>
                     </a>
                 </div>
             </div>
@@ -1236,8 +1547,8 @@
     <section class="features-section">
         <div class="section-container">
             <div class="section-header">
-                <h2>Fitur Unggulan</h2>
-                <p>Tools lengkap untuk analisis dokumen akademis Anda</p>
+                <h2 data-i18n="features.title">Fitur Unggulan</h2>
+                <p data-i18n="features.subtitle">Tools lengkap untuk analisis dokumen akademis Anda</p>
             </div>
 
             <!-- Static Feature Cards Grid -->
@@ -1350,69 +1661,26 @@
         </div>
     </section>
 
-    <!-- How It Works -->
-    <section class="how-section">
-        <div class="section-container">
-            <div class="section-header">
-                <h2>Cara Kerja</h2>
-                <p>3 langkah mudah untuk menganalisis dokumen Anda</p>
-            </div>
-            <div class="how-steps">
-                <div class="how-step">
-                    <div class="how-step-content">
-                        <div class="step-number">1</div>
-                        <h3>Upload Dokumen</h3>
-                        <p>Unggah gambar (JPG, PNG) atau dokumen (PDF, DOCX) yang ingin dianalisis. Sistem kami
-                            mendukung berbagai format file akademis.</p>
-                    </div>
-                    <div class="how-step-visual">
-                        <img src="/static/img/step-upload.png" alt="Upload Dokumen">
-                    </div>
-                </div>
-                <div class="how-step">
-                    <div class="how-step-content">
-                        <div class="step-number">2</div>
-                        <h3>Ekstraksi Teks</h3>
-                        <p>Sistem melakukan OCR pada gambar atau parse pada dokumen untuk mengekstrak seluruh teks
-                            yang ada di dalamnya.</p>
-                    </div>
-                    <div class="how-step-visual">
-                        <img src="/static/img/step-extract.png" alt="Ekstraksi Teks">
-                    </div>
-                </div>
-                <div class="how-step">
-                    <div class="how-step-content">
-                        <div class="step-number">3</div>
-                        <h3>Analisis Relevansi</h3>
-                        <p>Algoritma Rabin-Karp menganalisis teks dan mencocokkan dengan kata kunci riset Anda untuk
-                            menentukan tingkat relevansi.</p>
-                    </div>
-                    <div class="how-step-visual">
-                        <img src="/static/img/step-analysis.png" alt="Analisis Relevansi">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+
 
     <!-- Stats Section -->
     <section class="stats-section">
         <div class="stats-grid">
             <div class="stat-item">
                 <div class="value">10K+</div>
-                <div class="label">Dokumen Diproses</div>
+                <div class="label" data-i18n="stats.documents">Dokumen Diproses</div>
             </div>
             <div class="stat-item">
                 <div class="value">99%</div>
-                <div class="label">Akurasi OCR</div>
+                <div class="label" data-i18n="stats.accuracy">Akurasi OCR</div>
             </div>
             <div class="stat-item">
                 <div class="value">&lt;5s</div>
-                <div class="label">Waktu Proses</div>
+                <div class="label" data-i18n="stats.time">Waktu Proses</div>
             </div>
             <div class="stat-item">
                 <div class="value">4.9★</div>
-                <div class="label">Rating User</div>
+                <div class="label" data-i18n="stats.rating">Rating User</div>
             </div>
         </div>
     </section>
@@ -1504,57 +1772,39 @@
         <div class="footer-main">
             <div class="footer-brand">
                 <h3>NETRA</h3>
-                <p>Aplikasi screening literatur berbasis OCR dan algoritma Rabin-Karp untuk membantu mahasiswa dalam
+                <p>Platform analisis dokumen cerdas berbasis OCR dan algoritma Rabin-Karp untuk membantu mahasiswa dalam
                     proses tinjauan pustaka.</p>
             </div>
 
             <div class="footer-column">
-                <h4>Fitur</h4>
+                <h4 data-i18n="footer.tools">TOOLS</h4>
                 <ul>
-                    <li><a href="/batch">Batch Processing</a></li>
-                    <li><a href="/ocr">OCR Gambar</a></li>
-                    <li><a href="/document">Parse DOCX</a></li>
-                    <li><a href="/document">Parse PDF</a></li>
+                    <li><a href="/ocr">OCR Scanner</a></li>
+                    <li><a href="/document">Document Parser</a></li>
+                    <li><a href="/batch">Batch Analysis</a></li>
                 </ul>
             </div>
 
             <div class="footer-column">
-                <h4>Teknologi</h4>
+                <h4 data-i18n="footer.company">COMPANY</h4>
                 <ul>
-                    <li><a href="#">Flask</a></li>
-                    <li><a href="#">Tesseract OCR</a></li>
-                    <li><a href="#">PyPDF2</a></li>
-                    <li><a href="#">python-docx</a></li>
+                    <li><a href="/about" data-i18n="footer.about">About</a></li>
+                    <li><a href="/pricing" data-i18n="footer.pricing">Pricing</a></li>
+                    <li><a href="/contact" data-i18n="footer.contact">Contact</a></li>
                 </ul>
             </div>
 
             <div class="footer-column">
-                <h4>Referensi</h4>
+                <h4 data-i18n="footer.legal">LEGAL</h4>
                 <ul>
-                    <li><a href="#">Dokumentasi</a></li>
-                    <li><a href="#">GitHub</a></li>
-                    <li><a href="#">Paper</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-column">
-                <h4>Perusahaan</h4>
-                <ul>
-                    <li><a href="/about">Tentang Kami</a></li>
-                    <li><a href="/contact">Kontak</a></li>
-                    <li><a href="/pricing">Pricing</a></li>
+                    <li><a href="/privacy" data-i18n="footer.privacy">Kebijakan Privasi</a></li>
+                    <li><a href="/terms" data-i18n="footer.terms">Syarat & Ketentuan</a></li>
                 </ul>
             </div>
         </div>
 
         <div class="footer-bottom">
-            <div class="footer-copyright">© 2024 NETRA • Thesis Project</div>
-            <div class="footer-social">
-                <a href="#"><i class="bi bi-github"></i></a>
-                <a href="#"><i class="bi bi-linkedin"></i></a>
-                <a href="#"><i class="bi bi-instagram"></i></a>
-                <a href="#"><i class="bi bi-envelope-fill"></i></a>
-            </div>
+            <div class="footer-copyright" data-i18n="footer.copyright">© 2025 NETRA. All rights reserved.</div>
         </div>
     </footer>
 
@@ -1651,6 +1901,70 @@
                 }
             });
         });
+
+        // Language Switcher
+        (function () {
+            const langOptions = document.querySelectorAll('.lang-option');
+            const langCurrent = document.querySelector('.lang-current');
+
+            const langNames = {
+                'id': 'ID',
+                'en': 'EN',
+                'zh-TW': '繁',
+                'zh-CN': '简',
+                'vi': 'VI',
+                'ja': 'JP'
+            };
+
+            langOptions.forEach(option => {
+                option.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const lang = option.getAttribute('data-lang');
+
+                    // Update active state
+                    langOptions.forEach(opt => {
+                        opt.classList.remove('active');
+                        const checkIcon = opt.querySelector('i');
+                        if (checkIcon) checkIcon.style.display = 'none';
+                    });
+                    option.classList.add('active');
+                    const checkIcon = option.querySelector('i');
+                    if (checkIcon) checkIcon.style.display = 'inline';
+
+                    // Update current language display
+                    if (langCurrent) {
+                        langCurrent.textContent = langNames[lang] || lang.toUpperCase();
+                    }
+
+                    // Store preference
+                    localStorage.setItem('netra-lang', lang);
+
+                    // Apply translations to page
+                    if (window.netraI18n && window.netraI18n.applyTranslations) {
+                        window.netraI18n.applyTranslations();
+                    }
+                });
+            });
+
+            // Load saved language preference
+            const savedLang = localStorage.getItem('netra-lang');
+            if (savedLang) {
+                const savedOption = document.querySelector(`.lang-option[data-lang="${savedLang}"]`);
+                if (savedOption) {
+                    langOptions.forEach(opt => {
+                        opt.classList.remove('active');
+                        const checkIcon = opt.querySelector('i');
+                        if (checkIcon) checkIcon.style.display = 'none';
+                    });
+                    savedOption.classList.add('active');
+                    const checkIcon = savedOption.querySelector('i');
+                    if (checkIcon) checkIcon.style.display = 'inline';
+                    if (langCurrent) {
+                        langCurrent.textContent = langNames[savedLang] || savedLang.toUpperCase();
+                    }
+                }
+            }
+        })();
     </script>
 </body>
 
