@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+    
+    <!-- Homepage -->
+    <url>
+        <loc>https://netraku.my.id/</loc>
+        <xhtml:link rel="alternate" hreflang="id" href="https://netraku.my.id/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://netraku.my.id/?lang=en"/>
+        <xhtml:link rel="alternate" hreflang="zh-TW" href="https://netraku.my.id/?lang=zh-TW"/>
+        <xhtml:link rel="alternate" hreflang="zh-CN" href="https://netraku.my.id/?lang=zh-CN"/>
+        <xhtml:link rel="alternate" hreflang="vi" href="https://netraku.my.id/?lang=vi"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://netraku.my.id/?lang=ja"/>
+        <lastmod>2025-12-22</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+    
+    <!-- OCR Page -->
+    <url>
+        <loc>https://netraku.my.id/ocr</loc>
+        <lastmod>2025-12-22</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    
+    <!-- Document Parser Page -->
+    <url>
+        <loc>https://netraku.my.id/document</loc>
+        <lastmod>2025-12-22</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    
+    <!-- Batch Processing Page -->
+    <url>
+        <loc>https://netraku.my.id/batch</loc>
+        <lastmod>2025-12-22</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    
+    <!-- About Page -->
+    <url>
+        <loc>https://netraku.my.id/about</loc>
+        <lastmod>2025-12-22</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <!-- Pricing Page -->
+    <url>
+        <loc>https://netraku.my.id/pricing</loc>
+        <lastmod>2025-12-22</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <!-- Contact Page -->
+    <url>
+        <loc>https://netraku.my.id/contact</loc>
+        <lastmod>2025-12-22</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    
+    <!-- Privacy Policy -->
+    <url>
+        <loc>https://netraku.my.id/privacy</loc>
+        <lastmod>2025-12-22</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.3</priority>
+    </url>
+    
+    <!-- Terms of Service -->
+    <url>
+        <loc>https://netraku.my.id/terms</loc>
+        <lastmod>2025-12-22</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.3</priority>
+    </url>
+</urlset>

@@ -407,6 +407,22 @@ def get_file_type(filename: str) -> str:
 # FLASK ROUTES
 # ==============================================================================
 
+@app.route('/robots.txt')
+def robots():
+    return app.send_static_file('robots.txt')
+
+@app.route('/sitemap.xml')
+def sitemap():
+    return app.send_static_file('sitemap.xml')
+
+@app.route('/privacy')
+def privacy():
+    return render_template('privacy.html')
+
+@app.route('/terms')
+def terms():
+    return render_template('terms.html')
+
 @app.route('/')
 def index():
     """Render halaman utama."""

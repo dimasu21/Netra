@@ -1,0 +1,18 @@
+# NETRA Robots.txt
+# https://netraku.my.id/
+
+User-agent: *
+Allow: /
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://netraku.my.id/sitemap.xml
+
+# Disallow admin and sensitive paths
+Disallow: /login
+Disallow: /signup
+Disallow: /logout
+Disallow: /admin
+Disallow: /api/
