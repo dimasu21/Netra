@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  app:
+    # Ganti <github-username> dan <repo-name> (lowercase)
+    image: ghcr.io/<github-username>/<repo-name>:latest
+    container_name: netra_app
+    restart: always
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    volumes:
+      # Mount Cloudflare Token if running tunnel as sidecar (optional)
+      - ./static:/app/static
+
+    # Optional: Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+  # Jika ingin menjalankan Cloudflare Tunnel sebagai container juga:
+  # tunnel:
+  #   image: cloudflare/cloudflared
+  #   restart: always
+  #   command: tunnel run
+  #   environment:
+  #     - TUNNEL_TOKEN=${TUNNEL_TOKEN}
