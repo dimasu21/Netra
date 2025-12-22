@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500 | Server Error</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --red-primary: #ef4444;
+            --black: #0a0a0a;
+            --white: #ffffff;
+            --border-width: 3px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--white);
+            color: var(--black);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .error-container {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .error-code {
+            font-family: 'Space Mono', monospace;
+            font-size: 8rem;
+            font-weight: 700;
+            color: var(--red-primary);
+            line-height: 1;
+            text-shadow: 6px 6px 0 var(--black);
+            margin-bottom: 20px;
+        }
+
+        .error-title {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .error-message {
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            color: #4b5563;
+        }
+
+        .btn-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--black);
+            color: var(--white);
+            padding: 14px 28px;
+            text-decoration: none;
+            font-weight: 700;
+            font-family: 'Space Mono', monospace;
+            border: var(--border-width) solid var(--black);
+            transition: all 0.2s;
+            box-shadow: 4px 4px 0 var(--red-primary);
+        }
+
+        .btn-home:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 var(--red-primary);
+        }
+
+        .btn-home:active {
+            transform: translate(2px, 2px);
+            box-shadow: 0 0 0 var(--red-primary);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="error-container">
+        <div class="error-code">500</div>
+        <h1 class="error-title">Server Bermasalah!</h1>
+        <p class="error-message">Maaf, terjadi kesalahan internal pada server kami. Silakan coba beberapa saat lagi.</p>
+        <a href="/" class="btn-home">
+            <i class="bi bi-arrow-clockwise"></i> COBA LAGI
+        </a>
+    </div>
+</body>
+
+</html>

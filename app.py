@@ -49,6 +49,14 @@ if tesseract_path:
 elif os.path.exists(r'C:\Program Files\Tesseract-OCR\tesseract.exe'):
     pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
+# Fix for running behind reverse proxy (Cloudflare Tunnel)
+from werkzeug.middleware.proxy_fix import ProxyFix
+
+# Security & Limits
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+from flask_wtf.csrf import CSRFProtect
+
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'netra-secret-key-change-in-production')
@@ -56,8 +64,14 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///netra.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PREFERRED_URL_SCHEME'] = 'https'  # Force HTTPS for OAuth redirect URIs
 
-# Fix for running behind reverse proxy (Cloudflare Tunnel)
-from werkzeug.middleware.proxy_fix import ProxyFix
+# Initialize Security
+csrf = CSRFProtect(app)
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["200 per day", "50 per hour"],
+    storage_uri="memory://"
+)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
 
 # Initialize extensions
@@ -415,14 +429,6 @@ def robots():
 def sitemap():
     return app.send_static_file('sitemap.xml')
 
-@app.route('/privacy')
-def privacy():
-    return render_template('privacy.html')
-
-@app.route('/terms')
-def terms():
-    return render_template('terms.html')
-
 @app.route('/')
 def index():
     """Render halaman utama."""
@@ -481,6 +487,8 @@ def document():
 
 
 @app.route('/api/analyze', methods=['POST'])
+@csrf.exempt
+@limiter.limit("20 per minute")
 def analyze():
     """
     API endpoint untuk menganalisis relevansi dokumen.
@@ -538,6 +546,21 @@ def analyze():
         
         # Ekstrak teks berdasarkan tipe file
         if file_type == 'image':
+            # Optimize image
+            file_bytes.seek(0)
+            img = Image.open(file_bytes)
+            if img.mode == 'RGBA':
+                img = img.convert('RGB')
+            
+            # Resize if too large
+            if img.width > 2000 or img.height > 2000:
+                img.thumbnail((2000, 2000), Image.Resampling.LANCZOS)
+                # Save optimized to buffer
+                buf = BytesIO()
+                img.save(buf, format='JPEG', quality=85)
+                file_bytes = BytesIO(buf.getvalue())
+            
+            file_bytes.seek(0)
             extracted_text = extract_text_from_image(file_bytes)
             # Generate preview untuk gambar
             file_bytes.seek(0)
@@ -602,6 +625,18 @@ def analyze():
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 400
 
+
+# ==============================================================================
+# ERROR HANDLERS
+# ==============================================================================
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('errors/404.html'), 404
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('errors/500.html'), 500
 
 # ==============================================================================
 # MAIN ENTRY POINT
