@@ -477,12 +477,6 @@ def analyze():
         if not uploaded_file:
             return jsonify({'success': False, 'error': 'Tidak ada file yang diunggah'}), 400
         
-from flask import Flask, render_template, request, jsonify, session
-
-# ... imports ...
-
-# In analyze function:
-
         # Cloudflare Turnstile Verification
         # Skip if user is logged in or already verified in session
         if not current_user.is_authenticated and not session.get('is_human_verified'):
