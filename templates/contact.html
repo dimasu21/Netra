@@ -724,7 +724,12 @@
                 <h2>Kirim Pesan</h2>
 
                 <div class="form-card">
-                    <form id="contactForm">
+                    <form id="contactForm" action="https://api.web3forms.com/submit" method="POST">
+                        <!-- Web3Forms Access Key -->
+                        <input type="hidden" name="access_key" value="e611ba2f-3b37-4514-9f73-618bb28e8e4d">
+                        <input type="hidden" name="subject" value="Pesan Baru dari NETRA Contact Form">
+                        <input type="hidden" name="from_name" value="NETRA Contact Form">
+
                         <div class="form-group">
                             <label class="form-label">Nama Lengkap</label>
                             <input type="text" class="form-input" name="name" required placeholder="Masukkan nama Anda">
@@ -737,7 +742,7 @@
 
                         <div class="form-group">
                             <label class="form-label">Subjek</label>
-                            <input type="text" class="form-input" name="subject" required
+                            <input type="text" class="form-input" name="subject_user" required
                                 placeholder="Subjek pesan Anda">
                         </div>
 
@@ -747,7 +752,7 @@
                                 placeholder="Tuliskan pesan Anda di sini..."></textarea>
                         </div>
 
-                        <button type="submit" class="btn-brutal">
+                        <button type="submit" class="btn-brutal" id="submitBtn">
                             <i class="bi bi-send"></i> Kirim Pesan
                         </button>
                     </form>
@@ -814,14 +819,41 @@
     </footer>
 
     <script>
-        document.getElementById('contactForm').addEventListener('submit', function (e) {
+        const form = document.getElementById('contactForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const successMessage = document.getElementById('successMessage');
+
+        form.addEventListener('submit', async function (e) {
             e.preventDefault();
-            // Simulate form submission
-            document.getElementById('successMessage').classList.add('show');
-            this.reset();
-            setTimeout(() => {
-                document.getElementById('successMessage').classList.remove('show');
-            }, 5000);
+
+            // Disable button and show loading
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Mengirim...';
+
+            try {
+                const formData = new FormData(form);
+                const response = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    successMessage.classList.add('show');
+                    form.reset();
+                    setTimeout(() => {
+                        successMessage.classList.remove('show');
+                    }, 5000);
+                } else {
+                    alert('Gagal mengirim pesan. Silakan coba lagi.');
+                }
+            } catch (error) {
+                alert('Terjadi kesalahan. Silakan coba lagi.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="bi bi-send"></i> Kirim Pesan';
+            }
         });
 
         // Mobile Menu Toggle
