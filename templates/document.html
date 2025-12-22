@@ -556,7 +556,70 @@
             font-weight: 700;
         }
 
-        /* Stats Grid */
+        /* Stats Grid */        /* ==================== MOBILE OVERFLOW FIX ==================== */
+        @media (max-width: 768px) {
+            html, body {
+                overflow-x: hidden;
+            }
+            
+            .main {
+                padding: 20px 16px;
+                overflow-x: hidden;
+            }
+            
+            /* Reduce card shadow on mobile to prevent overflow */
+            .card::before {
+                right: -4px;
+                bottom: -4px;
+                top: 4px;
+                left: 4px;
+            }
+            
+            .card-body {
+                padding: 16px;
+            }
+            
+            /* Fix text result scrollbar */
+            .text-result {
+                max-height: 300px;
+                font-size: 0.75rem;
+                padding: 16px;
+                word-break: break-word;
+            }
+            
+            /* Hide scrollbars on mobile but keep scrollable */
+            .text-result::-webkit-scrollbar {
+                width: 4px;
+            }
+            
+            .text-result::-webkit-scrollbar-thumb {
+                background: var(--gray);
+                border-radius: 2px;
+            }
+            
+            /* Status badge smaller on mobile */
+            .status-badge {
+                padding: 10px 16px;
+                font-size: 0.85rem;
+            }
+            
+            /* Thumbnail box adjustments */
+            .thumbnail-box {
+                padding: 10px;
+            }
+            
+            .thumbnail-box img {
+                max-height: 150px;
+            }
+            
+            /* AI Summary adjustments */
+            .ai-summary-content {
+                max-height: 350px;
+                font-size: 0.85rem;
+                padding: 16px;
+            }
+        }
+
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
