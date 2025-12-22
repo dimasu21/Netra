@@ -19,6 +19,7 @@ import re
 import base64
 from io import BytesIO
 from flask import Flask, render_template, request, jsonify
+from flask_login import LoginManager, current_user
 from PIL import Image
 import pytesseract
 
@@ -29,6 +30,9 @@ import PyPDF2
 # Groq AI
 from groq import Groq
 from dotenv import load_dotenv
+
+# Database and Auth
+from models import db, User
 
 # Load environment variables
 load_dotenv()
@@ -47,6 +51,29 @@ elif os.path.exists(r'C:\Program Files\Tesseract-OCR\tesseract.exe'):
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'netra-secret-key-change-in-production')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///netra.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Initialize extensions
+db.init_app(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'auth.login'
+login_manager.login_message = 'Silakan login untuk mengakses halaman ini.'
+login_manager.login_message_category = 'info'
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+# Register auth blueprint
+from auth import auth as auth_blueprint
+app.register_blueprint(auth_blueprint)
+
+# Create database tables
+with app.app_context():
+    db.create_all()
 
 
 # ==============================================================================
@@ -414,16 +441,7 @@ def document():
     return render_template('document.html')
 
 
-@app.route('/login')
-def login():
-    """Render halaman login."""
-    return render_template('login.html')
-
-
-@app.route('/signup')
-def signup():
-    """Render halaman signup."""
-    return render_template('signup.html')
+# Login and Signup routes are now handled by auth blueprint
 
 
 @app.route('/api/analyze', methods=['POST'])

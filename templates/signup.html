@@ -329,6 +329,32 @@
             color: var(--blue-primary);
             text-decoration: none;
         }
+
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+
+        .flash-message {
+            padding: 12px 16px;
+            border: 2px solid var(--black);
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .flash-message.error {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .flash-message.success {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .flash-message.info {
+            background: var(--blue-pale);
+            color: var(--blue-dark);
+        }
     </style>
 </head>
 
@@ -353,6 +379,17 @@
                 <p>Daftar untuk mengakses semua fitur NETRA</p>
             </div>
 
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+
             <!-- Benefits -->
             <div class="benefits">
                 <h3>Keuntungan Bergabung</h3>
@@ -364,8 +401,8 @@
                 </ul>
             </div>
 
-            <!-- Google Signup -->
-            <button class="btn-google" onclick="signupWithGoogle()">
+            <!-- Google Signup (placeholder) -->
+            <button class="btn-google" onclick="signupWithGoogle()" type="button">
                 <svg width="20" height="20" viewBox="0 0 24 24">
                     <path fill="#4285F4"
                         d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -384,31 +421,29 @@
             </div>
 
             <!-- Email Signup Form -->
-            <form id="signupForm" onsubmit="handleSignup(event)">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Nama Depan</label>
-                        <input type="text" class="form-input" placeholder="John" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Nama Belakang</label>
-                        <input type="text" class="form-input" placeholder="Doe" required>
-                    </div>
+            <form method="POST" action="/signup">
+                <div class="form-group">
+                    <label class="form-label">Nama Lengkap</label>
+                    <input type="text" name="name" class="form-input" placeholder="John Doe" value="{{ name or '' }}"
+                        required minlength="2">
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Email</label>
-                    <input type="email" class="form-input" placeholder="nama@email.com" required>
+                    <input type="email" name="email" class="form-input" placeholder="nama@email.com"
+                        value="{{ email or '' }}" required>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Password</label>
-                    <input type="password" class="form-input" placeholder="Min. 8 karakter" required minlength="8">
+                    <input type="password" name="password" class="form-input" placeholder="Min. 6 karakter" required
+                        minlength="6">
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Konfirmasi Password</label>
-                    <input type="password" class="form-input" placeholder="Ulangi password" required>
+                    <input type="password" name="confirm_password" class="form-input" placeholder="Ulangi password"
+                        required>
                 </div>
 
                 <button type="submit" class="btn-signup">
@@ -433,13 +468,7 @@
 
     <script>
         function signupWithGoogle() {
-            // Placeholder - needs Google OAuth configuration
-            alert('📝 Daftar dengan Google\n\nFitur ini memerlukan konfigurasi Google OAuth.\n\nUntuk mengaktifkan:\n1. Buat project di Google Cloud Console\n2. Enable Google+ API\n3. Buat OAuth 2.0 credentials\n4. Tambahkan client ID ke aplikasi');
-        }
-
-        function handleSignup(e) {
-            e.preventDefault();
-            alert('✅ Pendaftaran Berhasil (Demo)\n\nFitur ini memerlukan backend authentication.\n\nSetelah dikonfigurasi, user akan bisa:\n• Membuat akun dengan email\n• Verifikasi email\n• Mengakses fitur premium');
+            alert('Fitur Google Sign Up akan segera tersedia. Silakan daftar dengan email terlebih dahulu.');
         }
     </script>
 </body>
