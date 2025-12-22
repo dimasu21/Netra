@@ -654,7 +654,14 @@
             }
 
             .feature-card .card-image {
-                height: 80px;
+                height: 100px;
+                padding: 10px;
+            }
+
+            .feature-card .card-image img {
+                object-fit: contain;
+                height: auto;
+                max-height: 100%;
             }
 
             .feature-card .card-title {
@@ -663,6 +670,11 @@
 
             .feature-card h3 {
                 font-size: 0.75rem;
+            }
+
+            /* Hide slider pointer on mobile */
+            .slider-pointer-container {
+                display: none;
             }
         }
 
