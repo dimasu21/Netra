@@ -431,6 +431,18 @@ def contact():
     return render_template('contact.html')
 
 
+@app.route('/privacy')
+def privacy():
+    """Render halaman Kebijakan Privasi."""
+    return render_template('privacy.html')
+
+
+@app.route('/terms')
+def terms():
+    """Render halaman Syarat & Ketentuan."""
+    return render_template('terms.html')
+
+
 @app.route('/batch')
 def batch():
     """Render halaman batch processing."""
