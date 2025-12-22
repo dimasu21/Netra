@@ -156,7 +156,8 @@ def login_google():
         flash('Google Sign-In belum dikonfigurasi.', 'error')
         return redirect(url_for('auth.login'))
     
-    redirect_uri = url_for('auth.google_callback', _external=True)
+    # Hardcode HTTPS redirect URI for production
+    redirect_uri = 'https://netraku.my.id/callback'
     return oauth.google.authorize_redirect(redirect_uri)
 
 
