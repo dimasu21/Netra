@@ -654,12 +654,16 @@
                 display: none;
             }
 
+            /* Keep description slider visible but make it single column */
             .feature-description-slider {
-                display: none;
+                grid-template-columns: 1fr;
+                padding: 20px;
+                min-height: auto;
             }
 
-            .slider-dots {
-                display: none;
+            .feature-slide-image {
+                order: -1;
+                min-height: 150px;
             }
 
             /* Hide slider pointer on mobile */
