@@ -54,6 +54,11 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'netra-secret-key-change-in-production')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///netra.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['PREFERRED_URL_SCHEME'] = 'https'  # Force HTTPS for OAuth redirect URIs
+
+# Fix for running behind reverse proxy (Cloudflare Tunnel)
+from werkzeug.middleware.proxy_fix import ProxyFix
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
 
 # Initialize extensions
 db.init_app(app)
