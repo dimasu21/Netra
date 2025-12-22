@@ -119,3 +119,86 @@ def logout():
     logout_user()
     flash('Anda telah logout.', 'info')
     return redirect(url_for('index'))
+
+
+# ==============================================================================
+# GOOGLE OAUTH
+# ==============================================================================
+
+import os
+from authlib.integrations.flask_client import OAuth
+
+# Initialize OAuth (will be configured in app.py)
+oauth = OAuth()
+
+def init_google_oauth(app):
+    """Initialize Google OAuth with app context."""
+    oauth.init_app(app)
+    oauth.register(
+        name='google',
+        client_id=os.environ.get('GOOGLE_CLIENT_ID'),
+        client_secret=os.environ.get('GOOGLE_CLIENT_SECRET'),
+        server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
+        client_kwargs={
+            'scope': 'openid email profile'
+        }
+    )
+
+
+@auth.route('/login/google')
+def login_google():
+    """Redirect to Google OAuth."""
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    
+    # Check if Google OAuth is configured
+    if not os.environ.get('GOOGLE_CLIENT_ID'):
+        flash('Google Sign-In belum dikonfigurasi.', 'error')
+        return redirect(url_for('auth.login'))
+    
+    redirect_uri = url_for('auth.google_callback', _external=True)
+    return oauth.google.authorize_redirect(redirect_uri)
+
+
+@auth.route('/callback')
+def google_callback():
+    """Handle Google OAuth callback."""
+    try:
+        token = oauth.google.authorize_access_token()
+        user_info = token.get('userinfo')
+        
+        if not user_info:
+            flash('Gagal mendapatkan informasi dari Google.', 'error')
+            return redirect(url_for('auth.login'))
+        
+        email = user_info.get('email', '').lower()
+        name = user_info.get('name', '')
+        google_id = user_info.get('sub')  # Google's unique user ID
+        
+        # Check if user exists
+        user = User.query.filter_by(email=email).first()
+        
+        if user is None:
+            # Create new user from Google
+            user = User(
+                email=email,
+                name=name,
+                google_id=google_id
+            )
+            db.session.add(user)
+            db.session.commit()
+            flash(f'Akun berhasil dibuat! Selamat datang, {name}!', 'success')
+        else:
+            # Update google_id if not set
+            if not user.google_id:
+                user.google_id = google_id
+                db.session.commit()
+            flash(f'Selamat datang kembali, {user.name}!', 'success')
+        
+        login_user(user, remember=True)
+        return redirect(url_for('index'))
+        
+    except Exception as e:
+        flash(f'Terjadi kesalahan: {str(e)}', 'error')
+        return redirect(url_for('auth.login'))
+
