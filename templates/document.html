@@ -1034,15 +1034,14 @@
         /* Mobile Tabs */
         @media (max-width: 768px) {
             .analysis-tabs {
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none;
-                -ms-overflow-style: none;
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
                 gap: 8px;
-                /* Add gap to prevent overlap */
-                padding-bottom: 4px;
-                /* Space for scrollbar if any */
+                border-bottom: none;
+                /* No border needed for grid */
+                margin-bottom: 16px;
+                padding-bottom: 0;
+                overflow: visible;
             }
 
             .analysis-tabs::-webkit-scrollbar {
@@ -1050,91 +1049,96 @@
             }
 
             .tab-btn {
-                min-width: 70px;
-                /* Increase min-width */
-                padding: 10px 8px;
-                flex-shrink: 0;
-                /* Prevent squeezing */
+                width: 100%;
+                min-width: 0;
+                padding: 8px 4px;
+                /* Tighter padding */
                 font-size: 0.65rem;
                 flex-direction: column;
-                gap: 6px;
-                white-space: nowrap;
-                /* Prevent messy wrapping */
+                gap: 4px;
                 text-align: center;
-                border-bottom: none !important;
-                /* Visual fix */
-                border: 1px solid var(--black) !important;
-                /* Individual borders */
+                white-space: normal;
+                /* Allow text wrap */
+                word-break: break-word;
+                /* Safety break */
+                border: 1px solid var(--gray-light) !important;
+                border-radius: 6px;
+                height: 100%;
+                justify-content: center;
             }
 
             .tab-btn.active {
                 background: var(--blue-primary);
                 color: var(--white);
+                border: 2px solid var(--black) !important;
+                transform: none;
+                z-index: 1;
             }
+        }
 
-            .tab-btn i {
-                font-size: 1.1rem;
-            }
+        .tab-btn i {
+            font-size: 1.1rem;
+        }
 
-            .tab-contents {
-                padding: 16px;
-            }
+        .tab-contents {
+            padding: 16px;
+        }
 
-            .tab-content h4 {
-                font-size: 0.85rem;
-            }
+        .tab-content h4 {
+            font-size: 0.85rem;
+        }
 
-            .struktur-grid {
-                grid-template-columns: 1fr;
-                gap: 8px;
-            }
+        .struktur-grid {
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
 
-            .struktur-item {
-                padding: 10px;
-            }
+        .struktur-item {
+            padding: 10px;
+        }
 
-            .struktur-item span {
-                font-size: 0.7rem;
-            }
+        .struktur-item span {
+            font-size: 0.7rem;
+        }
 
-            .konsistensi-grid {
-                grid-template-columns: 1fr;
-            }
+        .konsistensi-grid {
+            grid-template-columns: 1fr;
+        }
 
-            .skor-main {
-                flex-direction: column;
-                text-align: center;
-                gap: 12px;
-                padding: 16px;
-            }
+        .skor-main {
+            flex-direction: column;
+            text-align: center;
+            gap: 12px;
+            padding: 16px;
+        }
 
-            .skor-nilai {
-                width: 60px;
-                height: 60px;
-                font-size: 2rem;
-            }
+        .skor-nilai {
+            width: 60px;
+            height: 60px;
+            font-size: 2rem;
+        }
 
-            .skor-badge {
-                font-size: 0.75rem;
-                padding: 6px 12px;
-            }
+        .skor-badge {
+            font-size: 0.75rem;
+            padding: 6px 12px;
+        }
 
-            .analysis-list li {
-                font-size: 0.8rem;
-                padding: 6px 10px;
-            }
+        .analysis-list li {
+            font-size: 0.8rem;
+            padding: 6px 10px;
+        }
 
-            .kelemahan-category li {
-                font-size: 0.8rem;
-            }
+        .kelemahan-category li {
+            font-size: 0.8rem;
+        }
 
-            .rekomendasi-box {
-                padding: 12px;
-            }
+        .rekomendasi-box {
+            padding: 12px;
+        }
 
-            .rekomendasi-box p {
-                font-size: 0.85rem;
-            }
+        .rekomendasi-box p {
+            font-size: 0.85rem;
+        }
         }
 
         /* Extra small screens */
