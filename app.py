@@ -20,7 +20,8 @@ import base64
 from io import BytesIO
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 from flask_login import LoginManager, current_user, login_required
-from PIL import Image
+from PIL import Image, ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 import pytesseract
 
 # Document processing libraries
