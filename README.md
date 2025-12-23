@@ -173,8 +173,3 @@ Kontribusi sangat diterima! Silakan:
 
 Distributed under the MIT License. See `LICENSE` for more information.
 
----
-
-<div align="center">
-Made with ❤️ for Indonesian Researchers
-</div>
