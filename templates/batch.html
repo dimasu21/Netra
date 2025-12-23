@@ -678,9 +678,33 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             padding-bottom: 16px;
             border-bottom: var(--border-width) solid var(--black);
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .results-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .results-summary {
+                width: 100%;
+                display: grid !important;
+                /* Force grid */
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            .summary-item {
+                text-align: center;
+                justify-content: center;
+                width: 100%;
+            }
         }
 
         .results-header h2 {
@@ -2833,8 +2857,8 @@
             document.getElementById('relevantCount').textContent = `${relevant} Relevan`;
             document.getElementById('notRelevantCount').textContent = `${notRelevant} Tidak Relevan`;
 
-            // Generate Comparison Table
-            const comparisonHTML = generateComparisonTable(results);
+            // Comparison Table removed per user request
+            // const comparisonHTML = generateComparisonTable(results);
 
             const cardsHTML = results.map((result, index) => {
                 if (result.error) {
@@ -2922,7 +2946,7 @@
                 `;
             }).join('');
 
-            resultsContainer.innerHTML = comparisonHTML + cardsHTML;
+            resultsContainer.innerHTML = cardsHTML;
             resultsSection.scrollIntoView({ behavior: 'smooth' });
         }
 
