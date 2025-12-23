@@ -1,0 +1,221 @@
+<!-- Cookie Consent Banner - Neo Brutalism Style -->
+<div id="cookieConsent" class="cookie-banner" style="display: none;">
+    <div class="cookie-content">
+        <div class="cookie-icon">
+            <i class="bi bi-cookie"></i>
+        </div>
+        <div class="cookie-text">
+            <h4>🍪 Kami Menggunakan Cookies</h4>
+            <p>Website ini menggunakan cookies untuk meningkatkan pengalaman Anda dan menganalisis traffic.
+                Dengan melanjutkan, Anda menyetujui penggunaan cookies sesuai <a href="/privacy">Kebijakan Privasi</a>
+                kami.</p>
+        </div>
+        <div class="cookie-buttons">
+            <button class="btn-cookie-accept" onclick="acceptCookies()">
+                <i class="bi bi-check-lg"></i> Terima
+            </button>
+            <button class="btn-cookie-reject" onclick="rejectCookies()">
+                <i class="bi bi-x-lg"></i> Tolak
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Cookie Banner - Neo Brutalism */
+    .cookie-banner {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #0a0a0a;
+        border-top: 4px solid #2563eb;
+        padding: 20px 24px;
+        z-index: 99999;
+        animation: slideUp 0.4s ease;
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(100%);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .cookie-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .cookie-icon {
+        font-size: 2.5rem;
+        color: #fbbf24;
+    }
+
+    .cookie-text {
+        flex: 1;
+        min-width: 280px;
+    }
+
+    .cookie-text h4 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1rem;
+        color: #ffffff;
+        margin-bottom: 6px;
+    }
+
+    .cookie-text p {
+        font-size: 0.85rem;
+        color: #94a3b8;
+        line-height: 1.5;
+        margin: 0;
+    }
+
+    .cookie-text a {
+        color: #60a5fa;
+        text-decoration: underline;
+    }
+
+    .cookie-buttons {
+        display: flex;
+        gap: 12px;
+        flex-shrink: 0;
+    }
+
+    .btn-cookie-accept,
+    .btn-cookie-reject {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        font-family: 'Space Mono', monospace;
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: all 0.1s;
+        border: 3px solid #0a0a0a;
+    }
+
+    .btn-cookie-accept {
+        background: #2563eb;
+        color: #ffffff;
+        border-color: #ffffff;
+    }
+
+    .btn-cookie-accept:hover {
+        background: #1e40af;
+        transform: translate(-2px, -2px);
+        box-shadow: 4px 4px 0 #ffffff;
+    }
+
+    .btn-cookie-reject {
+        background: transparent;
+        color: #94a3b8;
+        border-color: #475569;
+    }
+
+    .btn-cookie-reject:hover {
+        background: #1e293b;
+        color: #ffffff;
+        transform: translate(-2px, -2px);
+        box-shadow: 4px 4px 0 #475569;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .cookie-banner {
+            padding: 16px;
+        }
+
+        .cookie-content {
+            flex-direction: column;
+            text-align: center;
+            gap: 16px;
+        }
+
+        .cookie-icon {
+            font-size: 2rem;
+        }
+
+        .cookie-text h4 {
+            font-size: 0.9rem;
+        }
+
+        .cookie-text p {
+            font-size: 0.8rem;
+        }
+
+        .cookie-buttons {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-cookie-accept,
+        .btn-cookie-reject {
+            padding: 10px 16px;
+            font-size: 0.75rem;
+        }
+    }
+</style>
+
+<script>
+    // Cookie Consent Logic
+    (function () {
+        const cookieBanner = document.getElementById('cookieConsent');
+        const consentValue = localStorage.getItem('cookieConsent');
+
+        // Show banner if no consent decision yet
+        if (!consentValue) {
+            setTimeout(function () {
+                cookieBanner.style.display = 'block';
+            }, 1000); // Delay 1 second before showing
+        }
+    })();
+
+    function acceptCookies() {
+        localStorage.setItem('cookieConsent', 'accepted');
+        localStorage.setItem('cookieConsentDate', new Date().toISOString());
+        hideCookieBanner();
+
+        // Enable analytics (Google Analytics is already running)
+        console.log('[Cookies] User accepted cookies');
+    }
+
+    function rejectCookies() {
+        localStorage.setItem('cookieConsent', 'rejected');
+        localStorage.setItem('cookieConsentDate', new Date().toISOString());
+        hideCookieBanner();
+
+        // Disable analytics cookies
+        window['ga-disable-G-MR9WFMXBY2'] = true;
+        console.log('[Cookies] User rejected cookies');
+    }
+
+    function hideCookieBanner() {
+        const banner = document.getElementById('cookieConsent');
+        banner.style.animation = 'slideDown 0.3s ease forwards';
+        setTimeout(function () {
+            banner.style.display = 'none';
+        }, 300);
+    }
+
+    // Add slideDown animation
+    const styleSheet = document.createElement('style');
+    styleSheet.textContent = `
+    @keyframes slideDown {
+        from { transform: translateY(0); opacity: 1; }
+        to { transform: translateY(100%); opacity: 0; }
+    }
+`;
+    document.head.appendChild(styleSheet);
+</script>

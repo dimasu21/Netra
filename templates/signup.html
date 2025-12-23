@@ -428,6 +428,7 @@
 
             <!-- Email Signup Form -->
             <form method="POST" action="/signup">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <div class="form-group">
                     <label class="form-label">Nama Lengkap</label>
                     <input type="text" name="name" class="form-input" placeholder="John Doe" value="{{ name or '' }}"

@@ -64,16 +64,16 @@
         .hero {
             background: var(--blue-pale);
             border-bottom: var(--border-width) solid var(--black);
-            padding: 60px 24px;
+            padding: 48px 24px;
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 0;
         }
 
         .hero h1 {
             font-family: 'Space Mono', monospace;
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             text-transform: uppercase;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             color: var(--black);
             letter-spacing: -1px;
         }
@@ -83,14 +83,185 @@
             max-width: 600px;
             margin: 0 auto;
             font-family: 'Inter', sans-serif;
-            font-size: 1.1rem;
-            line-height: 1.6;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .hero .sub-desc {
+            font-size: 0.9rem;
+            margin-top: 12px;
+            color: var(--gray);
+        }
+
+        /* Mobile/Desktop specific descriptions */
+        .hero-desc-desktop {
+            display: block;
+        }
+
+        .hero-desc-mobile {
+            display: none;
+        }
+
+        .feature-tags {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .feature-tags .tag {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--blue-dark);
+            background: var(--white);
+            padding: 6px 12px;
+            border: 2px solid var(--black);
+        }
+
+        /* Hero Mobile */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 32px 16px;
+            }
+
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+
+            .hero-desc-desktop {
+                display: none;
+            }
+
+            .hero-desc-mobile {
+                display: block;
+            }
+
+            .hero p {
+                font-size: 0.9rem;
+            }
+
+            .hero .sub-desc {
+                font-size: 0.8rem;
+            }
+
+            .feature-tags {
+                gap: 6px;
+            }
+
+            .feature-tags .tag {
+                font-size: 0.65rem;
+                padding: 4px 8px;
+            }
         }
 
         .main {
             max-width: 1000px;
             margin: 0 auto;
             padding: 40px 24px;
+        }
+
+        /* ==================== USER DROPDOWN ==================== */
+        .user-dropdown {
+            position: relative;
+        }
+
+        .user-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            background: transparent;
+            border: 2px solid var(--gray-light);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: var(--gray);
+            transition: all 0.2s;
+        }
+
+        .user-btn:hover {
+            border-color: var(--blue-primary);
+            color: var(--blue-primary);
+        }
+
+        .user-dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--white);
+            border: 2px solid var(--black);
+            min-width: 220px;
+            box-shadow: 4px 4px 0 var(--black);
+            z-index: 2000;
+        }
+
+        .user-dropdown-content::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 0;
+            right: 0;
+            height: 10px;
+        }
+
+        .user-dropdown:hover .user-dropdown-content {
+            display: block;
+        }
+
+        .user-dropdown-content .user-info {
+            padding: 16px;
+            background: var(--blue-pale);
+            border-bottom: 2px solid var(--black);
+        }
+
+        .user-dropdown-content .user-info strong {
+            display: block;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+
+        .user-dropdown-content .user-info small {
+            color: var(--gray);
+            font-size: 0.8rem;
+        }
+
+        .user-dropdown-content hr {
+            display: none;
+        }
+
+        .user-dropdown-content a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            color: var(--black);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+
+        .user-dropdown-content a:hover {
+            background: var(--blue-pale);
+            color: var(--blue-primary);
+        }
+
+        .user-dropdown-content a i {
+            font-size: 1rem;
+            color: var(--gray);
+        }
+
+        .user-dropdown-content a:hover i {
+            color: var(--blue-primary);
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: var(--gray-light);
+            margin: 0;
         }
 
         /* ==================== BRUTALIST CARD ==================== */
@@ -930,7 +1101,9 @@
         }
 
         /* Mobile-only links - hidden on desktop */
-        .navbar-tools a.mobile-only-link { display: none !important; }
+        .navbar-tools a.mobile-only-link {
+            display: none !important;
+        }
 
         .navbar-tools .dropdown-content {
             display: none;
@@ -1171,7 +1344,11 @@
         }
 
         @media (max-width: 900px) {
-            .navbar-tools a.mobile-only-link, .mobile-only-link { display: block !important; }
+
+            .navbar-tools a.mobile-only-link,
+            .mobile-only-link {
+                display: block !important;
+            }
 
             .navbar-tools {
                 display: flex;
@@ -1412,12 +1589,14 @@
                                 <strong>{{ current_user.name }}</strong>
                                 <small>{{ current_user.email }}</small>
                             </div>
-                            <hr>
-                            <a href="/history" class="dropdown-item">
-                            <i class="bi bi-clock-history"></i> Riwayat
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="/logout"><i class="bi bi-box-arrow-right"></i><span
+                            <a href="/profile">
+                                <i class="bi bi-person-fill"></i> Akun Saya
+                            </a>
+                            <a href="/history">
+                                <i class="bi bi-clock-history"></i> Riwayat
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="/logout"><i class="bi bi-box-arrow-right"></i><span
                                     data-i18n="nav.logout">Logout</span></a>
                         </div>
                     </div>
@@ -1440,9 +1619,16 @@
 
     <!-- Hero -->
     <section class="hero">
-        <h1>OCR & Rabin-Karp Analysis</h1>
-        <p>Unggah gambar dokumen Anda untuk mengekstraksi teks dan menganalisis tingkat relevansi menggunakan algoritma
-            Rabin-Karp.</p>
+        <h1>OCR SCAN</h1>
+        <p class="hero-desc-mobile">Ekstrak teks dari gambar dokumen akademik.</p>
+        <p class="hero-desc-desktop">Ekstrak teks dari gambar dokumen akademik dengan teknologi OCR.</p>
+        <p class="sub-desc">Unggah gambar dokumen (JPG, PNG), sistem akan membaca dan mengekstrak teks secara otomatis.
+            Hasil dapat dianalisis lebih lanjut.</p>
+        <div class="feature-tags">
+            <span class="tag">[EKSTRAK TEKS]</span>
+            <span class="tag">[BACA GAMBAR]</span>
+            <span class="tag">[MULTI FORMAT]</span>
+        </div>
     </section>
 
     <main class="main">
@@ -1460,7 +1646,8 @@
                             Unggah Dokumen Referensi
 
                         </label>
-                        <div class="upload-zone" id="dropZone">
+                        <div class="upload-zone" id="dropZone"
+                            title="Unggah gambar dokumen dengan resolusi cukup agar teks dapat dibaca dengan akurat.">
                             <input type="file" class="hidden" id="fileInput" accept="image/jpeg,image/png">
                             <i class="bi bi-cloud-arrow-up icon"></i>
                             <h5>Drag & Drop Image</h5>
@@ -1496,7 +1683,7 @@
                     <!-- Submit -->
                     <button type="submit" class="btn-brutal" id="analyzeBtn">
                         <i class="bi bi-cpu"></i>
-                        Analisis Relevansi
+                        Proses OCR
                     </button>
                 </form>
             </div>
@@ -1900,6 +2087,9 @@
             });
         }
     </script>
+
+    <!-- Cookie Consent Banner -->
+    {% include 'partials/cookie_banner.html' %}
 </body>
 
 </html>

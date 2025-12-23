@@ -19,7 +19,7 @@ import re
 import base64
 from io import BytesIO
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
-from flask_login import LoginManager, current_user
+from flask_login import LoginManager, current_user, login_required
 from PIL import Image
 import pytesseract
 
@@ -27,7 +27,7 @@ import pytesseract
 from docx import Document
 import PyPDF2
 
-# Groq AI
+# Groq AI with Fallback System (supports up to 5 API keys)
 from groq import Groq
 from dotenv import load_dotenv
 
@@ -38,9 +38,35 @@ from datetime import datetime
 # Load environment variables
 load_dotenv()
 
-# Configure Groq API (use environment variable or fallback to default)
-GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
-groq_client = Groq(api_key=GROQ_API_KEY)
+# Configure Multiple Groq API Keys for Fallback
+# Add your API keys to .env file: GROQ_API_KEY_1, GROQ_API_KEY_2, etc.
+GROQ_API_KEYS = []
+for i in range(1, 6):  # Support up to 5 API keys
+    key = os.environ.get(f"GROQ_API_KEY_{i}")
+    if key:
+        GROQ_API_KEYS.append(key)
+
+# Fallback to original single key if no numbered keys found
+if not GROQ_API_KEYS:
+    single_key = os.environ.get("GROQ_API_KEY")
+    if single_key:
+        GROQ_API_KEYS.append(single_key)
+
+# Track current API key index
+current_api_index = 0
+
+def get_groq_client():
+    """Get Groq client with current API key"""
+    global current_api_index
+    if not GROQ_API_KEYS:
+        return None
+    return Groq(api_key=GROQ_API_KEYS[current_api_index % len(GROQ_API_KEYS)])
+
+def switch_to_next_api():
+    """Switch to next available API key"""
+    global current_api_index
+    current_api_index = (current_api_index + 1) % len(GROQ_API_KEYS)
+    print(f"[FALLBACK] Switching to API key #{current_api_index + 1}")
 
 # Configure Tesseract path (auto-detect for Docker/Windows)
 import shutil
@@ -61,7 +87,28 @@ from flask_wtf.csrf import CSRFProtect
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'netra-secret-key-change-in-production')
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI', 'sqlite:///netra.db')
+
+# Database configuration - smart detection for local vs Docker
+basedir = os.path.abspath(os.path.dirname(__file__))
+local_db_path = 'sqlite:///' + os.path.join(basedir, 'instance', 'netra.db')
+
+# Check if env DATABASE_URI is set and valid (for Docker deployment)
+env_db_uri = os.environ.get('DATABASE_URI')
+if env_db_uri and env_db_uri.startswith('sqlite:///'):
+    # Extract path from URI and check if parent directory exists
+    db_file_path = env_db_uri.replace('sqlite:///', '')
+    # Only use env path if the parent directory actually exists on this system
+    if os.path.exists(os.path.dirname(db_file_path)):
+        app.config['SQLALCHEMY_DATABASE_URI'] = env_db_uri
+    else:
+        # Fallback to local path for development
+        app.config['SQLALCHEMY_DATABASE_URI'] = local_db_path
+elif env_db_uri:
+    # Non-SQLite database (e.g., PostgreSQL) - use as is
+    app.config['SQLALCHEMY_DATABASE_URI'] = env_db_uri
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = local_db_path
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PREFERRED_URL_SCHEME'] = 'https'  # Force HTTPS for OAuth redirect URIs
 
@@ -148,60 +195,138 @@ PRIME = 101     # Bilangan prima untuk operasi modulo
 
 def generate_ai_summary(text: str) -> dict:
     """
-    Generate AI summary of document using Groq.
+    Generate AI analysis of journal/academic document quality using Groq.
+    Returns structured JSON for tabs display.
     
     Args:
         text (str): Extracted text from document
         
     Returns:
-        dict: Summary with ringkasan, key_points, metodologi, hasil, kesimpulan
+        dict: Structured journal quality analysis in JSON format
     """
     try:
-        prompt = f"""
-Anda adalah asisten riset akademik. Analisis teks jurnal/dokumen berikut dan berikan output dalam format yang terstruktur.
+        prompt = f"""Anda adalah analis kualitas jurnal akademik profesional.
+
+Analisis dokumen berikut secara objektif dan teknis.
+JANGAN menulis ulang isi dokumen.
+JANGAN meringkas dokumen.
+
+Gunakan Bahasa Indonesia formal dan akademik.
 
 TEKS DOKUMEN:
-{text[:6000]}
+{text[:4500]}
 
-Berikan analisis dalam format berikut (gunakan bahasa Indonesia):
+BERIKAN OUTPUT DALAM FORMAT JSON YANG VALID (tanpa markdown code block):
 
-## RINGKASAN
-[Ringkasan singkat 2-3 kalimat tentang isi dokumen]
+{{
+    "deteksi_struktur": {{
+        "abstrak": "ada/tidak ada",
+        "pendahuluan": "ada/tidak ada",
+        "metodologi": "ada/tidak ada",
+        "hasil_pembahasan": "ada/tidak ada",
+        "kesimpulan": "ada/tidak ada"
+    }},
+    "kekuatan_metodologi": {{
+        "skor": "Kuat/Sedang/Lemah",
+        "penjelasan": "jelaskan dalam 2-3 kalimat mengapa metodologi kuat/sedang/lemah",
+        "poin_positif": ["poin 1", "poin 2"]
+    }},
+    "kejelasan_variabel": {{
+        "status": "Jelas/Kurang Jelas/Tidak Jelas",
+        "variabel_teridentifikasi": ["variabel 1", "variabel 2"],
+        "catatan": "jelaskan jika ada masalah kejelasan variabel"
+    }},
+    "konsistensi": {{
+        "tujuan_vs_metodologi": "Sesuai/Kurang Sesuai/Tidak Sesuai",
+        "metodologi_vs_hasil": "Sesuai/Kurang Sesuai/Tidak Sesuai",
+        "tujuan_vs_kesimpulan": "Sesuai/Kurang Sesuai/Tidak Sesuai",
+        "catatan": "jelaskan inkonsistensi jika ada"
+    }},
+    "kelemahan": {{
+        "struktural": ["kelemahan 1", "kelemahan 2"],
+        "metodologis": ["kelemahan 1", "kelemahan 2"],
+        "penulisan": ["kelemahan 1", "kelemahan 2"]
+    }},
+    "skor_keseluruhan": {{
+        "nilai": "A/B/C/D",
+        "interpretasi": "Sangat Baik/Baik/Cukup/Perlu Perbaikan",
+        "rekomendasi": "saran singkat untuk perbaikan"
+    }}
+}}
 
-## POIN PENTING
-- [Poin 1]
-- [Poin 2]
-- [Poin 3]
-
-## METODOLOGI
-[Jelaskan metodologi penelitian jika ada, atau tulis "Tidak terdeteksi" jika tidak ada]
-
-## HASIL PENELITIAN
-[Jelaskan hasil utama penelitian jika ada, atau tulis "Tidak terdeteksi" jika tidak ada]
-
-## KESIMPULAN
-[Kesimpulan utama dari dokumen]
-"""
+PENTING: Output harus berupa JSON valid tanpa markdown code block, tanpa backticks, langsung JSON saja."""
         
-        response = groq_client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0.3,
-            max_tokens=2000
-        )
+        # Use Groq API with Fallback System
+        max_retries = len(GROQ_API_KEYS) if GROQ_API_KEYS else 1
+        last_error = None
         
-        ai_text = response.choices[0].message.content
+        for attempt in range(max_retries):
+            try:
+                client = get_groq_client()
+                if not client:
+                    raise Exception("No API keys configured")
+                
+                response = client.chat.completions.create(
+                    model="llama-3.1-8b-instant",
+                    messages=[{"role": "user", "content": prompt}],
+                    temperature=0.2,
+                    max_tokens=1000,
+                    response_format={"type": "json_object"}
+                )
+                
+                ai_text = response.choices[0].message.content
+                break  # Success, exit retry loop
+                
+            except Exception as e:
+                last_error = e
+                error_str = str(e).lower()
+                
+                # Check if rate limit error (429)
+                if "rate_limit" in error_str or "429" in error_str or "quota" in error_str:
+                    print(f"[RATE LIMIT] API key #{current_api_index + 1} hit limit, trying next...")
+                    switch_to_next_api()
+                    continue
+                else:
+                    # Other error, don't retry
+                    raise e
+        else:
+            # All APIs exhausted
+            raise Exception(f"All {max_retries} API keys exhausted. Last error: {last_error}")
         
-        return {
-            'success': True,
-            'summary': ai_text
-        }
+        # Try to parse JSON, fallback to raw text if fails
+        import json
+        try:
+            # Clean potential markdown code blocks
+            clean_text = ai_text.strip()
+            if clean_text.startswith('```'):
+                clean_text = clean_text.split('```')[1]
+                if clean_text.startswith('json'):
+                    clean_text = clean_text[4:]
+            if clean_text.endswith('```'):
+                clean_text = clean_text[:-3]
+            
+            parsed_json = json.loads(clean_text.strip())
+            return {
+                'success': True,
+                'summary': ai_text,
+                'parsed': parsed_json,
+                'is_json': True
+            }
+        except json.JSONDecodeError:
+            return {
+                'success': True,
+                'summary': ai_text,
+                'parsed': None,
+                'is_json': False
+            }
         
     except Exception as e:
         return {
             'success': False,
             'error': str(e),
-            'summary': None
+            'summary': None,
+            'parsed': None,
+            'is_json': False
         }
 
 
@@ -466,6 +591,24 @@ def terms():
     return render_template('terms.html')
 
 
+@app.route('/profile')
+@login_required
+def profile():
+    """Render halaman profil user."""
+    # Get recent activities from history
+    activities = []
+    if current_user.is_authenticated:
+        from models import History
+        recent_history = History.query.filter_by(user_id=current_user.id).order_by(History.created_at.desc()).limit(5).all()
+        for h in recent_history:
+            activities.append({
+                'action': h.action_type or 'Analisis',
+                'filename': h.filename or 'document',
+                'time': h.created_at.strftime('%d %b %Y, %H:%M') if h.created_at else 'baru saja'
+            })
+    return render_template('profile.html', activities=activities)
+
+
 @app.route('/batch')
 def batch():
     """Render halaman batch processing."""
@@ -527,8 +670,10 @@ def analyze():
             return jsonify({'success': False, 'error': 'Tidak ada file yang diunggah'}), 400
         
         # Cloudflare Turnstile Verification
-        # Skip if user is logged in or already verified in session
-        if not current_user.is_authenticated and not session.get('is_human_verified'):
+        # Skip if user is logged in, already verified in session, OR running in development mode
+        is_localhost = request.host.startswith('127.0.0.1') or request.host.startswith('localhost')
+        
+        if not current_user.is_authenticated and not session.get('is_human_verified') and not is_localhost:
             turnstile_token = request.form.get('cf-turnstile-response')
             if not turnstile_token:
                 return jsonify({'success': False, 'error': 'Verifikasi keamanan gagal (Token missing). Silakan refresh halaman.'}), 400
@@ -660,6 +805,8 @@ def analyze():
             'file_type': file_type,
             'filename': filename,
             'ai_summary': ai_result.get('summary') if ai_result.get('success') else None,
+            'ai_parsed': ai_result.get('parsed') if ai_result.get('success') else None,
+            'ai_is_json': ai_result.get('is_json', False),
             'ai_error': ai_result.get('error') if not ai_result.get('success') else None
         })
         

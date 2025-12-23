@@ -47,11 +47,193 @@
             min-height: 100vh;
         }
 
+        /* ==================== HERO SECTION ==================== */
+        .hero {
+            background: var(--blue-pale);
+            border-bottom: var(--border-width) solid var(--black);
+            padding: 48px 24px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-family: 'Space Mono', monospace;
+            font-size: 2.2rem;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            color: var(--black);
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .hero .sub-desc {
+            font-size: 0.9rem;
+            margin-top: 12px;
+            color: var(--gray);
+        }
+
+        .feature-tags {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .feature-tags .tag {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--blue-dark);
+            background: var(--white);
+            padding: 6px 12px;
+            border: 2px solid var(--black);
+        }
+
+        /* Hero Mobile */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 32px 16px;
+            }
+
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+
+            .hero p {
+                font-size: 0.9rem;
+            }
+
+            .hero .sub-desc {
+                font-size: 0.8rem;
+            }
+
+            .feature-tags {
+                gap: 6px;
+            }
+
+            .feature-tags .tag {
+                font-size: 0.65rem;
+                padding: 4px 8px;
+            }
+        }
+
         /* ==================== MAIN CONTAINER ==================== */
         .main {
             max-width: 900px;
             margin: 0 auto;
             padding: 40px 24px;
+        }
+
+        /* ==================== USER DROPDOWN ==================== */
+        .user-dropdown {
+            position: relative;
+        }
+
+        .user-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            background: transparent;
+            border: 2px solid var(--gray-light);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: var(--gray);
+            transition: all 0.2s;
+        }
+
+        .user-btn:hover {
+            border-color: var(--blue-primary);
+            color: var(--blue-primary);
+        }
+
+        .user-dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--white);
+            border: 2px solid var(--black);
+            min-width: 220px;
+            box-shadow: 4px 4px 0 var(--black);
+            z-index: 2000;
+            padding-top: 0;
+        }
+
+        /* Fix flickering - add invisible bridge between button and dropdown */
+        .user-dropdown-content::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 0;
+            right: 0;
+            height: 10px;
+        }
+
+        .user-dropdown:hover .user-dropdown-content {
+            display: block;
+        }
+
+        .user-dropdown-content .user-info {
+            padding: 16px;
+            background: var(--blue-pale);
+            border-bottom: 2px solid var(--black);
+        }
+
+        .user-dropdown-content .user-info strong {
+            display: block;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+
+        .user-dropdown-content .user-info small {
+            color: var(--gray);
+            font-size: 0.8rem;
+        }
+
+        .user-dropdown-content hr {
+            display: none;
+        }
+
+        .user-dropdown-content a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            color: var(--black);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+
+        .user-dropdown-content a:hover {
+            background: var(--blue-pale);
+            color: var(--blue-primary);
+        }
+
+        .user-dropdown-content a i {
+            font-size: 1rem;
+            color: var(--gray);
+        }
+
+        .user-dropdown-content a:hover i {
+            color: var(--blue-primary);
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: var(--gray-light);
+            margin: 0;
         }
 
         /* ==================== BRUTALIST CARD ==================== */
@@ -546,6 +728,415 @@
             text-align: center;
         }
 
+        /* ==================== ANALYSIS TABS ==================== */
+        .analysis-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0;
+            border-bottom: var(--border-width) solid var(--black);
+            background: var(--gray-light);
+        }
+
+        .tab-btn {
+            flex: 1;
+            min-width: 100px;
+            padding: 12px 8px;
+            background: var(--gray-light);
+            border: none;
+            border-right: 1px solid var(--black);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .tab-btn:last-child {
+            border-right: none;
+        }
+
+        .tab-btn:hover {
+            background: var(--blue-pale);
+        }
+
+        .tab-btn.active {
+            background: var(--blue-primary);
+            color: var(--white);
+        }
+
+        .tab-btn i {
+            font-size: 0.9rem;
+        }
+
+        .tab-contents {
+            padding: 20px;
+            min-height: 200px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab-content h4 {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--blue-dark);
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--blue-pale);
+        }
+
+        /* Struktur Grid */
+        .struktur-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+        }
+
+        .struktur-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: var(--gray-light);
+            border: 2px solid var(--black);
+        }
+
+        .struktur-item.ada {
+            background: #d1fae5;
+            border-color: #10b981;
+        }
+
+        .struktur-item.tidak {
+            background: #fee2e2;
+            border-color: #ef4444;
+        }
+
+        .struktur-item i {
+            font-size: 1.2rem;
+        }
+
+        .struktur-item.ada i {
+            color: #10b981;
+        }
+
+        .struktur-item.tidak i {
+            color: #ef4444;
+        }
+
+        .struktur-item span {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        /* Metodologi Content */
+        .skor-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            font-weight: 700;
+            border: 2px solid var(--black);
+            margin-bottom: 12px;
+        }
+
+        .skor-badge.kuat {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .skor-badge.sedang {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .skor-badge.lemah {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .analysis-list {
+            list-style: none;
+            padding: 0;
+            margin: 12px 0;
+        }
+
+        .analysis-list li {
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            background: var(--gray-light);
+            border-left: 3px solid var(--blue-primary);
+            font-size: 0.85rem;
+        }
+
+        .analysis-text {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--gray);
+        }
+
+        /* Konsistensi Grid */
+        .konsistensi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .konsistensi-item {
+            padding: 12px;
+            border: 2px solid var(--black);
+            background: var(--gray-light);
+        }
+
+        .konsistensi-item .label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--gray);
+            margin-bottom: 4px;
+        }
+
+        .konsistensi-item .value {
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .konsistensi-item .value.sesuai {
+            color: #10b981;
+        }
+
+        .konsistensi-item .value.kurang {
+            color: #f59e0b;
+        }
+
+        .konsistensi-item .value.tidak {
+            color: #ef4444;
+        }
+
+        /* Kelemahan Section */
+        .kelemahan-category {
+            margin-bottom: 16px;
+        }
+
+        .kelemahan-category h5 {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--gray);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .kelemahan-category ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .kelemahan-category li {
+            padding: 8px 12px;
+            margin-bottom: 6px;
+            background: #fef3c7;
+            border-left: 3px solid #f59e0b;
+            font-size: 0.85rem;
+        }
+
+        /* Skor Section */
+        .skor-main {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: var(--blue-pale);
+            border: var(--border-width) solid var(--black);
+            margin-bottom: 16px;
+        }
+
+        .skor-nilai {
+            font-family: 'Space Mono', monospace;
+            font-size: 3rem;
+            font-weight: 700;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: var(--border-width) solid var(--black);
+        }
+
+        .skor-nilai.grade-a {
+            background: #10b981;
+            color: white;
+        }
+
+        .skor-nilai.grade-b {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .skor-nilai.grade-c {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .skor-nilai.grade-d {
+            background: #ef4444;
+            color: white;
+        }
+
+        .skor-info {
+            flex: 1;
+        }
+
+        .skor-info h5 {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+
+        .skor-info p {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .rekomendasi-box {
+            padding: 16px;
+            background: var(--gray-light);
+            border-left: 4px solid var(--blue-primary);
+        }
+
+        .rekomendasi-box h5 {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            color: var(--blue-dark);
+        }
+
+        .rekomendasi-box p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* Mobile Tabs */
+        @media (max-width: 768px) {
+            .analysis-tabs {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+                gap: 0;
+            }
+
+            .analysis-tabs::-webkit-scrollbar {
+                display: none;
+            }
+
+            .tab-btn {
+                min-width: 50px;
+                padding: 12px 16px;
+                flex-shrink: 0;
+                font-size: 0.65rem;
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .tab-btn i {
+                font-size: 1.1rem;
+            }
+
+            .tab-contents {
+                padding: 16px;
+            }
+
+            .tab-content h4 {
+                font-size: 0.85rem;
+            }
+
+            .struktur-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .struktur-item {
+                padding: 10px;
+            }
+
+            .struktur-item span {
+                font-size: 0.7rem;
+            }
+
+            .konsistensi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .skor-main {
+                flex-direction: column;
+                text-align: center;
+                gap: 12px;
+                padding: 16px;
+            }
+
+            .skor-nilai {
+                width: 60px;
+                height: 60px;
+                font-size: 2rem;
+            }
+
+            .skor-badge {
+                font-size: 0.75rem;
+                padding: 6px 12px;
+            }
+
+            .analysis-list li {
+                font-size: 0.8rem;
+                padding: 6px 10px;
+            }
+
+            .kelemahan-category li {
+                font-size: 0.8rem;
+            }
+
+            .rekomendasi-box {
+                padding: 12px;
+            }
+
+            .rekomendasi-box p {
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Extra small screens */
+        @media (max-width: 400px) {
+            .tab-btn {
+                min-width: 45px;
+                padding: 10px 12px;
+                font-size: 0;
+            }
+
+            .tab-btn i {
+                font-size: 1rem;
+            }
+
+            .struktur-item i {
+                font-size: 1rem;
+            }
+        }
+
         /* ==================== FOOTER - MULTI COLUMN ==================== */
         .footer {
             background: #0f172a;
@@ -913,7 +1504,9 @@
         }
 
         /* Mobile-only links - hidden on desktop */
-        .navbar-tools a.mobile-only-link { display: none !important; }
+        .navbar-tools a.mobile-only-link {
+            display: none !important;
+        }
 
         .navbar-tools .dropdown-content {
             display: none;
@@ -1154,7 +1747,11 @@
         }
 
         @media (max-width: 900px) {
-            .navbar-tools a.mobile-only-link, .mobile-only-link { display: block !important; }
+
+            .navbar-tools a.mobile-only-link,
+            .mobile-only-link {
+                display: block !important;
+            }
 
             .navbar-tools {
                 display: flex;
@@ -1395,12 +1992,14 @@
                                 <strong>{{ current_user.name }}</strong>
                                 <small>{{ current_user.email }}</small>
                             </div>
-                            <hr>
-                            <a href="/history" class="dropdown-item">
-                            <i class="bi bi-clock-history"></i> Riwayat
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="/logout"><i class="bi bi-box-arrow-right"></i><span
+                            <a href="/profile">
+                                <i class="bi bi-person-fill"></i> Akun Saya
+                            </a>
+                            <a href="/history">
+                                <i class="bi bi-clock-history"></i> Riwayat
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="/logout"><i class="bi bi-box-arrow-right"></i><span
                                     data-i18n="nav.logout">Logout</span></a>
                         </div>
                     </div>
@@ -1419,13 +2018,26 @@
         </div>
     </nav>
 
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>PARSE DOKUMEN</h1>
+        <p>Analisis kualitas struktur jurnal akademik Anda.</p>
+        <p class="sub-desc">Ekstrak teks PDF/DOCX, deteksi kelengkapan struktur, dan evaluasi konsistensi metodologi
+            secara otomatis.</p>
+        <div class="feature-tags">
+            <span class="tag">[EKSTRAKSI]</span>
+            <span class="tag">[ANALISIS AI]</span>
+            <span class="tag">[STRUKTUR]</span>
+        </div>
+    </section>
+
     <!-- Main -->
     <main class="main">
         <!-- Input Card -->
         <div class="card">
             <div class="card-header">
                 <i class="bi bi-file-earmark-text-fill"></i>
-                Document Parser Form
+                Parse Document
             </div>
             <div class="card-body">
                 <form id="analyzeForm">
@@ -1461,7 +2073,8 @@
 
                         </label>
                         <input type="text" class="form-input" id="keywordInput"
-                            placeholder="Contoh: Machine Learning, Deep Learning...">
+                            placeholder="Masukkan kata kunci penelitian..."
+                            title="Masukkan kata kunci utama penelitian untuk mendeteksi relevansi dokumen.">
                     </div>
 
                     <!-- Turnstile Widget -->
@@ -1472,7 +2085,7 @@
                     <!-- Submit -->
                     <button type="submit" class="btn-brutal" id="analyzeBtn">
                         <i class="bi bi-cpu"></i>
-                        Analisis Relevansi
+                        Analisis Dokumen
                     </button>
                 </form>
             </div>
@@ -1523,13 +2136,70 @@
                     </div>
                 </div>
 
-                <!-- AI Summary Section -->
+                <!-- AI Quality Analysis Section with Tabs -->
                 <div class="ai-summary-section" id="aiSummarySection">
                     <div class="ai-summary-header">
-                        <i class="bi bi-stars"></i>
-                        Ringkasan AI
+                        <i class="bi bi-clipboard-check"></i>
+                        Analisis Kualitas Jurnal
                     </div>
-                    <div class="ai-summary-content" id="aiSummaryContent">
+
+                    <!-- Tabs Navigation -->
+                    <div class="analysis-tabs">
+                        <button class="tab-btn active" data-tab="struktur">
+                            <i class="bi bi-list-check"></i> Struktur
+                        </button>
+                        <button class="tab-btn" data-tab="metodologi">
+                            <i class="bi bi-gear"></i> Metodologi
+                        </button>
+                        <button class="tab-btn" data-tab="variabel">
+                            <i class="bi bi-diagram-3"></i> Variabel
+                        </button>
+                        <button class="tab-btn" data-tab="konsistensi">
+                            <i class="bi bi-arrow-repeat"></i> Konsistensi
+                        </button>
+                        <button class="tab-btn" data-tab="kelemahan">
+                            <i class="bi bi-exclamation-triangle"></i> Kelemahan
+                        </button>
+                        <button class="tab-btn" data-tab="skor">
+                            <i class="bi bi-trophy"></i> Skor
+                        </button>
+                    </div>
+
+                    <!-- Tab Contents -->
+                    <div class="tab-contents">
+                        <div class="tab-content active" id="tab-struktur">
+                            <h4>Deteksi Struktur Akademik</h4>
+                            <div class="struktur-grid" id="strukturGrid"></div>
+                        </div>
+
+                        <div class="tab-content" id="tab-metodologi">
+                            <h4>Kekuatan Metodologi</h4>
+                            <div class="metodologi-content" id="metodologiContent"></div>
+                        </div>
+
+                        <div class="tab-content" id="tab-variabel">
+                            <h4>Kejelasan Variabel</h4>
+                            <div class="variabel-content" id="variabelContent"></div>
+                        </div>
+
+                        <div class="tab-content" id="tab-konsistensi">
+                            <h4>Konsistensi Tujuan vs Hasil</h4>
+                            <div class="konsistensi-content" id="konsistensiContent"></div>
+                        </div>
+
+                        <div class="tab-content" id="tab-kelemahan">
+                            <h4>Kelemahan yang Ditemukan</h4>
+                            <div class="kelemahan-content" id="kelemahanContent"></div>
+                        </div>
+
+                        <div class="tab-content" id="tab-skor">
+                            <h4>Skor Keseluruhan</h4>
+                            <div class="skor-content" id="skorContent"></div>
+                        </div>
+                    </div>
+
+                    <!-- Fallback for raw text -->
+                    <div class="ai-summary-content" id="aiSummaryContent" style="display: none;">
                         <div class="ai-loading" id="aiLoading">
                             <div class="spinner"></div>
                             <p>AI sedang menganalisis dokumen...</p>
@@ -1771,29 +2441,190 @@
             document.getElementById('matchCount').textContent = data.match_count;
             document.getElementById('keywordUsed').textContent = data.keyword;
 
-            // Display AI Summary
-            const aiSummaryContent = document.getElementById('aiSummaryContent');
+            // Display AI Quality Analysis in Tabs
+            if (data.ai_is_json && data.ai_parsed) {
+                displayAnalysisTabs(data.ai_parsed);
+                document.querySelector('.tab-contents').style.display = 'block';
+                document.getElementById('aiSummaryContent').style.display = 'none';
+            } else if (data.ai_summary) {
+                // Fallback to raw text display
+                document.querySelector('.tab-contents').style.display = 'none';
+                document.getElementById('aiSummaryContent').style.display = 'block';
 
-            if (data.ai_summary) {
-                // Simple markdown to HTML conversion
                 let html = data.ai_summary
                     .replace(/## (.*)/g, '<h2>$1</h2>')
                     .replace(/- (.*)/g, '<li>$1</li>')
                     .replace(/\n\n/g, '</p><p>')
                     .replace(/\n/g, '<br>');
-
-                // Wrap list items in ul
                 html = html.replace(/(<li>.*<\/li>)+/g, '<ul>$&</ul>');
-
-                aiSummaryContent.innerHTML = '<p>' + html + '</p>';
+                document.getElementById('aiSummaryContent').innerHTML = '<p>' + html + '</p>';
             } else if (data.ai_error) {
-                aiSummaryContent.innerHTML = `<div class="ai-error"><i class="bi bi-exclamation-triangle"></i> ${data.ai_error}</div>`;
+                document.querySelector('.tab-contents').style.display = 'none';
+                document.getElementById('aiSummaryContent').style.display = 'block';
+                document.getElementById('aiSummaryContent').innerHTML = `<div class="ai-error"><i class="bi bi-exclamation-triangle"></i> ${data.ai_error}</div>`;
             } else {
-                aiSummaryContent.innerHTML = '<div class="ai-error">AI summary tidak tersedia</div>';
+                document.querySelector('.tab-contents').style.display = 'none';
+                document.getElementById('aiSummaryContent').style.display = 'block';
+                document.getElementById('aiSummaryContent').innerHTML = '<div class="ai-error">Analisis AI tidak tersedia</div>';
             }
 
             resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
+
+        // Display parsed JSON data in tabs
+        function displayAnalysisTabs(parsed) {
+            // Tab 1: Struktur
+            const strukturGrid = document.getElementById('strukturGrid');
+            if (parsed.deteksi_struktur) {
+                const struktur = parsed.deteksi_struktur;
+                strukturGrid.innerHTML = `
+                    ${createStrukturItem('Abstrak', struktur.abstrak)}
+                    ${createStrukturItem('Pendahuluan', struktur.pendahuluan)}
+                    ${createStrukturItem('Metodologi', struktur.metodologi)}
+                    ${createStrukturItem('Hasil & Pembahasan', struktur.hasil_pembahasan)}
+                    ${createStrukturItem('Kesimpulan', struktur.kesimpulan)}
+                `;
+            }
+
+            // Tab 2: Metodologi
+            const metodologiContent = document.getElementById('metodologiContent');
+            if (parsed.kekuatan_metodologi) {
+                const met = parsed.kekuatan_metodologi;
+                const skorClass = met.skor?.toLowerCase() || 'sedang';
+                metodologiContent.innerHTML = `
+                    <div class="skor-badge ${skorClass}">
+                        <i class="bi bi-${skorClass === 'kuat' ? 'check-circle' : skorClass === 'lemah' ? 'x-circle' : 'dash-circle'}"></i>
+                        ${met.skor || 'Tidak dinilai'}
+                    </div>
+                    <p class="analysis-text">${met.penjelasan || ''}</p>
+                    ${met.poin_positif && met.poin_positif.length > 0 ? `
+                        <h5 style="margin-top: 16px; font-size: 0.8rem; color: var(--gray);">POIN POSITIF:</h5>
+                        <ul class="analysis-list">
+                            ${met.poin_positif.map(p => `<li>${p}</li>`).join('')}
+                        </ul>
+                    ` : ''}
+                `;
+            }
+
+            // Tab 3: Variabel
+            const variabelContent = document.getElementById('variabelContent');
+            if (parsed.kejelasan_variabel) {
+                const vr = parsed.kejelasan_variabel;
+                const statusClass = vr.status?.includes('Jelas') && !vr.status?.includes('Tidak') && !vr.status?.includes('Kurang') ? 'kuat' : vr.status?.includes('Kurang') ? 'sedang' : 'lemah';
+                variabelContent.innerHTML = `
+                    <div class="skor-badge ${statusClass}">
+                        <i class="bi bi-diagram-3"></i>
+                        ${vr.status || 'Tidak dinilai'}
+                    </div>
+                    ${vr.variabel_teridentifikasi && vr.variabel_teridentifikasi.length > 0 ? `
+                        <h5 style="margin-top: 16px; font-size: 0.8rem; color: var(--gray);">VARIABEL TERIDENTIFIKASI:</h5>
+                        <ul class="analysis-list">
+                            ${vr.variabel_teridentifikasi.map(v => `<li>${v}</li>`).join('')}
+                        </ul>
+                    ` : ''}
+                    ${vr.catatan ? `<p class="analysis-text" style="margin-top: 12px;">${vr.catatan}</p>` : ''}
+                `;
+            }
+
+            // Tab 4: Konsistensi
+            const konsistensiContent = document.getElementById('konsistensiContent');
+            if (parsed.konsistensi) {
+                const kon = parsed.konsistensi;
+                konsistensiContent.innerHTML = `
+                    <div class="konsistensi-grid">
+                        ${createKonsistensiItem('Tujuan vs Metodologi', kon.tujuan_vs_metodologi)}
+                        ${createKonsistensiItem('Metodologi vs Hasil', kon.metodologi_vs_hasil)}
+                        ${createKonsistensiItem('Tujuan vs Kesimpulan', kon.tujuan_vs_kesimpulan)}
+                    </div>
+                    ${kon.catatan ? `<p class="analysis-text">${kon.catatan}</p>` : ''}
+                `;
+            }
+
+            // Tab 5: Kelemahan
+            const kelemahanContent = document.getElementById('kelemahanContent');
+            if (parsed.kelemahan) {
+                const kel = parsed.kelemahan;
+                kelemahanContent.innerHTML = `
+                    ${createKelemahanCategory('Struktural', kel.struktural)}
+                    ${createKelemahanCategory('Metodologis', kel.metodologis)}
+                    ${createKelemahanCategory('Penulisan', kel.penulisan)}
+                `;
+            }
+
+            // Tab 6: Skor
+            const skorContent = document.getElementById('skorContent');
+            if (parsed.skor_keseluruhan) {
+                const sk = parsed.skor_keseluruhan;
+                const gradeClass = `grade-${sk.nilai?.toLowerCase() || 'c'}`;
+                skorContent.innerHTML = `
+                    <div class="skor-main">
+                        <div class="skor-nilai ${gradeClass}">${sk.nilai || '-'}</div>
+                        <div class="skor-info">
+                            <h5>${sk.interpretasi || 'Tidak ada interpretasi'}</h5>
+                            <p>Berdasarkan analisis struktur, metodologi, dan konsistensi dokumen</p>
+                        </div>
+                    </div>
+                    ${sk.rekomendasi ? `
+                        <div class="rekomendasi-box">
+                            <h5><i class="bi bi-lightbulb"></i> Rekomendasi</h5>
+                            <p>${sk.rekomendasi}</p>
+                        </div>
+                    ` : ''}
+                `;
+            }
+        }
+
+        // Helper functions
+        function createStrukturItem(label, value) {
+            const isAda = value?.toLowerCase().includes('ada') && !value?.toLowerCase().includes('tidak');
+            return `
+                <div class="struktur-item ${isAda ? 'ada' : 'tidak'}">
+                    <i class="bi bi-${isAda ? 'check-circle-fill' : 'x-circle-fill'}"></i>
+                    <span>${label}</span>
+                </div>
+            `;
+        }
+
+        function createKonsistensiItem(label, value) {
+            let valueClass = 'kurang';
+            if (value?.toLowerCase().includes('sesuai') && !value?.toLowerCase().includes('kurang') && !value?.toLowerCase().includes('tidak')) {
+                valueClass = 'sesuai';
+            } else if (value?.toLowerCase().includes('tidak')) {
+                valueClass = 'tidak';
+            }
+            return `
+                <div class="konsistensi-item">
+                    <div class="label">${label}</div>
+                    <div class="value ${valueClass}">${value || '-'}</div>
+                </div>
+            `;
+        }
+
+        function createKelemahanCategory(title, items) {
+            if (!items || items.length === 0) return '';
+            return `
+                <div class="kelemahan-category">
+                    <h5><i class="bi bi-exclamation-circle"></i> ${title}</h5>
+                    <ul>
+                        ${items.map(item => `<li>${item}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+
+        // Tab click handlers
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active from all tabs and contents
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+                // Add active to clicked tab and corresponding content
+                btn.classList.add('active');
+                const tabId = btn.dataset.tab;
+                document.getElementById(`tab-${tabId}`).classList.add('active');
+            });
+        });
 
         // Google Authentication (placeholder - needs Google OAuth setup)
         function loginWithGoogle() {
@@ -1818,6 +2649,9 @@
             });
         }
     </script>
+
+    <!-- Cookie Consent Banner -->
+    {% include 'partials/cookie_banner.html' %}
 </body>
 
 </html>

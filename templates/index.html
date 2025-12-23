@@ -420,12 +420,20 @@
             top: 100%;
             right: 0;
             background: var(--white);
-            border: 1px solid var(--gray-light);
-            border-radius: 8px;
-            min-width: 200px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            margin-top: 4px;
+            border: 2px solid var(--black);
+            min-width: 220px;
+            box-shadow: 4px 4px 0 var(--black);
+            z-index: 2000;
+        }
+
+        /* Fix flickering - add invisible bridge between button and dropdown */
+        .user-dropdown-content::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 0;
+            right: 0;
+            height: 10px;
         }
 
         .user-dropdown:hover .user-dropdown-content {
@@ -764,6 +772,53 @@
 
         .feature-slide-content .learn-more:hover {
             text-decoration: underline;
+        }
+
+        /* Enhanced Slide Typography */
+        .slide-tag {
+            display: inline-block;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--blue-primary);
+            background: var(--blue-pale);
+            padding: 4px 8px;
+            border: 1px solid var(--blue-primary);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .slide-subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--gray);
+            margin-bottom: 12px;
+            margin-top: -8px;
+        }
+
+        .slide-features {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            display: grid;
+            gap: 8px;
+        }
+
+        .slide-features li {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--black);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .slide-features li i {
+            color: var(--blue-primary);
+            font-size: 1rem;
+            font-weight: bold;
         }
 
         .feature-slide-image {
@@ -1589,12 +1644,14 @@
                                 <strong>{{ current_user.name }}</strong>
                                 <small>{{ current_user.email }}</small>
                             </div>
-                            <hr>
-                            <a href="/history" class="dropdown-item">
-                            <i class="bi bi-clock-history"></i> Riwayat
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="/logout"><i class="bi bi-box-arrow-right"></i><span
+                            <a href="/profile">
+                                <i class="bi bi-person-fill"></i> Akun Saya
+                            </a>
+                            <a href="/history">
+                                <i class="bi bi-clock-history"></i> Riwayat
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="/logout"><i class="bi bi-box-arrow-right"></i><span
                                     data-i18n="nav.logout">Logout</span></a>
                         </div>
                     </div>
@@ -1703,35 +1760,56 @@
                 <!-- Slide 1 - OCR -->
                 <div class="feature-slide active" data-index="0">
                     <div class="feature-slide-content">
+                        <span class="slide-tag">EKSTRAKSI TEKS</span>
                         <h3>OCR Scan</h3>
-                        <p>Ubah foto dokumen fisik buram menjadi teks digital presisi yang siap dianalisis sistem.
-                            Teknologi Tesseract OCR dengan dukungan bahasa Indonesia dan Inggris.</p>
+                        <h4 class="slide-subtitle">Dari Foto Menjadi Teks Digital</h4>
+                        <p>Ubah foto dokumen fisik—buku, jurnal, atau catatan tangan—menjadi teks digital yang siap
+                            dianalisis. Teknologi Tesseract OCR dengan akurasi tinggi.</p>
+                        <ul class="slide-features">
+                            <li><i class="bi bi-check2"></i> Support PNG, JPG, JPEG</li>
+                            <li><i class="bi bi-check2"></i> Bahasa Indonesia & Inggris</li>
+                            <li><i class="bi bi-check2"></i> Proses dalam hitungan detik</li>
+                        </ul>
                         <a href="/ocr" class="learn-more">Coba Sekarang →</a>
                     </div>
                     <div class="feature-slide-image">
-                        <img src="/static/img/slide-ocr.png?v=20231223b" alt="OCR Scanner Demo">
+                        <img src="/static/img/slide-ocr.gif" alt="OCR Scanner Demo">
                     </div>
                 </div>
 
                 <!-- Slide 2 - Parse -->
                 <div class="feature-slide" data-index="1">
                     <div class="feature-slide-content">
+                        <span class="slide-tag">ANALISIS DOKUMEN</span>
                         <h3>Parse Document</h3>
-                        <p>Dukungan penuh untuk analisis langsung file PDF dan Word tanpa perlu konversi format yang
-                            ribet. Ekstraksi teks cepat dan akurat.</p>
+                        <h4 class="slide-subtitle">Ekstrak & Analisis PDF/Word</h4>
+                        <p>Unggah file PDF atau Word langsung tanpa konversi format. Sistem akan mengekstrak teks dan
+                            menganalisis relevansi dengan kata kunci riset Anda.</p>
+                        <ul class="slide-features">
+                            <li><i class="bi bi-check2"></i> Support PDF & DOCX</li>
+                            <li><i class="bi bi-check2"></i> AI-Powered Analysis</li>
+                            <li><i class="bi bi-check2"></i> Highlight kata kunci</li>
+                        </ul>
                         <a href="/document" class="learn-more">Coba Sekarang →</a>
                     </div>
                     <div class="feature-slide-image">
-                        <img src="/static/img/slide-parse.png?v=20231223b" alt="Parse Document Demo">
+                        <img src="/static/img/slide-parse.gif" alt="Parse Document Demo">
                     </div>
                 </div>
 
                 <!-- Slide 3 - Batch -->
                 <div class="feature-slide" data-index="2">
                     <div class="feature-slide-content">
-                        <h3>Batch</h3>
-                        <p>Efisiensi riset maksimal dengan memproses puluhan halaman referensi sekaligus dalam satu
-                            klik. Bandingkan relevansi multiple dokumen.</p>
+                        <span class="slide-tag">MULTI-FILE</span>
+                        <h3>Batch Processing</h3>
+                        <h4 class="slide-subtitle">Proses Banyak Dokumen Sekaligus</h4>
+                        <p>Efisiensi riset maksimal! Unggah hingga 10 dokumen sekaligus dan sistem akan menganalisis
+                            relevansi masing-masing dengan kata kunci Anda.</p>
+                        <ul class="slide-features">
+                            <li><i class="bi bi-check2"></i> Hingga 10 file sekaligus</li>
+                            <li><i class="bi bi-check2"></i> Filter otomatis relevan/tidak</li>
+                            <li><i class="bi bi-check2"></i> Hemat waktu riset</li>
+                        </ul>
                         <a href="/batch" class="learn-more">Coba Sekarang →</a>
                     </div>
                     <div class="feature-slide-image rounded">
@@ -1742,13 +1820,20 @@
                 <!-- Slide 4 - Rabin-Karp -->
                 <div class="feature-slide" data-index="3">
                     <div class="feature-slide-content">
-                        <h3>Algoritma Rabin-Karp</h3>
-                        <p>Mesin pencari berbasis rolling-hash yang mampu menemukan relevansi topik dengan akurasi
-                            tinggi. Algoritma Rabin-Karp untuk pattern matching efisien.</p>
+                        <span class="slide-tag">ALGORITMA</span>
+                        <h3>Rabin-Karp</h3>
+                        <h4 class="slide-subtitle">Pattern Matching Efisien</h4>
+                        <p>Algoritma Rabin-Karp menggunakan teknik rolling hash untuk mencari pola teks dengan
+                            kompleksitas O(n+m). Cocok untuk pencocokan string dalam jumlah besar.</p>
+                        <ul class="slide-features">
+                            <li><i class="bi bi-check2"></i> Rolling hash algorithm</li>
+                            <li><i class="bi bi-check2"></i> Akurasi tinggi</li>
+                            <li><i class="bi bi-check2"></i> Optimized untuk akademik</li>
+                        </ul>
                         <a href="/about" class="learn-more">Pelajari Lebih Lanjut →</a>
                     </div>
                     <div class="feature-slide-image rounded">
-                        <img src="/static/img/slide-rabin.png?v=20231223b" alt="Algoritma Rabin-Karp">
+                        <img src="/static/img/slide-rabin.gif" alt="Algoritma Rabin-Karp">
                     </div>
                 </div>
             </div>
@@ -2068,6 +2153,9 @@
             }
         })();
     </script>
+
+    <!-- Cookie Consent Banner -->
+    {% include 'partials/cookie_banner.html' %}
 </body>
 
 </html>
