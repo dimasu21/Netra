@@ -152,7 +152,6 @@ brew install tesseract
 
 Aplikasi ini menggunakan algoritma **Rabin-Karp** untuk:
 - Pencarian pattern dalam teks
-- Deteksi plagiarisme
 - Highlighting teks yang cocok
 
 ```
@@ -173,10 +172,6 @@ Kontribusi sangat diterima! Silakan:
 ## 📄 License
 
 Distributed under the MIT License. See `LICENSE` for more information.
-
-## 📧 Contact
-
-Project Link: [https://github.com/yourusername/netra](https://github.com/yourusername/netra)
 
 ---
 
