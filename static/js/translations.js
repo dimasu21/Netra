@@ -17,7 +17,7 @@ const translations = {
         'nav.logout': 'Logout',
 
         // Hero
-        'hero.title': 'Analisis Dokumen Cerdas dengan',
+        'hero.title': 'Analisis Dokumen Anda dengan',
         'hero.rabinkarp': 'Rabin-Karp',
         'hero.ocr': 'OCR',
         'hero.description': 'Platform screening literatur berbasis OCR dan algoritma Rabin-Karp untuk membantu mahasiswa dalam proses tinjauan pustaka. Ekstrak teks dari gambar dan analisis relevansi dokumen dengan cepat.',
