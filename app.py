@@ -18,7 +18,7 @@ import os
 import re
 import base64
 from io import BytesIO
-from flask import Flask, render_template, request, jsonify, session
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 from flask_login import LoginManager, current_user
 from PIL import Image
 import pytesseract
@@ -32,7 +32,8 @@ from groq import Groq
 from dotenv import load_dotenv
 
 # Database and Auth
-from models import db, User
+from models import db, User, History
+from datetime import datetime
 
 # Load environment variables
 load_dotenv()
@@ -483,6 +484,30 @@ def document():
     return render_template('document.html')
 
 
+@app.route('/history')
+def history():
+    """Render halaman History/Riwayat Analisis."""
+    if not current_user.is_authenticated:
+        return redirect(url_for('auth.login'))
+    
+    # Ambil data history user, urutkan dari yang terbaru
+    histories = History.query.filter_by(user_id=current_user.id).order_by(History.created_at.desc()).all()
+    return render_template('history.html', histories=histories)
+    
+@app.route('/history/<int:id>/delete', methods=['POST'])
+def delete_history(id):
+    if not current_user.is_authenticated:
+        return jsonify({'success': False}), 403
+        
+    history = History.query.get_or_404(id)
+    if history.user_id != current_user.id:
+        return jsonify({'success': False}), 403
+        
+    db.session.delete(history)
+    db.session.commit()
+    return jsonify({'success': True})
+
+
 # Login and Signup routes are now handled by auth blueprint
 
 
@@ -606,6 +631,22 @@ def analyze():
         
         # Generate AI Summary
         ai_result = generate_ai_summary(extracted_text)
+        
+        # Save to History if User is Authenticated
+        if current_user.is_authenticated:
+            try:
+                new_history = History(
+                    user_id=current_user.id,
+                    filename=filename,
+                    file_type=file_type.upper(),
+                    extracted_text=extracted_text,
+                    ai_summary=ai_result.get('summary') if ai_result.get('success') else None,
+                    created_at=datetime.utcnow()
+                )
+                db.session.add(new_history)
+                db.session.commit()
+            except Exception as e:
+                print(f"Failed to save history: {e}")
         
         return jsonify({
             'success': True,

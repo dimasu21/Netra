@@ -47,232 +47,6 @@
             min-height: 100vh;
         }
 
-        /* ==================== iLovePDF-STYLE NAVBAR ==================== */
-        .navbar {
-            background: var(--white);
-            border-bottom: 2px solid var(--gray-light);
-            padding: 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .navbar-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 60px;
-        }
-
-        .navbar-brand {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            text-decoration: none;
-        }
-
-        .navbar-brand .logo-text {
-            font-family: 'Space Mono', monospace;
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--black);
-        }
-
-        .navbar-brand .logo-heart {
-            color: var(--blue-primary);
-            font-size: 1.1rem;
-        }
-
-        .navbar-tools {
-            display: flex;
-            align-items: center;
-            gap: 0;
-            height: 100%;
-        }
-
-        .navbar-tools a {
-            display: flex;
-            align-items: center;
-            height: 60px;
-            padding: 0 16px;
-            color: var(--gray);
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            text-decoration: none;
-            letter-spacing: 0.5px;
-            border-bottom: 3px solid transparent;
-            transition: all 0.2s;
-        }
-
-        .navbar-tools a:hover {
-            color: var(--blue-primary);
-            border-bottom-color: var(--blue-primary);
-            background: var(--blue-pale);
-        }
-
-        .navbar-tools a.active {
-            color: var(--blue-primary);
-            border-bottom-color: var(--blue-primary);
-        }
-
-        .navbar-tools .dropdown {
-            position: relative;
-        }
-
-        .navbar-tools .dropdown-content {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background: var(--white);
-            border: 2px solid var(--gray-light);
-            min-width: 180px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .navbar-tools .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        .navbar-tools .dropdown-content a {
-            display: block;
-            width: 100%;
-            height: auto;
-            padding: 12px 16px;
-            border-bottom: 1px solid var(--gray-light);
-        }
-
-        .navbar-tools .dropdown-content a:last-child {
-            border-bottom: none;
-        }
-
-        .navbar-auth {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .btn-login {
-            padding: 8px 16px;
-            color: var(--gray);
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .btn-login:hover {
-            color: var(--blue-primary);
-        }
-
-        .btn-signup {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 16px;
-            background: var(--blue-primary);
-            color: var(--white);
-            border: none;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-decoration: none;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .btn-signup:hover {
-            background: var(--blue-dark);
-        }
-
-        .btn-signup i {
-            font-size: 1rem;
-        }
-
-        /* Mobile Menu */
-        .navbar-toggle {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--black);
-        }
-
-        @media (max-width: 900px) {
-
-
-
-            .navbar-tools.active a {
-                margin-bottom: 12px;
-                width: 100%;
-                display: block;
-            }
-
-            .navbar-tools.active .dropdown-content {
-                position: static;
-                box-shadow: none;
-                border: none;
-                border-left: 2px solid var(--gray-light);
-                padding-left: 12px;
-                margin-bottom: 12px;
-                display: none;
-                /* Keep hidden until hover or click? Mobile usually click */
-            }
-
-            /* Show dropdown on hover/active for mobile? Or simplified */
-            .navbar-tools.active .dropdown:hover .dropdown-content {
-                display: block;
-            }
-
-
-            .navbar-tools {
-                display: flex;
-                flex-direction: column;
-                position: fixed;
-                top: 0;
-                right: 0;
-                height: 100vh;
-                width: 250px;
-                background: var(--white);
-                border-left: 3px solid var(--black);
-                padding: 80px 24px 24px;
-                z-index: 2000;
-                transform: translateX(100%);
-                transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-                box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
-            }
-
-            .navbar-tools.active {
-                transform: translateX(0);
-            }
-
-            .navbar-toggle {
-                display: block;
-                z-index: 2010;
-                position: relative;
-            }
-
-            /* Links in sidebar */
-            .navbar-tools a {
-                padding: 12px 0;
-                border-bottom: 1px solid #e2e8f0;
-                width: 100%;
-                display: block;
-            }
-
-
-            .navbar-toggle {
-                display: block;
-            }
-
-
-        }
-
         /* ==================== MAIN CONTAINER ==================== */
         .main {
             max-width: 900px;
@@ -1065,6 +839,484 @@
                 gap: 12px !important;
             }
         }
+
+        /* ==================== NAVBAR (Standardized) ==================== */
+        .navbar {
+            background: var(--white);
+            border-bottom: 2px solid var(--gray-light);
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            text-decoration: none;
+        }
+
+        .navbar-brand .logo-text {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--black);
+        }
+
+        .navbar-tools {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            height: 100%;
+            margin-left: auto;
+        }
+
+        .navbar-tools a {
+            display: flex;
+            align-items: center;
+            height: 60px;
+            padding: 0 16px;
+            color: var(--gray);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .navbar-tools a:hover {
+            color: var(--blue-primary);
+            border-bottom-color: var(--blue-primary);
+            background: var(--blue-pale);
+        }
+
+        .navbar-tools a.active {
+            color: var(--blue-primary);
+            border-bottom-color: var(--blue-primary);
+        }
+
+        .navbar-tools .dropdown {
+            position: relative;
+        }
+
+        /* Mobile-only links - hidden on desktop */
+        .navbar-tools a.mobile-only-link { display: none !important; }
+
+        .navbar-tools .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: var(--white);
+            border: 1px solid var(--gray-light);
+            border-radius: 8px;
+            min-width: 150px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 4px 0;
+        }
+
+        .navbar-tools .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .navbar-tools .dropdown-content a {
+            display: block !important;
+            width: 100%;
+            height: auto !important;
+            padding: 10px 16px !important;
+            font-size: 0.9rem !important;
+            border-bottom: none !important;
+            text-transform: none !important;
+            letter-spacing: normal !important;
+        }
+
+        .navbar-tools .dropdown-content a:hover {
+            background: var(--gray-light);
+            border-bottom-color: transparent !important;
+        }
+
+        .navbar-tools .dropdown-content a:last-child {
+            border-bottom: none;
+        }
+
+        .navbar-auth {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-login {
+            padding: 8px 16px;
+            color: var(--gray);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .btn-login:hover {
+            color: var(--blue-primary);
+        }
+
+        .btn-signup {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: var(--blue-primary);
+            color: var(--white);
+            border: 2px solid var(--black);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-signup:hover {
+            background: var(--blue-dark);
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        .navbar-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--black);
+        }
+
+        /* ==================== LANGUAGE DROPDOWN ==================== */
+        .lang-dropdown {
+            position: relative;
+        }
+
+        .lang-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            background: transparent;
+            border: 1px solid var(--gray-light);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: var(--gray);
+            transition: all 0.2s;
+        }
+
+        .lang-btn:hover {
+            border-color: var(--blue-primary);
+            color: var(--blue-primary);
+        }
+
+        .lang-dropdown-content {
+            display: none;
+            position: absolute;
+            top: calc(100% - 4px);
+            right: 0;
+            background: var(--white);
+            border: 1px solid var(--gray-light);
+            border-radius: 8px;
+            min-width: 180px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding-top: 8px;
+        }
+
+        .lang-dropdown:hover .lang-dropdown-content,
+        .lang-dropdown-content:hover {
+            display: block;
+        }
+
+        .lang-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 16px;
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .lang-option:hover {
+            background: var(--gray-light);
+        }
+
+        .lang-option.active {
+            color: var(--blue-primary);
+            font-weight: 600;
+        }
+
+        .lang-option i {
+            display: none;
+        }
+
+        .lang-option.active i {
+            display: inline;
+            color: var(--blue-primary);
+        }
+
+        /* ==================== USER DROPDOWN ==================== */
+        .user-dropdown {
+            position: relative;
+        }
+
+        .user-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--blue-pale);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: var(--blue-primary);
+            font-weight: 600;
+        }
+
+        .user-btn:hover {
+            background: var(--blue-light);
+            color: var(--white);
+        }
+
+        .user-dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--white);
+            border: 1px solid var(--gray-light);
+            border-radius: 8px;
+            min-width: 200px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            margin-top: 4px;
+        }
+
+        .user-dropdown:hover .user-dropdown-content {
+            display: block;
+        }
+
+        .user-info {
+            padding: 12px 16px;
+        }
+
+        .user-info strong {
+            display: block;
+            color: var(--black);
+            font-size: 0.95rem;
+        }
+
+        .user-info small {
+            color: var(--gray);
+            font-size: 0.8rem;
+        }
+
+        .user-dropdown-content hr {
+            margin: 0;
+            border: none;
+            border-top: 1px solid var(--gray-light);
+        }
+
+        .user-dropdown-content a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .user-dropdown-content a:hover {
+            background: var(--gray-light);
+            color: var(--blue-primary);
+        }
+
+        @media (max-width: 900px) {
+            .navbar-tools a.mobile-only-link, .mobile-only-link { display: block !important; }
+
+            .navbar-tools {
+                display: flex;
+                flex-direction: column;
+                position: fixed;
+                top: 0;
+                right: 0;
+                height: 100vh;
+                width: 250px;
+                background: var(--white);
+                border-left: 3px solid var(--black);
+                padding: 80px 24px 24px;
+                z-index: 2000;
+                transform: translateX(100%);
+                transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+                box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+            }
+
+            .navbar-tools.active {
+                transform: translateX(0);
+            }
+
+            .navbar-tools a {
+                padding: 16px 0 !important;
+                border-bottom: 1px solid var(--gray-light) !important;
+                width: 100% !important;
+                display: block !important;
+                height: auto !important;
+                color: var(--black) !important;
+            }
+
+            .navbar-toggle {
+                display: block;
+                z-index: 2010;
+            }
+
+            .navbar-container {
+                padding: 0 16px !important;
+            }
+
+            .navbar-brand .logo-text {
+                font-size: 1.1rem;
+            }
+
+            .navbar-right {
+                gap: 8px !important;
+            }
+
+            .lang-btn span,
+            .user-btn span {
+                display: none;
+            }
+
+            .lang-btn {
+                padding: 6px 8px;
+            }
+
+            .user-btn {
+                padding: 6px 8px;
+            }
+
+            .navbar-tools .dropdown {
+                display: none !important;
+            }
+        }
+
+
+        /* ==================== FOOTER (Standardized) ==================== */
+        .footer {
+            background: #0f172a;
+            color: #94a3b8;
+            margin-top: auto;
+            /* Ensure it pushes to bottom if flex column */
+        }
+
+        .footer-main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 48px 24px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 32px;
+        }
+
+        .footer-brand {
+            font-family: 'Space Mono', monospace;
+        }
+
+        .footer-brand h3 {
+            color: var(--white);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        .footer-brand p {
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .footer-column h4 {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--white);
+            margin-bottom: 16px;
+        }
+
+        .footer-column ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.2s;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--blue-light);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #1e293b;
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .footer-copyright {
+            font-size: 0.8rem;
+            font-family: 'Space Mono', monospace;
+        }
+
+        /* Responsive Footer */
+        @media (max-width: 1024px) {
+            .footer-main {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .footer-main {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+                gap: 16px;
+            }
+        }
     </style>
 </head>
 
@@ -1072,40 +1324,95 @@
     <!-- Navbar -->
     <nav class="navbar">
         <div class="navbar-container">
-            <!-- Brand -->
             <a href="/" class="navbar-brand">
                 <span class="logo-text">NETRA</span>
             </a>
 
-            <!-- Tool Links -->
             <div class="navbar-tools">
-                <a href="/">OCR Scan</a>
-                <a href="/document" class="active">Parse Document</a>
-                <a href="/batch">Batch</a>
+                <a href="/" data-i18n="nav.home">Beranda</a>
+                <a href="/ocr" data-i18n="nav.ocr">OCR Scan</a>
+                <a href="/document" class="active" data-i18n="nav.document">Parse Document</a>
+                <a href="/batch" data-i18n="nav.batch">Batch</a>
                 <div class="dropdown">
                     <a href="#"><span data-i18n="nav.more">Lainnya</span> <i class="bi bi-chevron-down"></i></a>
                     <div class="dropdown-content">
-
-
-
-                        <a href="/pricing">Pricing</a>
-                        <a href="/about">About</a>
-                        <a href="/contact">Contact</a>
-                        <a href="/privacy">Kebijakan Privasi</a>
-                        <a href="/terms">Syarat & Ketentuan</a>
+                        <a href="/pricing" data-i18n="footer.pricing">Pricing</a>
+                        <a href="/about" data-i18n="footer.about">About</a>
+                        <a href="/contact" data-i18n="footer.contact">Contact</a>
+                        <a href="/privacy" data-i18n="footer.privacy">Kebijakan Privasi</a>
+                        <a href="/terms" data-i18n="footer.terms">Syarat & Ketentuan</a>
                     </div>
                 </div>
+                <!-- Mobile-only links -->
+                <a href="/pricing" class="mobile-only-link" data-i18n="footer.pricing">Pricing</a>
+                <a href="/about" class="mobile-only-link" data-i18n="footer.about">About</a>
+                <a href="/contact" class="mobile-only-link" data-i18n="footer.contact">Contact</a>
+                <a href="/privacy" class="mobile-only-link" data-i18n="footer.privacy">Kebijakan Privasi</a>
+                <a href="/terms" class="mobile-only-link" data-i18n="footer.terms">Syarat & Ketentuan</a>
             </div>
 
-            <!-- Mobile Toggle -->
             <div class="navbar-right" style="margin-left: auto; display: flex; align-items: center; gap: 12px;">
+                <!-- Language Dropdown -->
+                <div class="lang-dropdown">
+                    <button class="lang-btn">
+                        <i class="bi bi-globe"></i>
+                        <span class="lang-current">ID</span>
+                        <i class="bi bi-chevron-down"></i>
+                    </button>
+                    <div class="lang-dropdown-content">
+                        <a href="#" data-lang="id" class="lang-option active">
+                            <span>Bahasa Indonesia</span>
+                            <i class="bi bi-check2"></i>
+                        </a>
+                        <a href="#" data-lang="en" class="lang-option">
+                            <span>English</span>
+                        </a>
+                        <a href="#" data-lang="zh-TW" class="lang-option">
+                            <span>中文（繁體）</span>
+                        </a>
+                        <a href="#" data-lang="zh-CN" class="lang-option">
+                            <span>中文（简体）</span>
+                        </a>
+                        <a href="#" data-lang="vi" class="lang-option">
+                            <span>Tiếng Việt</span>
+                        </a>
+                        <a href="#" data-lang="ja" class="lang-option">
+                            <span>日本語</span>
+                        </a>
+                    </div>
+                </div>
+
                 <div class="navbar-auth">
-                    <a href="/login" class="btn-login">Login</a>
+                    {% if current_user.is_authenticated %}
+                    <div class="user-dropdown">
+                        <button class="user-btn">
+                            <i class="bi bi-person-circle"></i>
+                            <span>{{ current_user.name.split()[0] }}</span>
+                            <i class="bi bi-chevron-down"></i>
+                        </button>
+                        <div class="user-dropdown-content">
+                            <div class="user-info">
+                                <strong>{{ current_user.name }}</strong>
+                                <small>{{ current_user.email }}</small>
+                            </div>
+                            <hr>
+                            <a href="/history" class="dropdown-item">
+                            <i class="bi bi-clock-history"></i> Riwayat
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="/logout"><i class="bi bi-box-arrow-right"></i><span
+                                    data-i18n="nav.logout">Logout</span></a>
+                        </div>
+                    </div>
+                    {% else %}
+                    <a href="/login" class="btn-login" data-i18n="nav.login">Login</a>
                     <a href="/signup" class="btn-signup">
-                        <i class="bi bi-google"></i>
-                        Sign up
+                        <i class="bi bi-person-plus"></i>
+                        <span data-i18n="nav.signup">Sign up</span>
                     </a>
-                </div><button class="navbar-toggle">
+                    {% endif %}
+                </div>
+                <button class="navbar-toggle">
                     <i class="bi bi-list"></i>
                 </button>
             </div>
@@ -1126,7 +1433,7 @@
                     <div class="form-group">
                         <label class="form-label">
                             Unggah Dokumen Referensi
-                            <span class="badge">Wajib</span>
+
                         </label>
                         <div class="upload-zone" id="dropZone">
                             <input type="file" class="hidden" id="fileInput"
@@ -1151,7 +1458,7 @@
                     <div class="form-group">
                         <label class="form-label">
                             Variabel / Kata Kunci Riset
-                            <span class="badge">Wajib</span>
+
                         </label>
                         <input type="text" class="form-input" id="keywordInput"
                             placeholder="Contoh: Machine Learning, Deep Learning...">
@@ -1246,63 +1553,48 @@
     </div>
 
     <!-- Footer -->
+
+    <!-- Footer -->
     <footer class="footer">
         <div class="footer-main">
             <div class="footer-brand">
                 <h3>NETRA</h3>
-                <p>Aplikasi screening literatur berbasis OCR dan algoritma Rabin-Karp untuk membantu mahasiswa dalam
+                <p>Platform analisis dokumen cerdas berbasis OCR dan algoritma Rabin-Karp untuk membantu mahasiswa dalam
                     proses tinjauan pustaka.</p>
             </div>
 
             <div class="footer-column">
-                <h4>Fitur</h4>
+                <h4 data-i18n="footer.tools">TOOLS</h4>
                 <ul>
-                    <li><a href="/batch">Batch Processing</a></li>
-                    <li><a href="#">OCR Gambar</a></li>
-                    <li><a href="#">Parse DOCX</a></li>
-                    <li><a href="#">Parse PDF</a></li>
+                    <li><a href="/ocr">OCR Scanner</a></li>
+                    <li><a href="/document">Document Parser</a></li>
+                    <li><a href="/batch">Batch Analysis</a></li>
                 </ul>
             </div>
 
             <div class="footer-column">
-                <h4>Teknologi</h4>
+                <h4 data-i18n="footer.company">COMPANY</h4>
                 <ul>
-                    <li><a href="#">Flask</a></li>
-                    <li><a href="#">Tesseract OCR</a></li>
-                    <li><a href="#">PyPDF2</a></li>
-                    <li><a href="#">python-docx</a></li>
+                    <li><a href="/about" data-i18n="footer.about">About</a></li>
+                    <li><a href="/pricing" data-i18n="footer.pricing">Pricing</a></li>
+                    <li><a href="/contact" data-i18n="footer.contact">Contact</a></li>
                 </ul>
             </div>
 
             <div class="footer-column">
-                <h4>Referensi</h4>
+                <h4 data-i18n="footer.legal">LEGAL</h4>
                 <ul>
-                    <li><a href="#">Dokumentasi</a></li>
-                    <li><a href="#">GitHub</a></li>
-                    <li><a href="#">Paper</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-column">
-                <h4>Perusahaan</h4>
-                <ul>
-                    <li><a href="/about">Tentang Kami</a></li>
-                    <li><a href="/contact">Kontak</a></li>
-                    <li><a href="/pricing">Pricing</a></li>
+                    <li><a href="/privacy" data-i18n="footer.privacy">Kebijakan Privasi</a></li>
+                    <li><a href="/terms" data-i18n="footer.terms">Syarat & Ketentuan</a></li>
                 </ul>
             </div>
         </div>
 
         <div class="footer-bottom">
-            <div class="footer-copyright">© 2024 NETRA • Thesis Project</div>
-            <div class="footer-social">
-                <a href="#"><i class="bi bi-github"></i></a>
-                <a href="#"><i class="bi bi-linkedin"></i></a>
-                <a href="#"><i class="bi bi-instagram"></i></a>
-                <a href="#"><i class="bi bi-envelope-fill"></i></a>
-            </div>
+            <div class="footer-copyright" data-i18n="footer.copyright">© 2025 NETRA. All rights reserved.</div>
         </div>
     </footer>
+
 
     <!-- Loading -->
     <div class="loading-overlay" id="loadingOverlay">

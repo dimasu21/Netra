@@ -39,3 +39,24 @@ class User(UserMixin, db.Model):
     
     def __repr__(self):
         return f'<User {self.email}>'
+
+
+class History(db.Model):
+    """
+    Model untuk menyimpan riwayat analisis dokumen user.
+    """
+    __tablename__ = 'history'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    filename = db.Column(db.String(255), nullable=False)
+    file_type = db.Column(db.String(50), nullable=False)  # 'OCR', 'DOC', 'BATCH'
+    extracted_text = db.Column(db.Text, nullable=True)  # Hasil OCR/Parse
+    ai_summary = db.Column(db.Text, nullable=True)      # Hasil AI Analysis
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Relasi ke User
+    user = db.relationship('User', backref=db.backref('history', lazy=True))
+
+    def __repr__(self):
+        return f'<History {self.filename}>'

@@ -164,6 +164,9 @@ def login_google():
 @auth.route('/callback')
 def google_callback():
     """Handle Google OAuth callback."""
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+
     try:
         token = oauth.google.authorize_access_token()
         user_info = token.get('userinfo')
@@ -188,13 +191,13 @@ def google_callback():
             )
             db.session.add(user)
             db.session.commit()
-            flash(f'Akun berhasil dibuat! Selamat datang, {name}!', 'success')
+            # flash(f'Akun berhasil dibuat! Selamat datang, {name}!', 'success')
         else:
             # Update google_id if not set
             if not user.google_id:
                 user.google_id = google_id
                 db.session.commit()
-            flash(f'Selamat datang kembali, {user.name}!', 'success')
+            # flash(f'Selamat datang kembali, {user.name}!', 'success')
         
         login_user(user, remember=True)
         return redirect(url_for('index'))
