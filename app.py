@@ -655,6 +655,70 @@ def delete_history(id):
 # Login and Signup routes are now handled by auth blueprint
 
 
+# ==============================================================================
+# BATCH RATE LIMITING API
+# ==============================================================================
+
+@app.route('/api/batch-limit/check', methods=['GET'])
+@csrf.exempt
+def check_batch_limit():
+    """Check remaining batch usage for current user."""
+    if not current_user.is_authenticated:
+        # Guest users have unlimited batch (for now, could limit by IP later)
+        return jsonify({
+            'allowed': True,
+            'remaining': 999,
+            'limit': 999,
+            'message': 'Guest user - unlimited'
+        })
+    
+    from models import UsageLimit
+    usage = UsageLimit.get_or_create(current_user.id, 'batch')
+    
+    # Check limit without incrementing
+    from datetime import datetime, timedelta
+    now = datetime.utcnow()
+    
+    # Reset if 24 hours passed
+    if usage.last_reset is None or (now - usage.last_reset) > timedelta(hours=24):
+        remaining = UsageLimit.BATCH_DAILY_LIMIT
+        used = 0
+    else:
+        remaining = max(0, UsageLimit.BATCH_DAILY_LIMIT - usage.usage_count)
+        used = usage.usage_count
+    
+    return jsonify({
+        'allowed': remaining > 0,
+        'remaining': remaining,
+        'used': used,
+        'limit': UsageLimit.BATCH_DAILY_LIMIT,
+        'message': f'{remaining} batch tersisa hari ini' if remaining > 0 else 'Limit tercapai'
+    })
+
+
+@app.route('/api/batch-limit/use', methods=['POST'])
+@csrf.exempt
+def use_batch_limit():
+    """Use one batch quota. Call this before processing batch."""
+    if not current_user.is_authenticated:
+        return jsonify({
+            'allowed': True,
+            'remaining': 999,
+            'message': 'Guest user - unlimited'
+        })
+    
+    from models import UsageLimit
+    usage = UsageLimit.get_or_create(current_user.id, 'batch')
+    allowed, remaining, message = usage.check_and_increment()
+    
+    return jsonify({
+        'allowed': allowed,
+        'remaining': remaining,
+        'limit': UsageLimit.BATCH_DAILY_LIMIT,
+        'message': message
+    })
+
+
 @app.route('/api/analyze', methods=['POST'])
 @csrf.exempt
 @limiter.limit("20 per minute")

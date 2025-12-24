@@ -192,6 +192,107 @@
         </div>
     </div>
 
+    <!-- Limit Exceeded Modal -->
+    <div class="limit-modal" id="limitModal" style="display: none;">
+        <div class="limit-modal-overlay"></div>
+        <div class="limit-modal-box">
+            <div class="limit-modal-icon">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+            </div>
+            <h3>Limit Batch Tercapai</h3>
+            <p id="limitModalMessage">Anda telah mencapai batas batch processing hari ini.</p>
+            <div class="limit-modal-info">
+                <span class="limit-used">0/3</span>
+                <span class="limit-label">batch hari ini</span>
+            </div>
+            <p class="limit-modal-hint">Limit akan reset dalam 24 jam atau <a href="/pricing">upgrade ke Premium</a> untuk unlimited.</p>
+            <button class="limit-modal-close" onclick="closeLimitModal()">
+                <i class="bi bi-x-lg"></i> Tutup
+            </button>
+        </div>
+    </div>
+
+    <style>
+        .limit-modal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .limit-modal-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+        }
+        .limit-modal-box {
+            position: relative;
+            background: var(--white, #fff);
+            border: 4px solid var(--black, #0a0a0a);
+            padding: 32px;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 8px 8px 0 var(--blue-primary, #2563eb);
+        }
+        .limit-modal-icon {
+            font-size: 3rem;
+            color: #f59e0b;
+            margin-bottom: 16px;
+        }
+        .limit-modal-box h3 {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+        .limit-modal-box p {
+            color: var(--gray, #64748b);
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+        }
+        .limit-modal-info {
+            background: #fee2e2;
+            border: 2px solid #ef4444;
+            padding: 12px;
+            margin-bottom: 16px;
+        }
+        .limit-used {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ef4444;
+        }
+        .limit-label {
+            display: block;
+            font-size: 0.75rem;
+            color: #991b1b;
+            text-transform: uppercase;
+        }
+        .limit-modal-hint {
+            font-size: 0.8rem;
+            color: var(--gray, #64748b);
+        }
+        .limit-modal-hint a {
+            color: var(--blue-primary, #2563eb);
+            font-weight: 600;
+        }
+        .limit-modal-close {
+            margin-top: 20px;
+            padding: 12px 24px;
+            background: var(--black, #0a0a0a);
+            color: white;
+            border: none;
+            font-family: 'Space Mono', monospace;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+        .limit-modal-close:hover {
+            background: var(--blue-primary, #2563eb);
+        }
+    </style>
+
+
     <!-- AdSense Display Ad (Horizontal) -->
     <div
         style="max-width: 1000px; margin: 0 auto 40px; padding: 20px; text-align: center; background: #f8f9fa; border: 1px dashed #ced4da;">
@@ -371,12 +472,44 @@
             analyzeBtn.disabled = selectedFiles.length === 0;
         }
 
+        // Limit Modal Functions
+        function showLimitModal(message, remaining, limit) {
+            const modal = document.getElementById('limitModal');
+            document.getElementById('limitModalMessage').textContent = message;
+            document.querySelector('.limit-used').textContent = `${limit - remaining}/${limit}`;
+            modal.style.display = 'flex';
+        }
+
+        function closeLimitModal() {
+            document.getElementById('limitModal').style.display = 'none';
+        }
+
         // Analyze all files
         analyzeBtn.addEventListener('click', async () => {
             const keyword = keywordInput.value.trim();
             if (!keyword) {
                 alert('Masukkan keyword terlebih dahulu!');
                 return;
+            }
+
+            // Check batch limit first
+            try {
+                const limitCheck = await fetch('/api/batch-limit/use', { method: 'POST' });
+                const limitData = await limitCheck.json();
+                
+                if (!limitData.allowed) {
+                    // Show limit reached modal
+                    showLimitModal(limitData.message, limitData.remaining, limitData.limit);
+                    return;
+                }
+                
+                // Update remaining counter if exists
+                const quotaDisplay = document.getElementById('batchQuotaDisplay');
+                if (quotaDisplay) {
+                    quotaDisplay.textContent = `${limitData.remaining}/${limitData.limit}`;
+                }
+            } catch (e) {
+                console.log('Limit check failed, proceeding anyway');
             }
 
             loadingOverlay.classList.add('show');

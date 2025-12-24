@@ -61,3 +61,71 @@ class History(db.Model):
 
     def __repr__(self):
         return f'<History {self.filename}>'
+
+
+class UsageLimit(db.Model):
+    """
+    Model untuk tracking penggunaan fitur dengan limit harian.
+    Digunakan untuk membatasi batch processing (3x/hari untuk free user).
+    """
+    __tablename__ = 'usage_limits'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    feature = db.Column(db.String(50), nullable=False)  # 'batch', 'ai_analysis', dll
+    usage_count = db.Column(db.Integer, default=0)
+    last_reset = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    # Relasi ke User
+    user = db.relationship('User', backref=db.backref('usage_limits', lazy=True))
+
+    # Constants untuk limit
+    BATCH_DAILY_LIMIT = 3
+    AI_DAILY_LIMIT = 10
+
+    @classmethod
+    def get_or_create(cls, user_id, feature):
+        """Get existing usage record or create new one."""
+        usage = cls.query.filter_by(user_id=user_id, feature=feature).first()
+        if not usage:
+            usage = cls(user_id=user_id, feature=feature, usage_count=0)
+            db.session.add(usage)
+            db.session.commit()
+        return usage
+
+    def check_and_increment(self):
+        """
+        Check if user can use feature, increment if allowed.
+        Returns (allowed: bool, remaining: int, message: str)
+        """
+        from datetime import datetime, timedelta
+        
+        # Reset if last reset was more than 24 hours ago
+        now = datetime.utcnow()
+        if self.last_reset is None or (now - self.last_reset) > timedelta(hours=24):
+            self.usage_count = 0
+            self.last_reset = now
+            db.session.commit()
+        
+        # Get limit based on feature
+        if self.feature == 'batch':
+            limit = self.BATCH_DAILY_LIMIT
+        elif self.feature == 'ai_analysis':
+            limit = self.AI_DAILY_LIMIT
+        else:
+            limit = 10  # Default limit
+        
+        remaining = limit - self.usage_count
+        
+        if self.usage_count >= limit:
+            hours_until_reset = 24 - int((now - self.last_reset).total_seconds() / 3600)
+            return False, 0, f"Limit harian tercapai ({limit}x/hari). Reset dalam ~{hours_until_reset} jam."
+        
+        # Increment usage
+        self.usage_count += 1
+        db.session.commit()
+        
+        return True, remaining - 1, "OK"
+
+    def __repr__(self):
+        return f'<UsageLimit {self.feature}: {self.usage_count}>'
