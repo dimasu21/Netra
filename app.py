@@ -603,7 +603,7 @@ def profile():
         recent_history = History.query.filter_by(user_id=current_user.id).order_by(History.created_at.desc()).limit(5).all()
         for h in recent_history:
             activities.append({
-                'action': h.action_type or 'Analisis',
+                'action': h.file_type or 'Analisis',
                 'filename': h.filename or 'document',
                 'time': h.created_at.strftime('%d %b %Y, %H:%M') if h.created_at else 'baru saja'
             })
