@@ -17,10 +17,11 @@ const translations = {
         'nav.logout': 'Logout',
 
         // Hero
-        'hero.title': 'Analisis Dokumen Anda dengan',
-        'hero.rabinkarp': 'Rabin-Karp',
-        'hero.ocr': 'OCR',
-        'hero.description': 'Platform screening literatur berbasis OCR dan algoritma Rabin-Karp untuk membantu mahasiswa dalam proses tinjauan pustaka. Ekstrak teks dari gambar dan analisis relevansi dokumen dengan cepat.',
+        'hero.badge': 'Powered by OCR & Rabin-Karp',
+        'hero.title': 'Asisten untuk',
+        'hero.highlight_keyword': 'Review Tinjauan Pustaka',
+        'hero.suffix': 'Anda',
+        'hero.description': 'Tak perlu baca satu per satu. Upload dokumen Anda, biarkan kami menemukan bagian yang relevan untuk riset Anda secara instan.',
         'hero.btn.ocr': 'Mulai OCR Scan',
         'hero.btn.document': 'Parse Document',
 
@@ -75,10 +76,11 @@ const translations = {
         'nav.signup': 'Sign up',
         'nav.logout': 'Logout',
 
-        'hero.title': 'Smart Document Analysis with',
-        'hero.rabinkarp': 'Rabin-Karp',
-        'hero.ocr': 'OCR',
-        'hero.description': 'OCR-based literature screening platform using the Rabin-Karp algorithm to help students in the literature review process. Extract text from images and analyze document relevance quickly.',
+        'hero.badge': 'Powered by OCR & Rabin-Karp',
+        'hero.title': 'Assistant for',
+        'hero.highlight_keyword': 'Your Literature Review',
+        'hero.suffix': '',
+        'hero.description': 'No need to read one by one. Upload your documents, let us find the relevant parts for your research instantly.',
         'hero.btn.ocr': 'Start OCR Scan',
         'hero.btn.document': 'Parse Document',
 
@@ -127,10 +129,11 @@ const translations = {
         'nav.signup': '註冊',
         'nav.logout': '登出',
 
-        'hero.title': '智能文件分析',
-        'hero.rabinkarp': 'Rabin-Karp',
-        'hero.ocr': 'OCR',
-        'hero.description': '基於OCR和Rabin-Karp算法的文獻篩選平台，幫助學生進行文獻回顧。快速從圖像中提取文字並分析文件相關性。',
+        'hero.badge': 'Powered by OCR & Rabin-Karp',
+        'hero.title': '您文獻回顧的',
+        'hero.highlight_keyword': '最佳助手',
+        'hero.suffix': '',
+        'hero.description': '無需逐一閱讀。上傳您的文件，讓我們立即為您的研究找到相關部分。',
         'hero.btn.ocr': '開始OCR掃描',
         'hero.btn.document': '解析文件',
 
@@ -179,10 +182,11 @@ const translations = {
         'nav.signup': '注册',
         'nav.logout': '退出',
 
-        'hero.title': '智能文档分析',
-        'hero.rabinkarp': 'Rabin-Karp',
-        'hero.ocr': 'OCR',
-        'hero.description': '基于OCR和Rabin-Karp算法的文献筛选平台，帮助学生进行文献回顾。快速从图像中提取文字并分析文档相关性。',
+        'hero.badge': 'Powered by OCR & Rabin-Karp',
+        'hero.title': '您文献回顾的',
+        'hero.highlight_keyword': '最佳助手',
+        'hero.suffix': '',
+        'hero.description': '无需逐一阅读。上传您的文档，让我们立即为您的研究找到相关部分。',
         'hero.btn.ocr': '开始OCR扫描',
         'hero.btn.document': '解析文档',
 
@@ -231,10 +235,11 @@ const translations = {
         'nav.signup': 'Đăng ký',
         'nav.logout': 'Đăng xuất',
 
-        'hero.title': 'Phân tích tài liệu thông minh với',
-        'hero.rabinkarp': 'Rabin-Karp',
-        'hero.ocr': 'OCR',
-        'hero.description': 'Nền tảng sàng lọc tài liệu dựa trên OCR và thuật toán Rabin-Karp để giúp sinh viên trong quá trình đánh giá tài liệu. Trích xuất văn bản từ hình ảnh và phân tích mức độ liên quan của tài liệu một cách nhanh chóng.',
+        'hero.badge': 'Powered by OCR & Rabin-Karp',
+        'hero.title': 'Trợ lý cho',
+        'hero.highlight_keyword': 'Đánh giá Tài liệu',
+        'hero.suffix': 'của bạn',
+        'hero.description': 'Không cần đọc từng tài liệu. Tải lên tài liệu của bạn, hãy để chúng tôi tìm phần liên quan cho nghiên cứu của bạn ngay lập tức.',
         'hero.btn.ocr': 'Bắt đầu quét OCR',
         'hero.btn.document': 'Phân tích tài liệu',
 
@@ -283,10 +288,11 @@ const translations = {
         'nav.signup': '新規登録',
         'nav.logout': 'ログアウト',
 
-        'hero.title': 'スマート文書分析',
-        'hero.rabinkarp': 'Rabin-Karp',
-        'hero.ocr': 'OCR',
-        'hero.description': 'OCRとRabin-Karpアルゴリズムに基づく文献スクリーニングプラットフォームで、学生の文献レビューを支援します。画像からテキストを抽出し、文書の関連性を素早く分析します。',
+        'hero.badge': 'Powered by OCR & Rabin-Karp',
+        'hero.title': 'あなたの',
+        'hero.highlight_keyword': '文献レビュー',
+        'hero.suffix': 'のアシスタント',
+        'hero.description': '一つずつ読む必要はありません。ドキュメントをアップロードして、研究に関連する部分を即座に見つけましょう。',
         'hero.btn.ocr': 'OCRスキャン開始',
         'hero.btn.document': 'ドキュメント解析',
 

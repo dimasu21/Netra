@@ -2,7 +2,7 @@
 ================================================================================
 ASISTEN TINJAUAN PUSTAKA (Literature Review Assistant)
 ================================================================================
-Aplikasi web untuk membantu mahasiswa melakukan screening referensi fisik
+Aplikasi web untuk membantu Anda melakukan screening referensi fisik
 (buku/jurnal) menggunakan OCR dan Algoritma Rabin-Karp.
 
 Tech Stack:

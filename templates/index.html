@@ -24,7 +24,7 @@
     <title>NETRA | Analisis Dokumen Anda dengan OCR & Rabin-Karp</title>
     <meta name="title" content="NETRA | Analisis Dokumen Anda dengan OCR & Rabin-Karp">
     <meta name="description"
-        content="Platform screening literatur berbasis OCR dan algoritma Rabin-Karp untuk membantu mahasiswa dalam proses tinjauan pustaka. Ekstrak teks dari gambar dan analisis relevansi dokumen dengan cepat.">
+        content="Platform screening literatur berbasis OCR dan algoritma Rabin-Karp untuk membantu Anda dalam proses tinjauan pustaka. Ekstrak teks dari gambar dan analisis relevansi dokumen dengan cepat.">
     <meta name="keywords"
         content="OCR, Rabin-Karp, analisis dokumen, tinjauan pustaka, literature review, text extraction, document parser, batch processing, skripsi, thesis">
     <meta name="author" content="NETRA">
@@ -48,7 +48,7 @@
     <meta property="og:url" content="https://netraku.my.id/">
     <meta property="og:title" content="NETRA | Analisis Dokumen Anda dengan OCR & Rabin-Karp">
     <meta property="og:description"
-        content="Platform screening literatur berbasis OCR dan algoritma Rabin-Karp untuk membantu mahasiswa dalam proses tinjauan pustaka.">
+        content="Platform screening literatur berbasis OCR dan algoritma Rabin-Karp untuk membantu Anda dalam proses tinjauan pustaka.">
     <meta property="og:image" content="https://netraku.my.id/static/img/og-image.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -65,7 +65,7 @@
     <meta name="twitter:url" content="https://netraku.my.id/">
     <meta name="twitter:title" content="NETRA | Analisis Dokumen Anda dengan OCR & Rabin-Karp">
     <meta name="twitter:description"
-        content="Platform screening literatur berbasis OCR dan algoritma Rabin-Karp untuk membantu mahasiswa dalam proses tinjauan pustaka.">
+        content="Platform screening literatur berbasis OCR dan algoritma Rabin-Karp untuk membantu Anda dalam proses tinjauan pustaka.">
     <meta name="twitter:image" content="https://netraku.my.id/static/img/og-image.png">
 
     <!-- Favicon -->
@@ -93,7 +93,7 @@
         "@type": "WebApplication",
         "name": "NETRA",
         "url": "https://netraku.my.id",
-        "description": "Platform screening literatur berbasis OCR dan algoritma Rabin-Karp untuk membantu mahasiswa dalam proses tinjauan pustaka.",
+        "description": "Platform screening literatur berbasis OCR dan algoritma Rabin-Karp untuk membantu Anda dalam proses tinjauan pustaka.",
         "applicationCategory": "EducationalApplication",
         "operatingSystem": "Web Browser",
         "offers": {
@@ -123,7 +123,7 @@
         "name": "NETRA",
         "url": "https://netraku.my.id",
         "logo": "https://netraku.my.id/static/img/logo.png",
-        "description": "Platform analisis dokumen cerdas untuk mahasiswa",
+        "description": "Platform analisis dokumen cerdas untuk Anda",
         "sameAs": []
     }
     </script>
@@ -517,11 +517,53 @@
             z-index: -1;
         }
 
+        .hero-content {
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: var(--blue-pale);
+            color: var(--blue-primary);
+            font-size: 0.65rem;
+            /* Smaller font */
+            font-weight: 700;
+            padding: 4px 10px;
+            /* Smaller padding */
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            border: 1px solid var(--blue-light);
+        }
+
+        .hero-content h1 {
+            font-family: 'Space Mono', monospace;
+            font-size: 3rem;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            color: var(--black);
+        }
+
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2rem;
+                /* Responsive font size */
+            }
+
+            .hero-badge {
+                font-size: 0.6rem;
+                padding: 3px 8px;
+            }
+        }
+
         .hero-content p {
             font-size: 1.15rem;
-            color: var(--gray);
+            color: #334155;
+            /* Darker gray for better contrast */
             line-height: 1.7;
             margin-bottom: 32px;
+            font-weight: 500;
         }
 
         .hero-cta {
@@ -1674,14 +1716,15 @@
     <section class="hero">
         <div class="hero-container">
             <div class="hero-content">
+                <span class="hero-badge" data-i18n="hero.badge">Powered by OCR & Rabin-Karp</span>
                 <h1>
-                    <span data-i18n="hero.title">Analisis Dokumen Anda dengan</span>
-                    <span class="highlight" data-i18n="hero.rabinkarp">Rabin-Karp</span> &
-                    <span class="highlight" data-i18n="hero.ocr">OCR</span>
+                    <span data-i18n="hero.title">Asisten untuk</span>
+                    <span class="highlight" data-i18n="hero.highlight_keyword">Review Tinjauan Pustaka</span>
+                    <span data-i18n="hero.suffix">Anda</span>
                 </h1>
                 <p data-i18n="hero.description">
-                    Platform screening literatur berbasis OCR dan algoritma Rabin-Karp untuk membantu mahasiswa
-                    dalam proses tinjauan pustaka. Ekstrak teks dari gambar dan analisis relevansi dokumen dengan cepat.
+                    Tak perlu baca satu per satu. Upload dokumen Anda, biarkan kami menemukan bagian yang relevan untuk
+                    riset Anda secara instan.
                 </p>
                 <div class="hero-cta">
                     <a href="/ocr" class="btn-brutal">
@@ -1959,7 +2002,7 @@
         <div class="footer-main">
             <div class="footer-brand">
                 <h3>NETRA</h3>
-                <p>Platform analisis dokumen cerdas berbasis OCR dan algoritma Rabin-Karp untuk membantu mahasiswa dalam
+                <p>Platform analisis dokumen cerdas berbasis OCR dan algoritma Rabin-Karp untuk membantu Anda dalam
                     proses tinjauan pustaka.</p>
             </div>
 
