@@ -80,7 +80,7 @@ class UsageLimit(db.Model):
     user = db.relationship('User', backref=db.backref('usage_limits', lazy=True))
 
     # Constants untuk limit
-    BATCH_DAILY_LIMIT = 3
+    BATCH_DAILY_LIMIT = 10
     AI_DAILY_LIMIT = 10
 
     @classmethod

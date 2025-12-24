@@ -540,6 +540,17 @@
                     });
                     const data = await response.json();
 
+                    if (data.limit_reached) {
+                        showLimitModal(data.error, data.remaining, data.limit);
+                        results.push({
+                            filename: selectedFiles[i].name,
+                            error: true,
+                            message: 'Limit harian tercapai'
+                        });
+                        notRelevantCount++; // Or treat as skipped
+                        break;
+                    }
+
                     if (data.is_relevant) {
                         relevantCount++;
                     } else {
