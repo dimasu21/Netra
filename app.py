@@ -774,28 +774,10 @@ def analyze():
                     'limit': GuestUsageLimit.DAILY_LIMIT
                 }), 429
         
-        if current_user.is_authenticated:
-            # Check if this is part of a batch process
-            is_batch = request.form.get('is_batch') == 'true'
-            
-            if not is_batch:
-                # Single Document / OCR Request -> Count as 1 limit usage
-                # Shared limit with AI Analysis / Batch (10/day total requests)
-                from models import UsageLimit
-                # Use 'ai_analysis' feature name (or 'analyze') limit
-                usage = UsageLimit.get_or_create(current_user.id, 'analyze') 
-                allowed, remaining, message = usage.check_and_increment()
-                
-                if not allowed:
-                     return jsonify({
-                        'success': False, 
-                        'error': f'Limit harian tercapai (10 request/hari). {message}',
-                        'limit_reached': True,
-                        'remaining': 0,
-                        'limit': 10
-                    }), 429
-            # If is_batch is True, we BYPASS the check here because the limit was already
-            # checked/incremented by /api/batch-limit/use (Session based limit).
+        # Authenticated users:
+        # For batch processing, the limit is checked separately via /api/batch-limit/use (10/day)
+        # For single document processing (OCR/Parse), it is explicitly UNLIMITED for logged-in users.
+        # So we do NOT perform any limit check here for authenticated users.
 
         
         # Cloudflare Turnstile Verification
