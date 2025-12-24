@@ -262,15 +262,15 @@
                 <div class="label">Total Users</div>
             </div>
             <div class="stat-card">
-                <div class="value">{{ users|selectattr('is_active')|list|length }}</div>
+                <div class="value">{{ users|selectattr('is_active', 'equalto', true)|list|length }}</div>
                 <div class="label">Users Aktif</div>
             </div>
             <div class="stat-card">
-                <div class="value">{{ users|selectattr('is_admin')|list|length }}</div>
+                <div class="value">{{ users|selectattr('is_admin', 'equalto', true)|list|length }}</div>
                 <div class="label">Admin</div>
             </div>
             <div class="stat-card">
-                <div class="value">{{ users|selectattr('google_id')|list|length }}</div>
+                <div class="value">{{ users|selectattr('google_id', 'ne', none)|list|length }}</div>
                 <div class="label">Login Google</div>
             </div>
         </div>
