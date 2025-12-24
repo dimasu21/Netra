@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | NETRA</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32x32.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <style>
+        :root {
+            --blue-primary: #2563eb;
+            --blue-dark: #1e40af;
+            --blue-light: #93c5fd;
+            --blue-pale: #dbeafe;
+            --black: #0f172a;
+            --gray: #64748b;
+            --gray-light: #f1f5f9;
+            --white: #ffffff;
+            --green: #22c55e;
+            --red: #ef4444;
+            --yellow: #f59e0b;
+            --border-width: 3px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--gray-light);
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+        .admin-navbar {
+            background: var(--black);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-navbar h1 {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.2rem;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-navbar h1 i { color: var(--blue-light); }
+
+        .admin-navbar a {
+            color: var(--gray);
+            text-decoration: none;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
+        }
+
+        .admin-navbar a:hover { color: var(--white); }
+
+        /* Container */
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        /* Stats Cards */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border: var(--border-width) solid var(--black);
+            padding: 20px;
+            position: relative;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 5px; left: 5px; right: -5px; bottom: -5px;
+            background: var(--blue-primary);
+            z-index: -1;
+        }
+
+        .stat-card .value {
+            font-family: 'Space Mono', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--blue-dark);
+        }
+
+        .stat-card .label {
+            font-size: 0.8rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+
+        /* Table Card */
+        .table-card {
+            background: var(--white);
+            border: var(--border-width) solid var(--black);
+            position: relative;
+        }
+
+        .table-card::before {
+            content: '';
+            position: absolute;
+            top: 6px; left: 6px; right: -6px; bottom: -6px;
+            background: var(--blue-primary);
+            z-index: -1;
+        }
+
+        .table-header {
+            background: var(--black);
+            color: var(--white);
+            padding: 16px 20px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-body {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gray);
+            text-align: left;
+            padding: 14px 16px;
+            border-bottom: 2px solid var(--gray-light);
+            background: var(--blue-pale);
+        }
+
+        td {
+            padding: 14px 16px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        tr:hover { background: var(--blue-pale); }
+
+        /* Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            border: 2px solid var(--black);
+            font-weight: 700;
+        }
+
+        .badge.active { background: #d1fae5; color: #065f46; }
+        .badge.inactive { background: #fee2e2; color: #991b1b; }
+        .badge.admin { background: var(--blue-pale); color: var(--blue-dark); }
+        .badge.google { background: #fef3c7; color: #92400e; }
+
+        /* Action Buttons */
+        .actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            padding: 6px 10px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            border: 2px solid var(--black);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-action:hover {
+            transform: translate(-1px, -1px);
+            box-shadow: 2px 2px 0 var(--black);
+        }
+
+        .btn-toggle { background: var(--gray-light); color: var(--black); }
+        .btn-admin { background: var(--blue-pale); color: var(--blue-dark); }
+        .btn-reset { background: #fef3c7; color: #92400e; }
+        .btn-delete { background: #fee2e2; color: #991b1b; }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            background: var(--black);
+            color: var(--white);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            border: 2px solid var(--black);
+            box-shadow: 4px 4px 0 var(--blue-primary);
+            z-index: 9999;
+            transform: translateY(150%);
+            transition: transform 0.3s;
+        }
+
+        .toast.show { transform: translateY(0); }
+        .toast.success { background: #22c55e; }
+        .toast.error { background: #ef4444; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .actions { flex-direction: column; }
+            .btn-action { width: 100%; justify-content: center; }
+            th, td { padding: 10px 8px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="admin-navbar">
+        <h1><i class="bi bi-shield-lock-fill"></i> ADMIN PANEL</h1>
+        <a href="/"><i class="bi bi-arrow-left"></i> Kembali ke Beranda</a>
+    </nav>
+
+    <!-- Container -->
+    <div class="admin-container">
+        <!-- Stats -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="value">{{ users|length }}</div>
+                <div class="label">Total Users</div>
+            </div>
+            <div class="stat-card">
+                <div class="value">{{ users|selectattr('is_active')|list|length }}</div>
+                <div class="label">Users Aktif</div>
+            </div>
+            <div class="stat-card">
+                <div class="value">{{ users|selectattr('is_admin')|list|length }}</div>
+                <div class="label">Admin</div>
+            </div>
+            <div class="stat-card">
+                <div class="value">{{ users|selectattr('google_id')|list|length }}</div>
+                <div class="label">Login Google</div>
+            </div>
+        </div>
+
+        <!-- Users Table -->
+        <div class="table-card">
+            <div class="table-header">
+                <span><i class="bi bi-people-fill"></i> Daftar Users</span>
+            </div>
+            <div class="table-body">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nama</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th>Tipe</th>
+                            <th>Terdaftar</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr id="user-{{ user.id }}">
+                            <td>{{ user.id }}</td>
+                            <td><strong>{{ user.name }}</strong></td>
+                            <td>{{ user.email }}</td>
+                            <td>
+                                <span class="badge {{ 'active' if user.is_active else 'inactive' }}" id="status-{{ user.id }}">
+                                    <i class="bi bi-{{ 'check-circle' if user.is_active else 'x-circle' }}"></i>
+                                    {{ 'Aktif' if user.is_active else 'Nonaktif' }}
+                                </span>
+                                {% if user.is_admin %}
+                                <span class="badge admin" id="admin-badge-{{ user.id }}">
+                                    <i class="bi bi-shield-fill"></i> Admin
+                                </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user.google_id %}
+                                <span class="badge google"><i class="bi bi-google"></i> Google</span>
+                                {% else %}
+                                <span class="badge">Email</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ user.created_at.strftime('%d %b %Y') if user.created_at else '-' }}</td>
+                            <td>
+                                <div class="actions">
+                                    <button class="btn-action btn-toggle" onclick="toggleActive({{ user.id }})">
+                                        <i class="bi bi-toggle-on"></i> Toggle Aktif
+                                    </button>
+                                    <button class="btn-action btn-admin" onclick="toggleAdmin({{ user.id }})">
+                                        <i class="bi bi-shield"></i> Toggle Admin
+                                    </button>
+                                    {% if not user.google_id %}
+                                    <button class="btn-action btn-reset" onclick="resetPassword({{ user.id }})">
+                                        <i class="bi bi-key"></i> Reset PW
+                                    </button>
+                                    {% endif %}
+                                    <button class="btn-action btn-delete" onclick="deleteUser({{ user.id }}, '{{ user.name }}')">
+                                        <i class="bi bi-trash"></i> Hapus
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast ' + type + ' show';
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        async function toggleActive(userId) {
+            try {
+                const res = await fetch(`/admin/user/${userId}/toggle-active`, { method: 'POST' });
+                const data = await res.json();
+                if (data.success) {
+                    location.reload();
+                } else {
+                    showToast(data.error, 'error');
+                }
+            } catch (e) {
+                showToast('Terjadi kesalahan', 'error');
+            }
+        }
+
+        async function toggleAdmin(userId) {
+            try {
+                const res = await fetch(`/admin/user/${userId}/toggle-admin`, { method: 'POST' });
+                const data = await res.json();
+                if (data.success) {
+                    location.reload();
+                } else {
+                    showToast(data.error, 'error');
+                }
+            } catch (e) {
+                showToast('Terjadi kesalahan', 'error');
+            }
+        }
+
+        async function resetPassword(userId) {
+            if (!confirm('Reset password user ini ke "netra123"?')) return;
+            try {
+                const res = await fetch(`/admin/user/${userId}/reset-password`, { method: 'POST' });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(`Password direset ke: ${data.new_password}`);
+                } else {
+                    showToast(data.error, 'error');
+                }
+            } catch (e) {
+                showToast('Terjadi kesalahan', 'error');
+            }
+        }
+
+        async function deleteUser(userId, name) {
+            if (!confirm(`Hapus user "${name}"? Data history juga akan dihapus.`)) return;
+            try {
+                const res = await fetch(`/admin/user/${userId}/delete`, { method: 'POST' });
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById(`user-${userId}`).remove();
+                    showToast('User berhasil dihapus');
+                } else {
+                    showToast(data.error, 'error');
+                }
+            } catch (e) {
+                showToast('Terjadi kesalahan', 'error');
+            }
+        }
+    </script>
+</body>
+</html>

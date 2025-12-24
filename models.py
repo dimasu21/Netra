@@ -26,6 +26,7 @@ class User(UserMixin, db.Model):
     google_id = db.Column(db.String(100), unique=True, nullable=True)  # Untuk Google Sign-In
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     is_active = db.Column(db.Boolean, default=True)
+    is_admin = db.Column(db.Boolean, default=False)  # Admin access
     
     def set_password(self, password):
         """Hash dan simpan password."""

@@ -816,6 +816,89 @@ def analyze():
 
 
 # ==============================================================================
+# ADMIN PANEL ROUTES
+# ==============================================================================
+
+def admin_required(f):
+    """Decorator untuk membatasi akses hanya untuk admin."""
+    from functools import wraps
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not current_user.is_authenticated:
+            flash('Silakan login terlebih dahulu.', 'warning')
+            return redirect(url_for('auth.login'))
+        if not current_user.is_admin:
+            flash('Akses ditolak. Anda bukan administrator.', 'danger')
+            return redirect(url_for('index'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+
+@app.route('/admin')
+@admin_required
+def admin_dashboard():
+    """Admin dashboard - lihat semua user."""
+    users = User.query.order_by(User.created_at.desc()).all()
+    return render_template('admin.html', users=users)
+
+
+@app.route('/admin/user/<int:user_id>/toggle-active', methods=['POST'])
+@admin_required
+@csrf.exempt
+def admin_toggle_user_active(user_id):
+    """Toggle status aktif user."""
+    user = User.query.get_or_404(user_id)
+    if user.id == current_user.id:
+        return jsonify({'success': False, 'error': 'Tidak bisa menonaktifkan diri sendiri'}), 400
+    user.is_active = not user.is_active
+    db.session.commit()
+    return jsonify({'success': True, 'is_active': user.is_active})
+
+
+@app.route('/admin/user/<int:user_id>/toggle-admin', methods=['POST'])
+@admin_required
+@csrf.exempt
+def admin_toggle_user_admin(user_id):
+    """Toggle status admin user."""
+    user = User.query.get_or_404(user_id)
+    if user.id == current_user.id:
+        return jsonify({'success': False, 'error': 'Tidak bisa mengubah status admin diri sendiri'}), 400
+    user.is_admin = not user.is_admin
+    db.session.commit()
+    return jsonify({'success': True, 'is_admin': user.is_admin})
+
+
+@app.route('/admin/user/<int:user_id>/delete', methods=['POST'])
+@admin_required
+@csrf.exempt
+def admin_delete_user(user_id):
+    """Hapus user dari database."""
+    user = User.query.get_or_404(user_id)
+    if user.id == current_user.id:
+        return jsonify({'success': False, 'error': 'Tidak bisa menghapus diri sendiri'}), 400
+    # Hapus history user terlebih dahulu
+    History.query.filter_by(user_id=user.id).delete()
+    db.session.delete(user)
+    db.session.commit()
+    return jsonify({'success': True})
+
+
+@app.route('/admin/user/<int:user_id>/reset-password', methods=['POST'])
+@admin_required
+@csrf.exempt
+def admin_reset_password(user_id):
+    """Reset password user ke default."""
+    user = User.query.get_or_404(user_id)
+    if user.google_id:
+        return jsonify({'success': False, 'error': 'User Google tidak bisa reset password'}), 400
+    # Set password default
+    new_password = 'netra123'
+    user.set_password(new_password)
+    db.session.commit()
+    return jsonify({'success': True, 'new_password': new_password})
+
+
+# ==============================================================================
 # ERROR HANDLERS
 # ==============================================================================
 
