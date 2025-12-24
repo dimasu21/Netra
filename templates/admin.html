@@ -320,18 +320,18 @@
                             <td>{{ user.created_at.strftime('%d %b %Y') if user.created_at else '-' }}</td>
                             <td>
                                 <div class="actions">
-                                    <button class="btn-action btn-toggle" onclick="toggleActive({{ user.id }})">
+                                    <button class="btn-action btn-toggle" data-id="{{ user.id }}" data-action="toggle-active">
                                         <i class="bi bi-toggle-on"></i> Toggle Aktif
                                     </button>
-                                    <button class="btn-action btn-admin" onclick="toggleAdmin({{ user.id }})">
+                                    <button class="btn-action btn-admin" data-id="{{ user.id }}" data-action="toggle-admin">
                                         <i class="bi bi-shield"></i> Toggle Admin
                                     </button>
                                     {% if not user.google_id %}
-                                    <button class="btn-action btn-reset" onclick="resetPassword({{ user.id }})">
+                                    <button class="btn-action btn-reset" data-id="{{ user.id }}" data-action="reset-password">
                                         <i class="bi bi-key"></i> Reset PW
                                     </button>
                                     {% endif %}
-                                    <button class="btn-action btn-delete" onclick="deleteUser({{ user.id }}, '{{ user.name }}')">
+                                    <button class="btn-action btn-delete" data-id="{{ user.id }}" data-name="{{ user.name }}" data-action="delete">
                                         <i class="bi bi-trash"></i> Hapus
                                     </button>
                                 </div>
@@ -355,64 +355,73 @@
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        async function toggleActive(userId) {
-            try {
-                const res = await fetch(`/admin/user/${userId}/toggle-active`, { method: 'POST' });
-                const data = await res.json();
-                if (data.success) {
-                    location.reload();
-                } else {
-                    showToast(data.error, 'error');
-                }
-            } catch (e) {
-                showToast('Terjadi kesalahan', 'error');
-            }
-        }
+        // Event delegation for all action buttons
+        document.querySelectorAll('.btn-action').forEach(btn => {
+            btn.addEventListener('click', async function() {
+                const userId = this.dataset.id;
+                const action = this.dataset.action;
+                const userName = this.dataset.name || '';
 
-        async function toggleAdmin(userId) {
-            try {
-                const res = await fetch(`/admin/user/${userId}/toggle-admin`, { method: 'POST' });
-                const data = await res.json();
-                if (data.success) {
-                    location.reload();
-                } else {
-                    showToast(data.error, 'error');
+                if (action === 'toggle-active') {
+                    try {
+                        const res = await fetch('/admin/user/' + userId + '/toggle-active', { method: 'POST' });
+                        const data = await res.json();
+                        if (data.success) {
+                            location.reload();
+                        } else {
+                            showToast(data.error, 'error');
+                        }
+                    } catch (e) {
+                        showToast('Terjadi kesalahan', 'error');
+                    }
                 }
-            } catch (e) {
-                showToast('Terjadi kesalahan', 'error');
-            }
-        }
 
-        async function resetPassword(userId) {
-            if (!confirm('Reset password user ini ke "netra123"?')) return;
-            try {
-                const res = await fetch(`/admin/user/${userId}/reset-password`, { method: 'POST' });
-                const data = await res.json();
-                if (data.success) {
-                    showToast(`Password direset ke: ${data.new_password}`);
-                } else {
-                    showToast(data.error, 'error');
+                else if (action === 'toggle-admin') {
+                    try {
+                        const res = await fetch('/admin/user/' + userId + '/toggle-admin', { method: 'POST' });
+                        const data = await res.json();
+                        if (data.success) {
+                            location.reload();
+                        } else {
+                            showToast(data.error, 'error');
+                        }
+                    } catch (e) {
+                        showToast('Terjadi kesalahan', 'error');
+                    }
                 }
-            } catch (e) {
-                showToast('Terjadi kesalahan', 'error');
-            }
-        }
 
-        async function deleteUser(userId, name) {
-            if (!confirm(`Hapus user "${name}"? Data history juga akan dihapus.`)) return;
-            try {
-                const res = await fetch(`/admin/user/${userId}/delete`, { method: 'POST' });
-                const data = await res.json();
-                if (data.success) {
-                    document.getElementById(`user-${userId}`).remove();
-                    showToast('User berhasil dihapus');
-                } else {
-                    showToast(data.error, 'error');
+                else if (action === 'reset-password') {
+                    if (!confirm('Reset password user ini ke "netra123"?')) return;
+                    try {
+                        const res = await fetch('/admin/user/' + userId + '/reset-password', { method: 'POST' });
+                        const data = await res.json();
+                        if (data.success) {
+                            showToast('Password direset ke: ' + data.new_password);
+                        } else {
+                            showToast(data.error, 'error');
+                        }
+                    } catch (e) {
+                        showToast('Terjadi kesalahan', 'error');
+                    }
                 }
-            } catch (e) {
-                showToast('Terjadi kesalahan', 'error');
-            }
-        }
+
+                else if (action === 'delete') {
+                    if (!confirm('Hapus user "' + userName + '"? Data history juga akan dihapus.')) return;
+                    try {
+                        const res = await fetch('/admin/user/' + userId + '/delete', { method: 'POST' });
+                        const data = await res.json();
+                        if (data.success) {
+                            document.getElementById('user-' + userId).remove();
+                            showToast('User berhasil dihapus');
+                        } else {
+                            showToast(data.error, 'error');
+                        }
+                    } catch (e) {
+                        showToast('Terjadi kesalahan', 'error');
+                    }
+                }
+            });
+        });
     </script>
 </body>
 </html>
