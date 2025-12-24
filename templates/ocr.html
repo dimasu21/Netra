@@ -343,6 +343,36 @@
         </div>
     </div>
 
+    <!-- Limit Exceeded Modal -->
+    <div class="limit-modal" id="limitModal" style="display: none;">
+        <div class="limit-modal-overlay"></div>
+        <div class="limit-modal-box">
+            <div class="limit-modal-icon"><i class="bi bi-exclamation-triangle-fill"></i></div>
+            <h3>Limit Harian Tercapai</h3>
+            <p id="limitModalMessage">Anda telah mencapai batas analisis hari ini.</p>
+            <div class="limit-modal-info">
+                <span class="limit-used">3/3</span>
+                <span class="limit-label">analisis hari ini</span>
+            </div>
+            <p class="limit-modal-hint"><a href="/login">Login</a> untuk mendapat lebih banyak kuota atau tunggu 24 jam.</p>
+            <button class="limit-modal-close" onclick="closeLimitModal()"><i class="bi bi-x-lg"></i> Tutup</button>
+        </div>
+    </div>
+    <style>
+        .limit-modal{position:fixed;top:0;left:0;right:0;bottom:0;z-index:10000;display:flex;align-items:center;justify-content:center}
+        .limit-modal-overlay{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7)}
+        .limit-modal-box{position:relative;background:#fff;border:4px solid #0a0a0a;padding:32px;max-width:400px;text-align:center;box-shadow:8px 8px 0 #2563eb}
+        .limit-modal-icon{font-size:3rem;color:#f59e0b;margin-bottom:16px}
+        .limit-modal-box h3{font-family:'Space Mono',monospace;font-size:1.2rem;margin-bottom:12px;text-transform:uppercase}
+        .limit-modal-box p{color:#64748b;font-size:0.9rem;margin-bottom:16px}
+        .limit-modal-info{background:#fee2e2;border:2px solid #ef4444;padding:12px;margin-bottom:16px}
+        .limit-used{font-family:'Space Mono',monospace;font-size:1.5rem;font-weight:700;color:#ef4444}
+        .limit-label{display:block;font-size:0.75rem;color:#991b1b;text-transform:uppercase}
+        .limit-modal-hint{font-size:0.8rem}.limit-modal-hint a{color:#2563eb;font-weight:600}
+        .limit-modal-close{margin-top:20px;padding:12px 24px;background:#0a0a0a;color:white;border:none;font-family:'Space Mono',monospace;text-transform:uppercase;cursor:pointer}
+        .limit-modal-close:hover{background:#2563eb}
+    </style>
+
     <script>
         // Elements
         const dropZone = document.getElementById('dropZone');
@@ -516,7 +546,10 @@
 
                 const data = await response.json();
 
-                if (data.success) {
+                if (data.limit_reached) {
+                    // Show limit modal for guests
+                    showLimitModal(data.error);
+                } else if (data.success) {
                     displayResults(data);
                 } else {
                     alert('Error: ' + data.error);
@@ -527,6 +560,15 @@
                 loadingOverlay.classList.remove('show');
             }
         });
+
+        // Limit Modal Functions
+        function showLimitModal(message) {
+            document.getElementById('limitModalMessage').textContent = message;
+            document.getElementById('limitModal').style.display = 'flex';
+        }
+        function closeLimitModal() {
+            document.getElementById('limitModal').style.display = 'none';
+        }
 
         function displayResults(data) {
             resultsSection.classList.add('show');

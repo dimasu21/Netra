@@ -129,3 +129,60 @@ class UsageLimit(db.Model):
 
     def __repr__(self):
         return f'<UsageLimit {self.feature}: {self.usage_count}>'
+
+
+class GuestUsageLimit(db.Model):
+    """
+    Model untuk tracking penggunaan fitur oleh guest (non-login) berdasarkan IP.
+    Limit 3x/hari untuk semua fitur (batch, OCR, parse document).
+    """
+    __tablename__ = 'guest_usage_limits'
+
+    id = db.Column(db.Integer, primary_key=True)
+    ip_address = db.Column(db.String(45), nullable=False, index=True)  # IPv6 max 45 chars
+    feature = db.Column(db.String(50), nullable=False)  # 'batch', 'ocr', 'document', 'analyze'
+    usage_count = db.Column(db.Integer, default=0)
+    last_reset = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Constants - Guest limit lebih ketat
+    DAILY_LIMIT = 3
+
+    @classmethod
+    def get_or_create(cls, ip_address, feature):
+        """Get existing usage record or create new one for IP."""
+        usage = cls.query.filter_by(ip_address=ip_address, feature=feature).first()
+        if not usage:
+            usage = cls(ip_address=ip_address, feature=feature, usage_count=0)
+            db.session.add(usage)
+            db.session.commit()
+        return usage
+
+    def check_and_increment(self):
+        """
+        Check if guest can use feature, increment if allowed.
+        Returns (allowed: bool, remaining: int, message: str)
+        """
+        from datetime import datetime, timedelta
+        
+        now = datetime.utcnow()
+        
+        # Reset if 24 hours passed
+        if self.last_reset is None or (now - self.last_reset) > timedelta(hours=24):
+            self.usage_count = 0
+            self.last_reset = now
+            db.session.commit()
+        
+        remaining = self.DAILY_LIMIT - self.usage_count
+        
+        if self.usage_count >= self.DAILY_LIMIT:
+            hours_until_reset = 24 - int((now - self.last_reset).total_seconds() / 3600)
+            return False, 0, f"Limit harian tercapai. Login atau tunggu ~{hours_until_reset} jam."
+        
+        # Increment usage
+        self.usage_count += 1
+        db.session.commit()
+        
+        return True, remaining - 1, "OK"
+
+    def __repr__(self):
+        return f'<GuestUsageLimit {self.ip_address}:{self.feature}: {self.usage_count}>'

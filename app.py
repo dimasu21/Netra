@@ -662,24 +662,36 @@ def delete_history(id):
 @app.route('/api/batch-limit/check', methods=['GET'])
 @csrf.exempt
 def check_batch_limit():
-    """Check remaining batch usage for current user."""
+    """Check remaining batch usage for current user or guest."""
+    from models import UsageLimit, GuestUsageLimit
+    from datetime import datetime, timedelta
+    
     if not current_user.is_authenticated:
-        # Guest users have unlimited batch (for now, could limit by IP later)
+        # Guest - track by IP
+        ip_address = request.remote_addr or '0.0.0.0'
+        usage = GuestUsageLimit.get_or_create(ip_address, 'batch')
+        
+        now = datetime.utcnow()
+        if usage.last_reset is None or (now - usage.last_reset) > timedelta(hours=24):
+            remaining = GuestUsageLimit.DAILY_LIMIT
+            used = 0
+        else:
+            remaining = max(0, GuestUsageLimit.DAILY_LIMIT - usage.usage_count)
+            used = usage.usage_count
+        
         return jsonify({
-            'allowed': True,
-            'remaining': 999,
-            'limit': 999,
-            'message': 'Guest user - unlimited'
+            'allowed': remaining > 0,
+            'remaining': remaining,
+            'used': used,
+            'limit': GuestUsageLimit.DAILY_LIMIT,
+            'is_guest': True,
+            'message': f'{remaining} tersisa (login untuk lebih banyak)' if remaining > 0 else 'Limit tercapai'
         })
     
-    from models import UsageLimit
+    # Logged in user
     usage = UsageLimit.get_or_create(current_user.id, 'batch')
     
-    # Check limit without incrementing
-    from datetime import datetime, timedelta
     now = datetime.utcnow()
-    
-    # Reset if 24 hours passed
     if usage.last_reset is None or (now - usage.last_reset) > timedelta(hours=24):
         remaining = UsageLimit.BATCH_DAILY_LIMIT
         used = 0
@@ -692,6 +704,7 @@ def check_batch_limit():
         'remaining': remaining,
         'used': used,
         'limit': UsageLimit.BATCH_DAILY_LIMIT,
+        'is_guest': False,
         'message': f'{remaining} batch tersisa hari ini' if remaining > 0 else 'Limit tercapai'
     })
 
@@ -700,14 +713,23 @@ def check_batch_limit():
 @csrf.exempt
 def use_batch_limit():
     """Use one batch quota. Call this before processing batch."""
+    from models import UsageLimit, GuestUsageLimit
+    
     if not current_user.is_authenticated:
+        # Guest - track by IP
+        ip_address = request.remote_addr or '0.0.0.0'
+        usage = GuestUsageLimit.get_or_create(ip_address, 'batch')
+        allowed, remaining, message = usage.check_and_increment()
+        
         return jsonify({
-            'allowed': True,
-            'remaining': 999,
-            'message': 'Guest user - unlimited'
+            'allowed': allowed,
+            'remaining': remaining,
+            'limit': GuestUsageLimit.DAILY_LIMIT,
+            'is_guest': True,
+            'message': message
         })
     
-    from models import UsageLimit
+    # Logged in user
     usage = UsageLimit.get_or_create(current_user.id, 'batch')
     allowed, remaining, message = usage.check_and_increment()
     
@@ -715,8 +737,10 @@ def use_batch_limit():
         'allowed': allowed,
         'remaining': remaining,
         'limit': UsageLimit.BATCH_DAILY_LIMIT,
+        'is_guest': False,
         'message': message
     })
+
 
 
 @app.route('/api/analyze', methods=['POST'])
@@ -733,6 +757,23 @@ def analyze():
         
         if not uploaded_file:
             return jsonify({'success': False, 'error': 'Tidak ada file yang diunggah'}), 400
+        
+        # Guest Rate Limit Check (3/day for non-logged-in users)
+        if not current_user.is_authenticated:
+            from models import GuestUsageLimit
+            ip_address = request.remote_addr or '0.0.0.0'
+            usage = GuestUsageLimit.get_or_create(ip_address, 'analyze')
+            allowed, remaining, message = usage.check_and_increment()
+            
+            if not allowed:
+                return jsonify({
+                    'success': False, 
+                    'error': f'Limit tercapai (3x/hari untuk guest). {message}',
+                    'limit_reached': True,
+                    'remaining': 0,
+                    'limit': GuestUsageLimit.DAILY_LIMIT
+                }), 429
+
         
         # Cloudflare Turnstile Verification
         # Skip if user is logged in, already verified in session, OR running in development mode
