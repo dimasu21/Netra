@@ -1,0 +1,92 @@
+/* ==============================================
+   NETRA - Footer Styles  
+   Footer yang dipakai di semua halaman
+   ============================================== */
+
+.footer {
+    background: var(--black);
+    color: var(--white);
+    padding: 60px 0 20px;
+    margin-top: auto;
+}
+
+.footer-main {
+    max-width: 1200px;
+    margin: 0 auto;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0 24px 40px;
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px;
+}
+
+/* Brand di footer */
+.footer-brand h3 {
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+    letter-spacing: -1px;
+}
+
+.footer-brand p {
+    color: var(--gray);
+    line-height: 1.6;
+    max-width: 300px;
+    font-size: 0.9rem;
+}
+
+/* Kolom link footer */
+.footer-column h4 {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gray);
+    margin-bottom: 20px;
+}
+
+.footer-column ul {
+    list-style: none;
+}
+
+.footer-column ul li {
+    margin-bottom: 12px;
+}
+
+.footer-column ul li a {
+    color: var(--white);
+    text-decoration: none;
+    transition: color 0.2s;
+    font-size: 0.95rem;
+}
+
+.footer-column ul li a:hover {
+    color: var(--blue-primary);
+}
+
+/* Copyright */
+.footer-bottom {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    color: var(--gray);
+    padding: 0 24px;
+}
+
+/* Responsive footer */
+@media (max-width: 768px) {
+    .footer-main {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+}

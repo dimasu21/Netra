@@ -1,0 +1,55 @@
+/* ==============================================
+   NETRA - Responsive Utilities
+   Media queries untuk semua halaman
+   ============================================== */
+
+/* Tablet */
+@media (max-width: 900px) {
+    .navbar-tools {
+        display: none;
+    }
+
+    .navbar-toggle {
+        display: block;
+    }
+
+    .navbar-container {
+        padding: 0 24px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    /* Navbar mobile */
+    .navbar-tools {
+        display: none;
+    }
+
+    .navbar-toggle {
+        display: block;
+    }
+
+    /* Footer mobile */
+    .footer-main {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+    body {
+        font-size: 14px;
+    }
+
+    .container {
+        padding: 0 16px;
+    }
+}

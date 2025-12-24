@@ -1,0 +1,327 @@
+/* ==============================================
+   NETRA - Navbar Styles
+   Navigasi utama yang dipakai di semua halaman
+   ============================================== */
+
+/* Wrapper navbar */
+.navbar {
+    background: var(--white);
+    border-bottom: 2px solid var(--gray-light);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+}
+
+/* Logo */
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    text-decoration: none;
+}
+
+.navbar-brand .logo-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--black);
+}
+
+/* Menu navigasi */
+.navbar-tools {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    height: 100%;
+    margin-left: auto;
+}
+
+.navbar-tools a {
+    display: flex;
+    align-items: center;
+    height: 60px;
+    padding: 0 16px;
+    color: var(--gray);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+}
+
+.navbar-tools a:hover {
+    color: var(--blue-primary);
+    border-bottom-color: var(--blue-primary);
+    background: var(--blue-pale);
+}
+
+.navbar-tools a.active {
+    color: var(--blue-primary);
+    border-bottom-color: var(--blue-primary);
+}
+
+/* Dropdown menu */
+.navbar-tools .dropdown {
+    position: relative;
+}
+
+.navbar-tools .dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--white);
+    border: 1px solid var(--gray-light);
+    border-radius: 8px;
+    min-width: 150px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    padding: 4px 0;
+}
+
+.navbar-tools .dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.navbar-tools .dropdown-content a {
+    display: block !important;
+    width: 100%;
+    height: auto !important;
+    padding: 10px 16px !important;
+    font-size: 0.9rem !important;
+    border-bottom: none !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+}
+
+.navbar-tools .dropdown-content a:hover {
+    background: var(--gray-light);
+    border-bottom-color: transparent !important;
+}
+
+/* Link khusus mobile */
+.mobile-only-link {
+    display: none !important;
+}
+
+/* Auth buttons */
+.navbar-auth {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.btn-login {
+    padding: 8px 16px;
+    color: var(--gray);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.btn-login:hover {
+    color: var(--blue-primary);
+}
+
+.btn-signup {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: var(--blue-primary);
+    color: var(--white);
+    border: 2px solid var(--black);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-signup:hover {
+    background: var(--blue-dark);
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--black);
+}
+
+/* Tombol hamburger mobile */
+.navbar-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--black);
+}
+
+/* Dropdown bahasa */
+.lang-dropdown {
+    position: relative;
+}
+
+.lang-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: transparent;
+    border: 1px solid var(--gray-light);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--gray);
+    transition: all 0.2s;
+}
+
+.lang-btn:hover {
+    border-color: var(--blue-primary);
+    color: var(--blue-primary);
+}
+
+.lang-dropdown-content {
+    display: none;
+    position: absolute;
+    top: calc(100% - 4px);
+    right: 0;
+    background: var(--white);
+    border: 1px solid var(--gray-light);
+    border-radius: 8px;
+    min-width: 180px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    padding-top: 8px;
+}
+
+.lang-dropdown:hover .lang-dropdown-content,
+.lang-dropdown-content:hover {
+    display: block;
+}
+
+.lang-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    color: var(--gray);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+}
+
+.lang-option:hover {
+    background: var(--gray-light);
+}
+
+.lang-option.active {
+    color: var(--blue-primary);
+    font-weight: 600;
+}
+
+.lang-option i {
+    display: none;
+}
+
+.lang-option.active i {
+    display: inline;
+    color: var(--blue-primary);
+}
+
+/* Dropdown user */
+.user-dropdown {
+    position: relative;
+}
+
+.user-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--blue-pale);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--blue-primary);
+    font-weight: 600;
+}
+
+.user-btn:hover {
+    background: var(--blue-light);
+    color: var(--white);
+}
+
+.user-dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--white);
+    border: 2px solid var(--black);
+    min-width: 220px;
+    box-shadow: 4px 4px 0 var(--black);
+    z-index: 2000;
+}
+
+.user-dropdown-content::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 0;
+    right: 0;
+    height: 10px;
+}
+
+.user-dropdown:hover .user-dropdown-content {
+    display: block;
+}
+
+.user-info {
+    padding: 12px 16px;
+}
+
+.user-info strong {
+    display: block;
+    color: var(--black);
+    font-size: 0.95rem;
+}
+
+.user-info small {
+    color: var(--gray);
+    font-size: 0.8rem;
+}
+
+.user-dropdown-content hr {
+    margin: 0;
+    border: none;
+    border-top: 1px solid var(--gray-light);
+}
+
+.user-dropdown-content a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    color: var(--gray);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+}
+
+.user-dropdown-content a:hover {
+    background: var(--gray-light);
+    color: var(--blue-primary);
+}

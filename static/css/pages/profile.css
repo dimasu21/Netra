@@ -1,0 +1,400 @@
+/* ==============================================
+   NETRA - profile.html Styles
+   File ini diekstrak dari inline CSS template
+   Generated: 2025-12-24
+   ============================================== */
+
+
+        :root {
+            --blue-primary: #2563eb;
+            --blue-dark: #1e40af;
+            --blue-light: #60a5fa;
+            --blue-pale: #dbeafe;
+            --black: #0a0a0a;
+            --white: #ffffff;
+            --gray: #6b7280;
+            --gray-light: #f1f5f9;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --border-width: 3px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--gray-light);
+            color: var(--black);
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: var(--white);
+            border-bottom: 2px solid var(--gray-light);
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            text-decoration: none;
+        }
+
+        .navbar-brand .logo-text {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--black);
+        }
+
+        /* Main Container */
+        .main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        /* Page Header */
+        .page-header {
+            margin-bottom: 32px;
+        }
+
+        .page-header h1 {
+            font-family: 'Space Mono', monospace;
+            font-size: 2rem;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Card Sections */
+        .profile-card {
+            background: var(--white);
+            border: var(--border-width) solid var(--black);
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            right: -6px;
+            bottom: -6px;
+            background: var(--blue-primary);
+            z-index: -1;
+        }
+
+        .card-header {
+            background: var(--black);
+            color: var(--white);
+            padding: 14px 20px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-body {
+            padding: 24px;
+        }
+
+        /* Info Field */
+        .info-field {
+            margin-bottom: 20px;
+        }
+
+        .info-field:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gray);
+            margin-bottom: 6px;
+        }
+
+        .info-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--black);
+        }
+
+        .info-value i {
+            margin-right: 8px;
+            color: var(--blue-primary);
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            border: 2px solid var(--black);
+        }
+
+        .status-badge.free {
+            background: var(--gray-light);
+            color: var(--black);
+        }
+
+        .status-badge.pro {
+            background: var(--blue-primary);
+            color: var(--white);
+        }
+
+        .status-badge.institusi {
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .quota-info {
+            margin-top: 16px;
+            padding: 12px 16px;
+            background: var(--blue-pale);
+            border: 2px solid var(--black);
+            font-size: 0.85rem;
+        }
+
+        .quota-info i {
+            margin-right: 8px;
+            color: var(--blue-primary);
+        }
+
+        /* Feature List */
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .feature-item:last-child {
+            border-bottom: none;
+        }
+
+        .feature-name {
+            font-size: 0.9rem;
+        }
+
+        .feature-status {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border: 1px solid var(--black);
+        }
+
+        .feature-status.aktif {
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .feature-status.terbatas {
+            background: var(--warning);
+            color: var(--black);
+        }
+
+        .feature-status.nonaktif {
+            background: var(--danger);
+            color: var(--white);
+        }
+
+        /* Upgrade Section */
+        .upgrade-section {
+            background: linear-gradient(135deg, var(--blue-primary), var(--blue-dark));
+            color: var(--white);
+        }
+
+        .upgrade-section .card-header {
+            background: var(--blue-dark);
+        }
+
+        .upgrade-section .card-body {
+            text-align: center;
+            padding: 32px 24px;
+        }
+
+        .upgrade-section p {
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        .btn-upgrade {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 32px;
+            background: var(--white);
+            color: var(--blue-dark);
+            border: var(--border-width) solid var(--black);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+
+        .btn-upgrade:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        /* Activity List */
+        .activity-list {
+            list-style: none;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-light);
+            font-size: 0.85rem;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-item i {
+            font-size: 1.2rem;
+            color: var(--blue-primary);
+        }
+
+        .activity-item .time {
+            margin-left: auto;
+            color: var(--gray);
+            font-size: 0.75rem;
+        }
+
+        /* Logout Button */
+        .btn-logout {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 16px 24px;
+            background: var(--white);
+            color: var(--danger);
+            border: var(--border-width) solid var(--black);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+
+        .btn-logout:hover {
+            background: var(--danger);
+            color: var(--white);
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        /* Back Link */
+        .back-link {
+            text-align: center;
+            margin-top: 24px;
+        }
+
+        .back-link a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .back-link a:hover {
+            color: var(--blue-primary);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .main {
+                padding: 24px 16px;
+            }
+
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .profile-card::before {
+                right: -4px;
+                bottom: -4px;
+                top: 4px;
+                left: 4px;
+            }
+
+            .card-body {
+                padding: 16px;
+            }
+
+            .status-badge {
+                font-size: 0.75rem;
+                padding: 8px 14px;
+            }
+
+            .feature-name {
+                font-size: 0.8rem;
+            }
+
+            .feature-status {
+                font-size: 0.65rem;
+            }
+
+            .btn-upgrade,
+            .btn-logout {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    

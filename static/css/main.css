@@ -1,0 +1,16 @@
+/* ==============================================
+   NETRA - Main Stylesheet
+   File ini mengimpor semua CSS yang diperlukan
+   ============================================== */
+
+/* Core styles */
+@import url('base.css');
+@import url('navbar.css');
+@import url('footer.css');
+
+/* Component styles */
+@import url('hero.css');
+@import url('features.css');
+
+/* Responsive */
+@import url('responsive.css');

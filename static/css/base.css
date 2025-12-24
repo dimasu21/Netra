@@ -1,0 +1,87 @@
+/* ==============================================
+   NETRA - Base Styles
+   File ini berisi reset CSS, variabel warna, 
+   dan tipografi dasar yang dipakai di semua halaman
+   ============================================== */
+
+/* Variabel warna utama */
+:root {
+    --blue-primary: #2563eb;
+    --blue-dark: #1e40af;
+    --blue-light: #60a5fa;
+    --blue-pale: #dbeafe;
+    --black: #0a0a0a;
+    --white: #ffffff;
+    --gray: #6b7280;
+    --gray-light: #f1f5f9;
+    --yellow: #facc15;
+    --border-width: 3px;
+}
+
+/* Reset dasar */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body default */
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--white);
+    color: var(--black);
+    min-height: 100vh;
+}
+
+/* Link default */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Tombol brutal style */
+.btn-brutal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px 32px;
+    background: var(--blue-primary);
+    color: var(--white);
+    border: var(--border-width) solid var(--black);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.1s;
+    text-decoration: none;
+}
+
+.btn-brutal:hover {
+    background: var(--blue-dark);
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--black);
+}
+
+.btn-brutal:active {
+    transform: translate(0, 0);
+    box-shadow: none;
+}
+
+.btn-brutal-outline {
+    background: var(--white);
+    color: var(--black);
+}
+
+.btn-brutal-outline:hover {
+    background: var(--blue-pale);
+}
+
+/* Container standar */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
